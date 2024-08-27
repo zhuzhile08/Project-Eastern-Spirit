@@ -2,17 +2,19 @@ cmake_minimum_required (VERSION 3.24.0)
 
 project(BuildLibraries)
 
+set(ETCS_ENABLE_COMPONENTS_EXT ON CACHE BOOL "Use the already implemented components as an extension" FORCE)
+
 # add all libraries that need to be built
 # add_subdirectory("openal-soft")
 if (BUILD_STATIC)
-	option(SDL_SHARED "Build a shared version of the library" OFF)
-	option(SDL_STATIC "Build a static version of the library" ON)
+	set(SDL_SHARED OFF CACHE BOOL "Build a shared version of the library" FORCE)
+	set(SDL_STATIC ON CACHE BOOL "Build a static version of the library" FORCE)
 else ()
-	option(SDL_SHARED "Build a shared version of the library" ON)
-	option(SDL_STATIC "Build a static version of the library" OFF)
+	set(SDL_SHARED ON CACHE BOOL "Build a shared version of the library" FORCE)
+	set(SDL_STATIC OFF CACHE BOOL "Build a static version of the library" FORCE)
 endif ()
 
+add_subdirectory("lsd")
+add_subdirectory("glm")
 add_subdirectory("sdl")
-
-# GLM and VMA aren't build here because they only build the tests, 
-# which is not necceceary for the library to function 
+add_subdirectory("etcs")

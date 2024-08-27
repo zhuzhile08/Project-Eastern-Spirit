@@ -8,18 +8,11 @@ PUBLIC
 	# library local include directory
 	${ENGINE_INCLUDE_DIR}
 
-	# graphics and windowing libraries
-	${LIBRARY_PATH}/sdl/include/
-
-	# math and physics libraries
-	${LIBRARY_PATH}/glm/
-
 	# audio libraries
 	# ${LIBRARY_PATH}/openal-soft/include/
 
 	# utility libraries
 	${LIBRARY_PATH}/stb/
-	${LIBRARY_PATH}/lsd/
 )
 
 set (GAME_SOURCE_FILES 
@@ -36,10 +29,19 @@ add_executable(Game
 target_link_libraries(Game
 LINK_PUBLIC
 	# graphics and windowing libraries
+	SDL3::Headers
 	SDL3::SDL3-static
 
 	# audio libraries
 	# OpenAL::OpenAL
+
+	# math libraries
+	glm::glm
+
+	# utility libraries
+	LyraStandardLibrary::Headers
+	ETCS::Headers
+	ETCS::ETCS-static
 )
 
 target_precompile_headers(Game
