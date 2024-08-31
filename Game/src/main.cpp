@@ -1,7 +1,6 @@
-#define STB_IMAGE_IMPLEMENTATION
 #define SDL_MAIN_HANDLED
 
-#include <SDL3/SDL.h>
+#include <Init.h>
 
 #include <ETCS/ETCS.h>
 
@@ -32,8 +31,6 @@ struct DrawData {
 int main(int argc, char** args) {
 	bool running = true;
 
-	glm::ivec2 windowDim(1280, 720);
-
 	double fps = 0;
 	double accumulator = 0;
 	std::uint64_t startTime = 0;
@@ -42,8 +39,6 @@ int main(int argc, char** args) {
 	std::random_device randDevice;
 	std::default_random_engine randEngine(randDevice());
 
-	SDL_Event e;
-	SDL_Window* window = { };
 	SDL_Renderer* renderer = { };
 
 	SDL_Texture* textureAtlas = { };
@@ -52,23 +47,10 @@ int main(int argc, char** args) {
 	std::map<int, lsd::Vector<DrawData>, std::greater<float>> drawData = { };
 
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_GAMEPAD) == SDL_FALSE) {
-		std::printf("Failed to initialize SDL with error: \"%s\"", SDL_GetError());
-		return 0;
-	}
-
-	etcs::init();
-
-	std::srand(std::time(nullptr));
-
-
-	if (SDL_CreateWindowAndRenderer(
-		"車万朱元璋", 
-		windowDim.x, windowDim.y, 
-		SDL_WINDOW_RESIZABLE, &window, &renderer) == SDL_FALSE) {
-		std::printf("Failed to create SDL Window and/or Renderer with error: \"%s\"", SDL_GetError());
-		return 0;
-	}
+	esengine::init({
+		args[0],
+		"車万朱元璋"
+	});
 
 
 	auto pixels = stbi_load("/Users/zhilezhugd/Programming/C++/Project-Eastern-Spirit/out/build/Debug/Game/Data/Sheet.png", &textureDim.x, &textureDim.y, &textureDim.z, STBI_rgb_alpha);
@@ -189,8 +171,6 @@ int main(int argc, char** args) {
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	
-	SDL_Quit();
 
-	etcs::quit();
+	esengine::quit();
 }

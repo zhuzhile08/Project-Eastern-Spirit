@@ -29,6 +29,8 @@ add_executable(Game
 target_link_libraries(Game
 LINK_PUBLIC
 	# graphics and windowing libraries
+	Engine::Headers
+	Engine::Engine
 	SDL3::Headers
 	SDL3::SDL3-static
 
