@@ -10,3 +10,6 @@
 [submodule "Deps/stb"]
 	path = Deps/stb
 	url = https://github.com/nothings/stb.git
+[submodule "Deps/etcs"]
+	path = Deps/etcs
+	url = https://github.com/zhuzhile08/Entity-Tree-Component-System.git
