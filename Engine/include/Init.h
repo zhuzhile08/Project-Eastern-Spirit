@@ -20,8 +20,10 @@ namespace esengine {
 
 struct InitInfo {
 	lsd::StringView appPath = { };
+
 	lsd::StringView name = { };
 	glm::uvec2 dim = { 1280, 720 };
+	int flags = { }
 };
 
 void init(InitInfo info);

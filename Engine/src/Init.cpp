@@ -31,7 +31,7 @@ void init(InitInfo info) {
 	) throw std::runtime_error(SDL_GetError());
 
 	globals::fileSystem = new Filesystem(info.appPath);
-	globals::window = new Window(info.name, info.dim, );
+	globals::window = new Window(info.name, info.dim, SDL_WINDOW_RESIZABLE | info.flags);
 	globals::renderSystem = new RenderSystem();
 	globals::inputSystem = new InputSystem();
 }
