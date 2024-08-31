@@ -120,7 +120,7 @@ int main(int argc, char** args) {
 	auto renderSystem = etcs::insertSystem<const etcs::Transform, const SpriteRect>();
 
 	lsd::Function<void(const etcs::Transform&, const SpriteRect&)> renderFunction = 
-		[&camTransform, &windowDim, &drawData, &deltaTime, renderer, textureAtlas](const etcs::Transform& transform, const SpriteRect& rect) {
+		[&camTransform, &windowDim, &drawData, renderer, textureAtlas](const etcs::Transform& transform, const SpriteRect& rect) {
 			if (transform.translation().y > 0) {
 				auto translation = camTransform.get().localTransform() * glm::vec4(transform.translation(), 1.0f);
 				
