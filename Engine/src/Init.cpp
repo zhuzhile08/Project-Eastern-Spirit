@@ -1,6 +1,6 @@
 #include <Init.h>
 
-#include <Common/Filesystem.h>
+#include <Common/FileSystem.h>
 
 #include <InputSystem.h>
 #include <Graphics/Window.h>
@@ -30,7 +30,7 @@ void init(InitInfo info) {
 		SDL_INIT_GAMEPAD) == SDL_FALSE
 	) throw std::runtime_error(SDL_GetError());
 
-	globals::fileSystem = new Filesystem(info.appPath);
+	globals::fileSystem = new FileSystem(info.argv);
 	globals::window = new Window(info.name, info.dim, SDL_WINDOW_RESIZABLE | info.flags);
 	globals::renderSystem = new RenderSystem();
 	globals::inputSystem = new InputSystem();

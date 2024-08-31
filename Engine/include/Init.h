@@ -19,11 +19,11 @@
 namespace esengine {
 
 struct InitInfo {
-	lsd::StringView appPath = { };
+	char** argv = { };
 
 	lsd::StringView name = { };
-	glm::uvec2 dim = { 1280, 720 };
-	int flags = { }
+	glm::ivec2 dim = { 1280, 720 };
+	int flags = { };
 };
 
 void init(InitInfo info);

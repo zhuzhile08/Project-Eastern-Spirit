@@ -28,7 +28,7 @@ struct DrawData {
 
 }
 
-int main(int argc, char** args) {
+int main(int argc, char** argv) {
 	bool running = true;
 
 	double fps = 0;
@@ -48,7 +48,7 @@ int main(int argc, char** args) {
 
 
 	esengine::init({
-		args[0],
+		argv,
 		"車万朱元璋"
 	});
 
