@@ -1,4 +1,5 @@
 #define STB_IMAGE_IMPLEMENTATION
+#define SDL_MAIN_HANDLED
 
 #include <SDL3/SDL.h>
 
@@ -11,7 +12,8 @@
 #include <random>
 #include <map>
 
-static constexpr std::size_t fov = 90;
+static constexpr std::size_t fov = 100;
+static constexpr double deltaTime = 0.01;
 static const float fovRatio = glm::tan(glm::radians(static_cast<float>(fov / 2)));
 
 namespace {
@@ -32,10 +34,10 @@ int main(int argc, char** args) {
 
 	glm::ivec2 windowDim(1280, 720);
 
-	float fps = 1;
-	float deltaTime = 0;
-	std::uint64_t frameStart = 0;
-	std::uint64_t frameTime = 0;
+	double fps = 0;
+	double accumulator = 0;
+	std::uint64_t startTime = 0;
+	std::uint64_t currentTime = 0;
 
 	std::random_device randDevice;
 	std::default_random_engine randEngine(randDevice());
@@ -50,7 +52,7 @@ int main(int argc, char** args) {
 	std::map<int, lsd::Vector<DrawData>, std::greater<float>> drawData = { };
 
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) == SDL_FALSE) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_GAMEPAD) == SDL_FALSE) {
 		std::printf("Failed to initialize SDL with error: \"%s\"", SDL_GetError());
 		return 0;
 	}
@@ -120,7 +122,7 @@ int main(int argc, char** args) {
 	lsd::Function<void(const etcs::Transform&, const SpriteRect&)> renderFunction = 
 		[&camTransform, &windowDim, &drawData, &deltaTime, renderer, textureAtlas](const etcs::Transform& transform, const SpriteRect& rect) {
 			if (transform.translation().y > 0) {
-				auto translation = camTransform.get().localTransform() * glm::vec4(transform.translation(), 0.0f);
+				auto translation = camTransform.get().localTransform() * glm::vec4(transform.translation(), 1.0f);
 				
 				float fovRatY = translation.y * fovRatio;
 
@@ -138,17 +140,14 @@ int main(int argc, char** args) {
 	};
 
 
-	frameStart = SDL_GetTicks();
+	startTime = SDL_GetTicks();
 
 	while (running) {
-		frameTime = SDL_GetTicks();
+		currentTime = SDL_GetTicks();
+		accumulator += (currentTime - startTime) / 1000.0f;
+		startTime = currentTime;
 
-		if (frameStart < frameTime) {
-			deltaTime = frameTime - frameStart;
-
-			fps = 1000.0f / deltaTime;
-			frameStart = frameTime;
-
+		while (accumulator >= deltaTime) {
 			while (SDL_PollEvent(&e) == SDL_TRUE) {
 				if (e.type == SDL_EVENT_QUIT) {
 					running = false;
@@ -158,30 +157,33 @@ int main(int argc, char** args) {
 					SDL_GetWindowSize(window, &windowDim.x, &windowDim.y);
 				} else if (e.type == SDL_EVENT_KEY_DOWN) {
 					if (e.key.scancode == SDL_SCANCODE_W) {
-						camTransform.get().translation().z += 1;
-					} else if (e.key.scancode == SDL_SCANCODE_S) {
-						camTransform.get().translation().z -= 1;
-					} else if (e.key.scancode == SDL_SCANCODE_A) {
-						camTransform.get().translation().x += 1;
-					} else if (e.key.scancode == SDL_SCANCODE_D) {
-						camTransform.get().translation().x -= 1;
+						camTransform.get().translation().z -= 0.1;
+					} if (e.key.scancode == SDL_SCANCODE_S) {
+						camTransform.get().translation().z += 0.1;
+					} if (e.key.scancode == SDL_SCANCODE_A) {
+						camTransform.get().translation().x += 0.1;
+					} if (e.key.scancode == SDL_SCANCODE_D) {
+						camTransform.get().translation().x -= 0.1;
 					}
 				}
 			}
 
-			SDL_RenderClear(renderer);
+			accumulator -= deltaTime;
+		}
 
-			renderSystem.each(renderFunction);
 
-			for (auto& [_, data] : drawData) {
-				for (const auto& call : data) {
-					SDL_RenderTextureRotated(renderer, textureAtlas, &call.src, &call.dst, 0, nullptr, SDL_FLIP_NONE);
-					data.clear();
-				}
+		SDL_RenderClear(renderer);
+
+		renderSystem.each(renderFunction);
+
+		for (auto& [_, data] : drawData) {
+			for (const auto& call : data) {
+				SDL_RenderTextureRotated(renderer, textureAtlas, &call.src, &call.dst, 0, nullptr, SDL_FLIP_NONE);
+				data.clear();
 			}
+		}
 
-			SDL_RenderPresent(renderer);
-		} else SDL_Delay(1);
+		SDL_RenderPresent(renderer);
 	}
 
 
