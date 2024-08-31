@@ -13,3 +13,6 @@
 [submodule "Deps/etcs"]
 	path = Deps/etcs
 	url = https://github.com/zhuzhile08/Entity-Tree-Component-System.git
+[submodule "Data"]
+	path = Data
+	url = https://github.com/zhuzhile08/Project-Eastern-Spirit-Data.git
