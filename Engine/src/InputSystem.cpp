@@ -32,13 +32,13 @@ void InputSystem::cancelQuit() {
 	m_quit = false;
 }
 
-input::Key InputSystem::keyboard(input::KeyType type) {
+Key InputSystem::keyboard(KeyType type) {
 	return m_keys[type];
 }
-input::MouseButton InputSystem::mouse(input::MouseButtonType type) {
+MouseButton InputSystem::mouse(MouseButtonType type) {
 	return m_mouseButtons[type];
 }
-input::ControllerButton InputSystem::controller(input::ControllerButtonType type) {
+ControllerButton InputSystem::controller(ControllerButtonType type) {
 	return m_controllerButtons[type];
 }
 glm::vec2 InputSystem::mousePos() {
@@ -89,6 +89,7 @@ void InputSystem::update() {
 			case SDL_EVENT_WINDOW_MINIMIZED:
 			case SDL_EVENT_WINDOW_MAXIMIZED:
 				globals::window->m_changed = true;
+				SDL_GetWindowSizeInPixels(globals::window->m_window, &globals::window->m_size.x, &globals::window->m_size.y);
 			case SDL_EVENT_KEY_DOWN:
 				for (auto& key : m_keys) {
 					if (event.key.key == key.first) key.second.pressed = true;

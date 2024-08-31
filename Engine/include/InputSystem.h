@@ -18,8 +18,6 @@
 
 namespace esengine {
 
-namespace input {
-
 // keyboard input (scancodes)
 enum class KeyType {
 	a = 4,
@@ -358,8 +356,6 @@ public:
 	ControllerButtonType type;
 };
 
-} // namespace input
-
 
 class InputSystem {
 public:
@@ -368,9 +364,9 @@ public:
 	bool quit();
 	void cancelQuit();
 
-	input::Key keyboard(input::KeyType type);
-	input::MouseButton mouse(input::MouseButtonType type);
-	input::ControllerButton controller(input::ControllerButtonType type);
+	Key keyboard(KeyType type);
+	MouseButton mouse(MouseButtonType type);
+	ControllerButton controller(ControllerButtonType type);
 	glm::vec2 mousePos();
 	glm::vec2 mouseDelta();
 	glm::vec2 analogueStickPos();
@@ -378,9 +374,9 @@ public:
 	void update();
 
 private:
-	lsd::UnorderedSparseMap<input::KeyType, input::Key> m_keys;
-	lsd::UnorderedSparseMap<input::MouseButtonType, input::MouseButton> m_mouseButtons;
-	lsd::UnorderedSparseMap<input::ControllerButtonType, input::ControllerButton> m_controllerButtons;
+	lsd::UnorderedSparseMap<KeyType, Key> m_keys;
+	lsd::UnorderedSparseMap<MouseButtonType, MouseButton> m_mouseButtons;
+	lsd::UnorderedSparseMap<ControllerButtonType, ControllerButton> m_controllerButtons;
 
 	bool m_quit = false;
 
@@ -398,20 +394,20 @@ private:
 
 namespace lsd {
 
-template <> struct Hash<esengine::input::Key> {
-	constexpr std::size_t operator()(const esengine::input::Key& k) const noexcept {
+template <> struct Hash<esengine::Key> {
+	constexpr std::size_t operator()(const esengine::Key& k) const noexcept {
 		return static_cast<std::size_t>(k.type);
 	}
 };
 
-template <> struct Hash<esengine::input::MouseButton> {
-	constexpr std::size_t operator()(const esengine::input::MouseButton& b) const noexcept {
+template <> struct Hash<esengine::MouseButton> {
+	constexpr std::size_t operator()(const esengine::MouseButton& b) const noexcept {
 		return static_cast<std::size_t>(b.type);
 	}
 };
 
-template <> struct Hash<esengine::input::ControllerButton> {
-	constexpr std::size_t operator()(const esengine::input::ControllerButton& b) const noexcept {
+template <> struct Hash<esengine::ControllerButton> {
+	constexpr std::size_t operator()(const esengine::ControllerButton& b) const noexcept {
 		return static_cast<std::size_t>(b.type);
 	}
 };

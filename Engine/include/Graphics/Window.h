@@ -20,12 +20,10 @@ namespace esengine {
 
 class Window {
 public:
-	Window(lsd::StringView title, const glm::uvec2& size, int flags);
+	Window(lsd::StringView title, const glm::ivec2& size, int flags);
 
-	glm::uvec2 windowSize() const;
-
-	[[nodiscard]] bool fullscreen() const noexcept {
-		return m_fullscreen;
+	const glm::ivec2& size() const noexcept {
+		return m_size;
 	}
 	[[nodiscard]] bool changed() const noexcept {
 		return m_changed;
@@ -34,8 +32,9 @@ public:
 private:
 	sdl::Window m_window;
 
-	bool m_fullscreen = false;
+	glm::ivec2 m_size;
 	bool m_changed = false;
+
 
 	friend class InputSystem;
 };
