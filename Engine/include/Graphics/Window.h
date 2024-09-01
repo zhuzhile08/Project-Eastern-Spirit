@@ -22,6 +22,9 @@ class Window {
 public:
 	Window(lsd::StringView title, const glm::ivec2& size, int flags);
 
+	SDL_Window* window() const noexcept {
+		return m_window.get();
+	}
 	const glm::ivec2& size() const noexcept {
 		return m_size;
 	}
