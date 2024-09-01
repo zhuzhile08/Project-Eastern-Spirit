@@ -1,6 +1,8 @@
 #define SDL_MAIN_HANDLED
 
+#include <Common/Common.h>
 #include <Init.h>
+#include <InputSystem.h>
 
 #include <ETCS/ETCS.h>
 
@@ -39,12 +41,8 @@ int main(int argc, char** argv) {
 	std::random_device randDevice;
 	std::default_random_engine randEngine(randDevice());
 
-	SDL_Renderer* renderer = { };
-
 	SDL_Texture* textureAtlas = { };
 	glm::ivec3 textureDim = { }; // z represents the channels
-
-	std::map<int, lsd::Vector<DrawData>, std::greater<float>> drawData = { };
 
 
 	esengine::init({
@@ -70,6 +68,8 @@ int main(int argc, char** argv) {
 	}
 
 	stbi_image_free(pixels);
+
+	// esengine::Texture textureAtlas("Sheet.png");
 
 
 	auto camera = etcs::insertEntity();
@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
 	auto renderSystem = etcs::insertSystem<const etcs::Transform, const SpriteRect>();
 
 	lsd::Function<void(const etcs::Transform&, const SpriteRect&)> renderFunction = 
-		[&camTransform, &windowDim, &drawData, renderer, textureAtlas](const etcs::Transform& transform, const SpriteRect& rect) {
+		[&camTransform, textureAtlas](const etcs::Transform& transform, const SpriteRect& rect) {
 			if (transform.translation().y > 0) {
 				auto translation = camTransform.get().localTransform() * glm::vec4(transform.translation(), 1.0f);
 				
@@ -122,41 +122,37 @@ int main(int argc, char** argv) {
 	};
 
 
+	
+
+
 	startTime = SDL_GetTicks();
 
-	while (running) {
+	while (!esengine::globals::inputSystem->quit()) {
 		currentTime = SDL_GetTicks();
 		accumulator += (currentTime - startTime) / 1000.0f;
 		startTime = currentTime;
 
 		while (accumulator >= deltaTime) {
-			while (SDL_PollEvent(&e) == SDL_TRUE) {
-				if (e.type == SDL_EVENT_QUIT) {
-					running = false;
-
-					break;
-				} else if (e.type == SDL_EVENT_WINDOW_RESIZED) {
-					SDL_GetWindowSize(window, &windowDim.x, &windowDim.y);
-				} else if (e.type == SDL_EVENT_KEY_DOWN) {
-					if (e.key.scancode == SDL_SCANCODE_W) {
-						camTransform.get().translation().z -= 0.1;
-					} if (e.key.scancode == SDL_SCANCODE_S) {
-						camTransform.get().translation().z += 0.1;
-					} if (e.key.scancode == SDL_SCANCODE_A) {
-						camTransform.get().translation().x += 0.1;
-					} if (e.key.scancode == SDL_SCANCODE_D) {
-						camTransform.get().translation().x -= 0.1;
-					}
-				}
+			if (esengine::globals::inputSystem->keyboard(esengine::KeyType::w).held) {
+				camTransform.get().translation().z -= 0.1;
+			}
+			if (esengine::globals::inputSystem->keyboard(esengine::KeyType::w).held) {
+				camTransform.get().translation().z += 0.1;
+			}
+			if (esengine::globals::inputSystem->keyboard(esengine::KeyType::w).held) {
+				camTransform.get().translation().x += 0.1;
+			}
+			if (esengine::globals::inputSystem->keyboard(esengine::KeyType::w).held) {
+				camTransform.get().translation().x -= 0.1;
 			}
 
 			accumulator -= deltaTime;
+
+			renderSystem.each(renderFunction);
 		}
 
 
 		SDL_RenderClear(renderer);
-
-		renderSystem.each(renderFunction);
 
 		for (auto& [_, data] : drawData) {
 			for (const auto& call : data) {
@@ -167,10 +163,6 @@ int main(int argc, char** argv) {
 
 		SDL_RenderPresent(renderer);
 	}
-
-
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
 
 	esengine::quit();
 }
