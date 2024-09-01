@@ -32,21 +32,26 @@ void InputSystem::cancelQuit() {
 	m_quit = false;
 }
 
-Key InputSystem::keyboard(KeyType type) {
+const Key& InputSystem::keyboard(KeyType type) {
 	return m_keys[type];
 }
-MouseButton InputSystem::mouse(MouseButtonType type) {
+
+const MouseButton& InputSystem::mouse(MouseButtonType type) {
 	return m_mouseButtons[type];
 }
-ControllerButton InputSystem::controller(ControllerButtonType type) {
+
+const ControllerButton& InputSystem::controller(ControllerButtonType type) {
 	return m_controllerButtons[type];
 }
+
 glm::vec2 InputSystem::mousePos() {
 	return m_mousePos;
 }
+
 glm::vec2 InputSystem::mouseDelta() {
 	return m_mouseDelta;
 }
+
 glm::vec2 InputSystem::analogueStickPos() {
 	return m_stickPos;
 }
@@ -58,22 +63,22 @@ void InputSystem::update() {
 	SDL_PumpEvents();
 	
 	for (auto& button : m_controllerButtons) {
-		button.second.reset();
+		button.reset();
 	}
 	
 	auto mState = SDL_GetMouseState(&m_mousePos.x, &m_mousePos.y);
 	for (auto& button : m_mouseButtons) {
-		button.second.reset();
+		button.reset();
 		
-		if ((m_mouseState & button.first) == button.first) button.second.held = true;
+		if ((m_mouseState & button.type) == button.type) button.held = true;
 		std::swap(mState, m_mouseState);
 	}
 
 	auto kState = SDL_GetKeyboardState(nullptr);
 	for (auto& key : m_keys) {
-		key.second.reset();
+		key.reset();
 		
-		if (m_keyboardState[static_cast<std::size_t>(key.first)] && kState[static_cast<std::size_t>(key.first)]) key.second.held = true;
+		if (m_keyboardState[static_cast<std::size_t>(key.type)] && kState[static_cast<std::size_t>(key.type)]) key.held = true;
 		std::swap(kState, m_keyboardState);
 	}
 
@@ -92,27 +97,27 @@ void InputSystem::update() {
 				SDL_GetWindowSizeInPixels(globals::window->m_window, &globals::window->m_size.x, &globals::window->m_size.y);
 			case SDL_EVENT_KEY_DOWN:
 				for (auto& key : m_keys) {
-					if (event.key.key == key.first) key.second.pressed = true;
+					if (event.key.key == key.type) key.pressed = true;
 				}
 			case SDL_EVENT_KEY_UP:
 				for (auto& key : m_keys) {
-					if (event.key.key == key.first) key.second.released = true;
+					if (event.key.key == key.type) key.released = true;
 				}
 			case SDL_EVENT_MOUSE_BUTTON_DOWN:
 				for (auto& key : m_mouseButtons) {
-					if (event.button.button == key.first) key.second.pressed = true;
+					if (event.button.button == key.type) key.pressed = true;
 				}
 			case SDL_EVENT_MOUSE_BUTTON_UP:
 				for (auto& key : m_mouseButtons) {
-					if (event.button.button == key.first) key.second.released = true;
+					if (event.button.button == key.type) key.released = true;
 				}
 			case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
 				for (auto& key : m_controllerButtons) {
-					if (event.button.button == key.first) key.second.pressed = true;
+					if (event.button.button == key.type) key.pressed = true;
 				}
 			case SDL_EVENT_GAMEPAD_BUTTON_UP:
 				for (auto& key : m_controllerButtons) {
-					if (event.button.button == key.first) key.second.released = true;
+					if (event.button.button == key.type) key.released = true;
 				}
 
 			case SDL_EVENT_MOUSE_MOTION:

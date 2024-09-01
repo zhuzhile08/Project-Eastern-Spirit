@@ -11,8 +11,9 @@
 
 #pragma once
 
+#include <LSD/Operators.h>
 #include <LSD/Hash.h>
-#include <LSD/UnorderedSparseMap.h>
+#include <LSD/UnorderedSparseSet.h>
 
 #include <glm/glm.hpp>
 
@@ -357,6 +358,22 @@ public:
 };
 
 
+namespace input_system_detail { // slightly cursed, but I didn't want to leak the below using directive into the engine namespace
+
+using namespace lsd::enum_operators;
+
+CUSTOM_HASHER(KHasher, const Key&, KeyType, lsd::Hash<KeyType>(), .type)
+CUSTOM_EQUAL(KEqual, const Key&, KeyType, .type)
+
+CUSTOM_HASHER(MBHasher, const MouseButton&, MouseButtonType, lsd::Hash<MouseButtonType>(), .type)
+CUSTOM_EQUAL(MBEqual, const MouseButton&, MouseButtonType, .type)
+
+CUSTOM_HASHER(CBHasher, const ControllerButton&, ControllerButtonType, lsd::Hash<ControllerButtonType>(), .type)
+CUSTOM_EQUAL(CBEqual, const ControllerButton&, ControllerButtonType, .type)
+
+} // namespace input_system_detail
+
+
 class InputSystem {
 public:
 	InputSystem();
@@ -364,9 +381,9 @@ public:
 	bool quit();
 	void cancelQuit();
 
-	Key keyboard(KeyType type);
-	MouseButton mouse(MouseButtonType type);
-	ControllerButton controller(ControllerButtonType type);
+	const Key& keyboard(KeyType type);
+	const MouseButton& mouse(MouseButtonType type);
+	const ControllerButton& controller(ControllerButtonType type);
 	glm::vec2 mousePos();
 	glm::vec2 mouseDelta();
 	glm::vec2 analogueStickPos();
@@ -374,9 +391,9 @@ public:
 	void update();
 
 private:
-	lsd::UnorderedSparseMap<KeyType, Key> m_keys;
-	lsd::UnorderedSparseMap<MouseButtonType, MouseButton> m_mouseButtons;
-	lsd::UnorderedSparseMap<ControllerButtonType, ControllerButton> m_controllerButtons;
+	lsd::UnorderedSparseSet<Key, input_system_detail::KHasher, input_system_detail::KEqual> m_keys;
+	lsd::UnorderedSparseSet<MouseButton, input_system_detail::MBHasher, input_system_detail::MBEqual> m_mouseButtons;
+	lsd::UnorderedSparseSet<ControllerButton, input_system_detail::CBHasher, input_system_detail::CBEqual> m_controllerButtons;
 
 	bool m_quit = false;
 
