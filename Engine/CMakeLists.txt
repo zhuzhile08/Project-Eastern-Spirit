@@ -41,7 +41,7 @@ set (ENGINE_SOURCE_FILES
 	"src/Graphics/Background.cpp"
 	"src/Graphics/Font.cpp"
 	"src/Graphics/RenderSystem.cpp"
-	"src/Graphics/TextureAtlas.cpp"
+	"src/Graphics/Texture.cpp"
 	"src/Graphics/Window.cpp"
 
 	"src/Init.cpp"
