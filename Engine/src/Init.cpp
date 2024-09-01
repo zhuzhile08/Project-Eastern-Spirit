@@ -1,5 +1,6 @@
 #include <Init.h>
 
+#include <Common/Common.h>
 #include <Common/FileSystem.h>
 
 #include <InputSystem.h>
@@ -9,15 +10,6 @@
 #include <ETCS/ETCS.h>
 
 namespace esengine {
-
-namespace globals {
-
-extern FileSystem* fileSystem;
-extern Window* window;
-extern RenderSystem* renderSystem;
-extern InputSystem* inputSystem;
-
-}
 
 void init(InitInfo info) {
 	etcs::init();
