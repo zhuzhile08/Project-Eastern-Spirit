@@ -77,7 +77,7 @@ public:
 			} else if constexpr (std::same_as<handle_type, SDL_Renderer*>) {
 				SDL_DestroyRenderer(m_handle);
 			} else if constexpr (std::same_as<handle_type, SDL_Texture*>) {
-				SDL_DestroyTexutre(m_handle);
+				SDL_DestroyTexture(m_handle);
 			}
 		}
 
@@ -105,6 +105,8 @@ public:
 	constexpr const_handle& get() const noexcept { return m_handle; }
 	constexpr operator handle_type&() noexcept { return m_handle; }
 	constexpr operator const_handle&() const noexcept { return m_handle; }
+
+	constexpr operator bool() const noexcept { return m_handle; }
 
 private:
 	handle_type m_handle { };
