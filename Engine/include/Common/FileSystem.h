@@ -13,7 +13,7 @@
 
 #include <LSD/SharedPointer.h>
 #include <LSD/Vector.h>
-#include <LSD/StringView.h>
+#include <LSD/String.h>
 #include <LSD/UnorderedSparseMap.h>
 
 #include <type_traits>
@@ -21,6 +21,29 @@
 #include <filesystem>
 
 namespace esengine {
+
+class FilesystemError : public std::runtime_error {
+public:
+	FilesystemError(const lsd::String& message) : std::runtime_error(message.cStr()) {
+		m_message.append(message).pushBack('!');
+	}
+	FilesystemError(const char* message) : std::runtime_error(message) {
+		m_message.append(message).pushBack('!');
+	}
+	FilesystemError(const FilesystemError&) = default;
+	FilesystemError(FilesystemError&&) = default;
+
+	FilesystemError& operator=(const FilesystemError&) = default;
+	FilesystemError& operator=(FilesystemError&&) = default;
+
+	const char* what() const noexcept override {
+		return m_message.cStr();
+	}
+
+private:
+	lsd::String m_message { "Program terminated with FilesystemError: " };
+};
+
 
 enum class OpenMode {
 	read,

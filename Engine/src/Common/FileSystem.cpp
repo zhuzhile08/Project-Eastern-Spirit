@@ -86,6 +86,7 @@ File FileSystem::load(const std::filesystem::path& path, OpenMode mode, bool buf
 	// @todo implement as multithreaded
 	// return signal (bool mutex?)
 	// run on different thread and set bool to true when done
+	if (!exists(path)) throw FilesystemError("File not found");
 
 	string_type p(path.native());
 
@@ -120,7 +121,7 @@ File FileSystem::load(const std::filesystem::path& path, OpenMode mode, bool buf
 		flushAndCloseFile
 	).first->second;
 
-	assert(file && "Failed to load file!");
+	if (!file) throw FilesystemError("Failed to load file");
 
 	return File(file, (buffered ? globals::fileSystem->unusedBuffer() : nullptr), path.c_str());
 }
