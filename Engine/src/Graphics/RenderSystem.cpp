@@ -11,6 +11,10 @@ RenderSystem* renderSystem = nullptr;
 
 } // namespace globals
 
+RenderSystem::RenderSystem() {
+	insertPass(""); // default render pass;
+}
+
 void RenderSystem::insertPass(lsd::StringView name/*, Texture* target = nullptr*/) {
 	m_renderPasses.emplace(RenderPass { sdl::Renderer(globals::window->window()), name });
 }
@@ -19,8 +23,8 @@ void RenderSystem::removePass(lsd::StringView name) {
 	m_renderPasses.erase(name);
 }
 
-void RenderSystem::insertCall(lsd::StringView name, CallData&& callData) {
-	m_renderPasses.at(name).drawData.emplace(std::move(callData));
+void RenderSystem::insertCall(lsd::StringView name, double zPos, CallData&& callData) {
+	m_renderPasses.at(name).drawData[zPos * 10].emplaceBack(std::move(callData));
 }
 
 void RenderSystem::drawPass(lsd::StringView name) {

@@ -29,10 +29,12 @@ class RenderSystem {
 public:
 	struct CallData {
 	public:
-		Texture* texture;
+		double rotation;
+		
 		SDL_FRect src;
 		SDL_FRect dst;
-		double rotation;
+
+		Texture* texture;
 	};
 
 private:
@@ -43,7 +45,7 @@ private:
 
 		Texture* target = nullptr;
 
-		std::map<int, lsd::Vector<CallData>, std::greater<float>> drawData = { };
+		std::map<int, lsd::Vector<CallData>, std::greater<int>> drawData = { };
 
 	};
 
@@ -51,15 +53,19 @@ private:
 	CUSTOM_EQUAL(Equal, const RenderPass&, const lsd::String&, .name)
 
 public:
-	RenderSystem() = default;
+	RenderSystem();
 
 	void insertPass(lsd::StringView name/*, Texture* target = nullptr*/);
 	void removePass(lsd::StringView name);
 
-	void insertCall(lsd::StringView name, CallData&& callData);
+	void insertCall(lsd::StringView name, double zPos, CallData&& callData);
 	
 	void drawPass(lsd::StringView name);
 	void drawAll();
+
+	const RenderPass& pass(lsd::StringView name = "") const {
+		return m_renderPasses.at(name);
+	}
 
 private:
 	lsd::UnorderedSparseSet<RenderPass, Hasher, Equal> m_renderPasses;
