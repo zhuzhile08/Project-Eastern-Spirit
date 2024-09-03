@@ -4,6 +4,8 @@
 #include <Init.h>
 #include <InputSystem.h>
 
+#include <Graphics/Texture.h>
+
 #include <ETCS/ETCS.h>
 
 #include <glm/glm.hpp>
@@ -41,9 +43,6 @@ int main(int argc, char** argv) {
 	std::random_device randDevice;
 	std::default_random_engine randEngine(randDevice());
 
-	SDL_Texture* textureAtlas = { };
-	glm::ivec3 textureDim = { }; // z represents the channels
-
 
 	esengine::init({
 		argv,
@@ -51,25 +50,7 @@ int main(int argc, char** argv) {
 	});
 
 
-	auto pixels = stbi_load("/Users/zhilezhugd/Programming/C++/Project-Eastern-Spirit/out/build/Debug/Game/Data/Sheet.png", &textureDim.x, &textureDim.y, &textureDim.z, STBI_rgb_alpha);
-	if (pixels == nullptr) {
-		std::printf("Failed to load sprite sheet!");
-		return 0;
-	}
-
-	if (textureAtlas = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STATIC, textureDim.x, textureDim.y); textureAtlas == nullptr) {
-		std::printf("Failed to create SDL Texutre with error: \"%s\"", SDL_GetError());
-		return 0;
-	}
-
-	if (SDL_Rect dim { 0, 0, textureDim.x, textureDim.y }; SDL_UpdateTexture(textureAtlas, &dim, pixels, textureDim.x * textureDim.z) == SDL_FALSE) {
-		std::printf("Failed to update SDL Texutre with error: \"%s\"", SDL_GetError());
-		return 0;
-	}
-
-	stbi_image_free(pixels);
-
-	// esengine::Texture textureAtlas("Sheet.png");
+	esengine::Texture textureAtlas("Sheet.png");
 
 
 	auto camera = etcs::insertEntity();
