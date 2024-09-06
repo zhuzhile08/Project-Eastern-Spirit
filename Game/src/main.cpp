@@ -84,13 +84,13 @@ private:
 		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::w).held) {
 			m_camTransform.get().translation().z -= 0.1;
 		}
-		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::w).held) {
+		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::s).held) {
 			m_camTransform.get().translation().z += 0.1;
 		}
-		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::w).held) {
+		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::a).held) {
 			m_camTransform.get().translation().x += 0.1;
 		}
-		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::w).held) {
+		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::d).held) {
 			m_camTransform.get().translation().x -= 0.1;
 		}
 	}
