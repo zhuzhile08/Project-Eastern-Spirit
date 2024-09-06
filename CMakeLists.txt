@@ -24,7 +24,7 @@ set(LIBRARY_PATH ${CMAKE_SOURCE_DIR}/Deps)
 set(ENGINE_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/Engine/include/)
 
 # copy data to the binary folder
-file(COPY ${CMAKE_SOURCE_DIR}/Data DESTINATION ${CMAKE_BINARY_DIR}/Game/Data)
+file(COPY ${CMAKE_SOURCE_DIR}/Data DESTINATION ${CMAKE_BINARY_DIR}/Game/)
 
 
 # set global options

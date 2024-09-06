@@ -51,7 +51,7 @@ FileSystem::FileSystem(char** argv) : m_absPathBase(argv[0]) {
 }
 
 bool FileSystem::exists(const std::filesystem::path& path) const {
-	return m_files.contains(path);
+	return std::filesystem::exists(path);
 }
 
 bool FileSystem::contains(const std::filesystem::path& path, OpenMode mode) const {

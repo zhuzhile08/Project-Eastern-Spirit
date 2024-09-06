@@ -33,15 +33,21 @@ void InputSystem::cancelQuit() {
 }
 
 const Key& InputSystem::keyboard(KeyType type) {
-	return m_keys[type];
+	auto& k = m_keys[type];
+	k.type = type;
+	return k;
 }
 
 const MouseButton& InputSystem::mouse(MouseButtonType type) {
-	return m_mouseButtons[type];
+	auto& b = m_mouseButtons[type];
+	b.type = type;
+	return b;
 }
 
 const ControllerButton& InputSystem::controller(ControllerButtonType type) {
-	return m_controllerButtons[type];
+	auto& b = m_controllerButtons[type];
+	b.type = type;
+	return b;
 }
 
 glm::vec2 InputSystem::mousePos() {

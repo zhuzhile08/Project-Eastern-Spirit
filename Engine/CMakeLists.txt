@@ -44,7 +44,7 @@ set (ENGINE_SOURCE_FILES
 	"src/Graphics/Texture.cpp"
 	"src/Graphics/Window.cpp"
 
-	"src/Init.cpp"
+	"src/Application.cpp"
 	"src/InputSystem.cpp"
 	"src/Stage.cpp"
 )

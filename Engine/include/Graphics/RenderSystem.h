@@ -58,12 +58,12 @@ public:
 	void insertPass(lsd::StringView name/*, Texture* target = nullptr*/);
 	void removePass(lsd::StringView name);
 
-	void insertCall(lsd::StringView name, double zPos, CallData&& callData);
+	void insertCall(double zPos, CallData&& callData, lsd::StringView name = { });
 	
 	void drawPass(lsd::StringView name);
 	void drawAll();
 
-	const RenderPass& pass(lsd::StringView name = "") const {
+	const RenderPass& pass(lsd::StringView name = { }) const {
 		return m_renderPasses.at(name);
 	}
 

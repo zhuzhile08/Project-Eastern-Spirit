@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <SDL3/SDL.h>
+
 namespace esengine {
 
 class FileSystem;
@@ -19,6 +21,10 @@ class RenderSystem;
 class InputSystem;
 
 class Texture;
+
+struct SpriteRect { // temporary
+	SDL_FRect rect;
+};
 
 namespace globals {
 
