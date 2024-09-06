@@ -94,7 +94,7 @@ File FileSystem::load(const std::filesystem::path& path, OpenMode mode, bool buf
 
 #ifdef _WIN32
 	wchar_t m[4];
-	std::mbstowcs(m, mStr, mStr);
+	std::mbstowcs(m, mStr, 4);
 	p.append(m);
 #else
 	p.append(mStr);
