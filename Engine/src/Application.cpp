@@ -1,4 +1,4 @@
-#include <Init.h>
+#include <Application.h>
 
 #include <Common/Common.h>
 #include <Common/FileSystem.h>
@@ -11,7 +11,7 @@
 
 namespace esengine {
 
-void init(InitInfo info) {
+Application::Application(InitInfo info) : m_deltaTime(info.deltaTime) {
 	etcs::init();
 
 	if (SDL_Init(
@@ -28,7 +28,7 @@ void init(InitInfo info) {
 	globals::inputSystem = new InputSystem();
 }
 
-void quit() {
+Application::~Application() {
 	delete globals::inputSystem;
 	delete globals::renderSystem;
 	delete globals::window;
@@ -37,6 +37,29 @@ void quit() {
 	SDL_Quit();
 
 	etcs::quit();
+}
+
+void Application::run() {
+	m_currentTime = SDL_GetTicks();
+
+	while (!esengine::globals::inputSystem->quit()) {
+		m_startTime = m_currentTime;
+		m_currentTime = SDL_GetTicks();
+
+		m_accumulator += m_currentTime - m_startTime;
+
+		while (m_accumulator >= m_deltaTime) {
+			globals::inputSystem->update();
+
+			update();
+
+			m_accumulator -= m_deltaTime;
+		}
+
+		m_projector.each(m_projectionFunction);
+
+		globals::renderSystem->drawAll();
+	}
 }
 
 } // namespace esengine

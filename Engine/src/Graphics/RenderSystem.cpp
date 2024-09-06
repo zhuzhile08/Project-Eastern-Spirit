@@ -12,7 +12,7 @@ RenderSystem* renderSystem = nullptr;
 } // namespace globals
 
 RenderSystem::RenderSystem() {
-	insertPass(""); // default render pass;
+	insertPass({ }); // default render pass;
 }
 
 void RenderSystem::insertPass(lsd::StringView name/*, Texture* target = nullptr*/) {
@@ -23,7 +23,7 @@ void RenderSystem::removePass(lsd::StringView name) {
 	m_renderPasses.erase(name);
 }
 
-void RenderSystem::insertCall(lsd::StringView name, double zPos, CallData&& callData) {
+void RenderSystem::insertCall(double zPos, CallData&& callData, lsd::StringView name) {
 	m_renderPasses.at(name).drawData[zPos * 10].emplaceBack(std::move(callData));
 }
 
@@ -46,12 +46,11 @@ void RenderSystem::drawPass(lsd::StringView name) {
 
 void RenderSystem::drawAll() {
 	for (auto& pass : m_renderPasses) {
-		SDL_RenderClear(pass.renderer.get());
+		SDL_RenderClear(pass.renderer);
 
 		for (auto& [_, data] : pass.drawData) {
 			for (const auto& call : data) {
-				if (call.rotation == 0) SDL_RenderTexture(pass.renderer, call.texture->texture(), &call.src, &call.dst);
-				else SDL_RenderTextureRotated(pass.renderer, call.texture->texture(), &call.src, &call.dst, 0, nullptr, SDL_FLIP_NONE);
+				SDL_RenderTextureRotated(pass.renderer, call.texture->texture(), &call.src, &call.dst, 0, nullptr, SDL_FLIP_NONE);
 
 				data.clear();
 			}

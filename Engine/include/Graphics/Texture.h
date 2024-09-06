@@ -25,11 +25,11 @@ namespace esengine {
 
 class Texture {
 public:
-	Texture(lsd::StringView path, std::initializer_list<lsd::StringView> passNames = { });
+	Texture(lsd::StringView path, std::initializer_list<lsd::StringView> passNames = { { } });
 
 	void createForPass(lsd::StringView passName);
 
-	[[nodiscard]] SDL_Texture* texture(lsd::StringView passName = "") const noexcept {
+	[[nodiscard]] SDL_Texture* texture(lsd::StringView passName = { }) const noexcept {
 		return m_textures.at(passName).get();
 	}
 	[[nodiscard]] const glm::ivec3& dimension() const noexcept {
