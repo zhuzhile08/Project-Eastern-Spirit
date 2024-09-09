@@ -36,7 +36,7 @@ set (ENGINE_SOURCE_FILES
 	"src/Components/Path.cpp"
 	"src/Components/Text.cpp"
 	"src/Components/Trail.cpp"
-	"src/Components/Valuable.cpp"
+	
 
 	"src/Graphics/Background.cpp"
 	"src/Graphics/Font.cpp"
