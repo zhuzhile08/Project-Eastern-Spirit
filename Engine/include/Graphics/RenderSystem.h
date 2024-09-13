@@ -35,6 +35,8 @@ public:
 		SDL_FRect dst;
 
 		Texture* texture;
+
+		lsd::StringView passName = { };
 	};
 
 private:
@@ -55,10 +57,10 @@ private:
 public:
 	RenderSystem();
 
-	void insertPass(lsd::StringView name/*, Texture* target = nullptr*/);
+	void insertPass(lsd::StringView name, Texture* target = nullptr);
 	void removePass(lsd::StringView name);
 
-	void insertCall(double zPos, CallData&& callData, lsd::StringView name = { });
+	void insertCall(double yPos, CallData&& callData);
 	
 	void drawPass(lsd::StringView name);
 	void drawAll();
