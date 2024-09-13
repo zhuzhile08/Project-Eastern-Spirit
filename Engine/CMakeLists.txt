@@ -26,15 +26,15 @@ set (ENGINE_SOURCE_FILES
 
 	"src/Common/Filesystem.cpp"
 
-	"src/Components/2DSprite.cpp"
-	"src/Components/3DSprite.cpp"
+	"src/Components/Sprite2D.cpp"
+	"src/Components/Sprite3D.cpp"
 	"src/Components/Animator.cpp"
 	"src/Components/Dispenser.cpp"
 	"src/Components/Health.cpp"
 	"src/Components/Hitbox.cpp"
 	"src/Components/Hurtbox.cpp"
 	"src/Components/Path.cpp"
-	"src/Components/Text.cpp"
+	"src/Components/TextBox.cpp"
 	"src/Components/Trail.cpp"
 	"src/Components/Valuable.cpp"
 
