@@ -14,16 +14,21 @@ using namespace lsd::enum_operators;
 Texture::Texture(lsd::StringView path, std::initializer_list<lsd::StringView> passNames) : m_path(path) {
 	File f = globals::fileSystem->load(globals::fileSystem->assetsPath() / path.data(), OpenMode::binary | OpenMode::read, false);
 
-	for (const auto& name : passNames) createForPassBackend(name, f);
+	for (const auto& name : passNames) createForPass(name, f);
 }
 
-void Texture::createForPass(lsd::StringView passName) {
-	File f = globals::fileSystem->load(globals::fileSystem->assetsPath() / m_path.data(), OpenMode::binary | OpenMode::read, false);
+SDL_Texture* Texture::texture(lsd::StringView passName) noexcept {
+	auto it = m_textures.find(passName);
 
-	createForPassBackend(passName, f);
+	if (it != m_textures.end()) return it->second.get();
+	else {
+		File f = globals::fileSystem->load(globals::fileSystem->assetsPath() / m_path.data(), OpenMode::binary | OpenMode::read, false);
+
+		return createForPass(passName, f);
+	}
 }
 
-void Texture::createForPassBackend(lsd::StringView passName, const File& file) {
+SDL_Texture* Texture::createForPass(lsd::StringView passName, const File& file) {
 	auto pixels = stbi_load_from_file(file.stream(), &m_dimension.x, &m_dimension.y, &m_dimension.z, STBI_rgb_alpha);
 	if (pixels == nullptr) throw std::runtime_error("Failed to load sprite sheet!");
 
@@ -41,6 +46,8 @@ void Texture::createForPassBackend(lsd::StringView passName, const File& file) {
 		throw std::runtime_error("Failed to update SDL texutre!");
 
 	stbi_image_free(pixels);
+
+	return tx.get();
 }
 
 } // namespace esengine
