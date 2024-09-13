@@ -398,7 +398,7 @@ private:
 	bool m_quit = false;
 
 	std::uint32_t m_mouseState;
-	const std::uint8_t*m_keyboardState;
+	const bool* m_keyboardState;
 
 	glm::vec2 m_mousePos;
 	glm::vec2 m_mouseDelta;

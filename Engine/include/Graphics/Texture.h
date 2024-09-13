@@ -27,9 +27,8 @@ class Texture {
 public:
 	Texture(lsd::StringView path, std::initializer_list<lsd::StringView> passNames = { { } });
 
-	void createForPass(lsd::StringView passName);
-
-	[[nodiscard]] SDL_Texture* texture(lsd::StringView passName = { }) const noexcept {
+	[[nodiscard]] SDL_Texture* texture(lsd::StringView passName = { }) noexcept;
+	[[nodiscard]] const SDL_Texture* texture(lsd::StringView passName = { }) const noexcept {
 		return m_textures.at(passName).get();
 	}
 	[[nodiscard]] const glm::ivec3& dimension() const noexcept {
@@ -45,7 +44,7 @@ private:
 
 	lsd::String m_path;
 
-	void createForPassBackend(lsd::StringView passName, const File& file);
+	SDL_Texture* createForPass(lsd::StringView passName, const File& file);
 };
 
 } // namespace esengine

@@ -16,15 +16,29 @@
 namespace esengine {
 
 class FileSystem;
+
+class Background;
+class Font;
+class Texutre;
 class Window;
+
 class RenderSystem;
 class InputSystem;
 
-class Texture;
+class Animator;
+class Camera;
+class Dispenser;
+class Health;
+class Hitbox;
+class Hurtbox;
+class Path;
+class Sprite2D;
+class Sprtie3D;
+class TextBox;
+class Trail;
+class Valuable;
 
-struct SpriteRect { // temporary
-	SDL_FRect rect;
-};
+class Texture;
 
 namespace globals {
 

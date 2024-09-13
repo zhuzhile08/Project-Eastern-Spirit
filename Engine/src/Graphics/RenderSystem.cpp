@@ -15,16 +15,18 @@ RenderSystem::RenderSystem() {
 	insertPass({ }); // default render pass;
 }
 
-void RenderSystem::insertPass(lsd::StringView name/*, Texture* target = nullptr*/) {
-	m_renderPasses.emplace(RenderPass { sdl::Renderer(globals::window->window()), name });
+void RenderSystem::insertPass(lsd::StringView name, Texture* target) {
+	auto renderer = m_renderPasses.emplace(RenderPass { sdl::Renderer(globals::window->window()), name }).first->renderer.get();
+
+	if (target) SDL_SetRenderTarget(renderer, target->texture());
 }
 
 void RenderSystem::removePass(lsd::StringView name) {
 	m_renderPasses.erase(name);
 }
 
-void RenderSystem::insertCall(double zPos, CallData&& callData, lsd::StringView name) {
-	m_renderPasses.at(name).drawData[zPos * 10].emplaceBack(std::move(callData));
+void RenderSystem::insertCall(double yPos, CallData&& callData) {
+	m_renderPasses.at(callData.passName).drawData[yPos * 10].emplaceBack(std::move(callData));
 }
 
 void RenderSystem::drawPass(lsd::StringView name) {
