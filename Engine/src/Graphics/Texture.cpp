@@ -42,7 +42,7 @@ SDL_Texture* Texture::createForPass(lsd::StringView passName, const File& file) 
 
 	if (!tx) throw std::runtime_error("Failed to create SDL texture!");
 
-	if (SDL_Rect dim { 0, 0, m_dimension.x, m_dimension.y }; SDL_UpdateTexture(tx.get(), &dim, pixels, m_dimension.x * m_dimension.z) == SDL_FALSE)
+	if (SDL_Rect dim { 0, 0, m_dimension.x, m_dimension.y }; SDL_UpdateTexture(tx.get(), &dim, pixels, m_dimension.x * m_dimension.z) == false)
 		throw std::runtime_error("Failed to update SDL texutre!");
 
 	stbi_image_free(pixels);
