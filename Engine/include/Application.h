@@ -13,10 +13,11 @@
 
 #include <Common/Common.h>
 
+#include <Components/Sprite3D.h>
+
 #include <SDL3/SDL.h>
 
 #include <ETCS/Components/Transform.h>
-#include <ETCS/System.h>
 
 #include <LSD/StringView.h>
 #include <LSD/FunctionPointer.h>
@@ -54,9 +55,6 @@ protected:
 
 	std::uint64_t m_startTime = 0;
 	std::uint64_t m_currentTime = 0;
-
-	lsd::Function<void(const etcs::Transform&, const SpriteRect&)> m_projectionFunction;
-	etcs::System<const etcs::Transform, const SpriteRect> m_projector;
 };
 
 } // namespace esengine

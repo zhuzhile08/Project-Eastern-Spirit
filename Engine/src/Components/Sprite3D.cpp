@@ -10,8 +10,8 @@ namespace esengine {
 static constexpr std::size_t fov = 100;
 static const float fovRatio = glm::tan(glm::radians(static_cast<float>(fov / 2)));
 
-RenderSystem::CallData Sprite3D::drawCall(const glm::vec3& translation, const Camera& camera) const {
-	auto tf = glm::vec4(translation, 1.0f); // camTransform*
+RenderSystem::CallData Sprite3D::drawCall(const glm::vec3& translation, const glm::mat4& camTransform, const Camera& camera) const {
+	auto tf = camTransform * glm::vec4(translation, 1.0f); // camTransform*
 
 	float fovRatY = tf.y * fovRatio;
 

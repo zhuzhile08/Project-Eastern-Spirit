@@ -30,6 +30,8 @@ public:
 	Sprite3D() = default;
 	Sprite3D(SDL_FRect rect, Texture* texture) : m_rect(rect), m_texture(texture) { }
 
+	[[nodiscard]] RenderSystem::CallData drawCall(const glm::vec3& translation, const glm::mat4& camTransform, const Camera& camera) const;
+	
 	[[nodiscard]] const SDL_FRect& rect() const noexcept {
 		return m_rect;
 	}
@@ -41,9 +43,6 @@ private:
 	SDL_FRect m_rect { };
 	Texture* m_texture { };
 
-	[[nodiscard]] RenderSystem::CallData drawCall(const glm::vec3& translation, const Camera& camera) const;
-
-	friend class Camera;
 	friend class Animator;
 };
 
