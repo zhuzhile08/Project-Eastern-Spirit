@@ -34,9 +34,9 @@ public:
 		std::random_device randDevice;
 		std::default_random_engine randEngine(randDevice());
 
-		std::uniform_int_distribution<int> randXGen(-20, 20);
-		std::uniform_int_distribution<std::size_t> randYGen(0, 64);
-		std::uniform_int_distribution<int> randZGen(-20, 20);
+		std::uniform_real_distribution<float> randXGen(-20, 20);
+		std::uniform_real_distribution<float> randYGen(0, 64);
+		std::uniform_real_distribution<float> randZGen(-20, 20);
 
 		for (size_t i = 2049; i > 1; i--) {
 			auto e = etcs::world().insertEntity();
@@ -56,10 +56,10 @@ public:
 private:
 	void update() {
 		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::w).held) {
-			m_camTransform.get().translation().z -= 0.1;
+			m_camTransform.get().translation().z += 0.1;
 		}
 		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::s).held) {
-			m_camTransform.get().translation().z += 0.1;
+			m_camTransform.get().translation().z -= 0.1;
 		}
 		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::a).held) {
 			m_camTransform.get().translation().x += 0.1;
@@ -67,7 +67,6 @@ private:
 		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::d).held) {
 			m_camTransform.get().translation().x -= 0.1;
 		}
-		
 	}
 
 	esengine::Texture m_textureAtlas;

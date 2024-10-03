@@ -16,18 +16,28 @@
 
 #include <LSD/String.h>
 
+#include <Common/Common.h>
+
 namespace esengine {
 
 class Camera {
 public:
-	Camera(lsd::StringView passName = { }) : m_passName(passName) { }
+	Camera(double fov = 90, lsd::StringView passName = { }, double near = 0.1f);
 
+	void recalculate(double fov = 90, double near = 0.1f);
+	void update();
+
+	[[nodiscard]] const glm::mat4& projectionMat() const noexcept {
+		return m_projectionMat;
+	}
 	[[nodiscard]] const lsd::String& passName() const noexcept {
 		return m_passName;
 	}
 
 private:
 	lsd::String m_passName;
+
+	glm::mat4 m_projectionMat;
 };
 
 } // namespace esengine

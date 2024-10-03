@@ -388,6 +388,7 @@ public:
 	glm::vec2 mouseDelta();
 	glm::vec2 analogueStickPos();
 
+	void startFrame();
 	void update();
 
 private:

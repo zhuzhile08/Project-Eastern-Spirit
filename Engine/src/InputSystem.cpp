@@ -62,8 +62,11 @@ glm::vec2 InputSystem::analogueStickPos() {
 	return m_stickPos;
 }
 
-void InputSystem::update() {
+void InputSystem::startFrame() {
 	globals::window->m_changed = false;
+}
+
+void InputSystem::update() {
 	m_mouseDelta = { 0, 0 };
 	
 	SDL_PumpEvents();
@@ -99,6 +102,8 @@ void InputSystem::update() {
 			case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
 			case SDL_EVENT_WINDOW_MINIMIZED:
 			case SDL_EVENT_WINDOW_MAXIMIZED:
+			case SDL_EVENT_WINDOW_ENTER_FULLSCREEN:
+			case SDL_EVENT_WINDOW_LEAVE_FULLSCREEN:
 				globals::window->m_changed = true;
 				SDL_GetWindowSizeInPixels(globals::window->m_window, &globals::window->m_size.x, &globals::window->m_size.y);
 			case SDL_EVENT_KEY_DOWN:

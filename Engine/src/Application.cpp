@@ -52,6 +52,8 @@ void Application::run() {
 
 		m_accumulator += m_currentTime - m_startTime;
 
+		globals::inputSystem->startFrame();
+
 		while (m_accumulator >= m_deltaTime) {
 			globals::inputSystem->update();
 
@@ -60,7 +62,9 @@ void Application::run() {
 			m_accumulator -= m_deltaTime;
 		}
 
-		for (const auto& [camTransform, camera] : etcs::world().query<etcs::Transform, const Camera>()) {
+		for (auto [camTransform, camera] : etcs::world().query<etcs::Transform, Camera>()) {
+			camera.update();
+
 			for (const auto& [transform, sprite] : etcs::world().query<const etcs::Transform, const Sprite3D>()) {
 				esengine::globals::renderSystem->insertCall(transform.translation().y, sprite.drawCall(transform.translation(), camTransform.localTransform(), camera));
 			}
