@@ -3,7 +3,7 @@
 
 namespace esengine {
 
-Font::Font(glm::uvec2 charSize, std::uint32_t padding, Texture texturePath) : m_charSize(charSize), m_padding(padding), m_texturePath(texturePath) { 
+Font::Font(glm::uvec2 charSize, std::uint32_t padding, Texture texturePath) noexcept : m_charSize(charSize), m_padding(padding), m_texturePath(texturePath) {
 
 	for (int i = 0; i <= 255; i++) {
 		SDL_Rect rect;
