@@ -2,7 +2,7 @@
  * @file Texture.h
  * @author Zhile Zhu (zhuzhile08@gmail.com)
  * 
- * @brief Texture wrapper class
+ * @brief Texture wrapper classes
  * 
  * @date 2024-09-01
  * 
@@ -23,6 +23,7 @@
 
 namespace esengine {
 
+// Image texture
 class Texture {
 public:
 	Texture(lsd::StringView path, std::initializer_list<lsd::StringView> passNames = { { } });
@@ -45,6 +46,29 @@ private:
 	lsd::String m_path;
 
 	SDL_Texture* createForPass(lsd::StringView passName, const File& file);
+};
+
+// Streaming texture
+class StreamingTexture {
+public:
+	StreamingTexture(glm::ivec2 dimension, std::initializer_list<lsd::StringView> passNames = { { } });
+
+	void resize(glm::ivec2 dimension);
+	void update(const void* data, SDL_Rect location, lsd::StringView passName = { });
+
+	[[nodiscard]] SDL_Texture* texture(lsd::StringView passName = { }) noexcept;
+	[[nodiscard]] const SDL_Texture* texture(lsd::StringView passName = { }) const noexcept {
+		return m_textures.at(passName).get();
+	}
+	[[nodiscard]] const glm::ivec2& dimension() const noexcept {
+		return m_dimension;
+	}
+
+private:
+	lsd::UnorderedSparseMap<lsd::String, sdl::Texture> m_textures;
+	glm::ivec2 m_dimension = { }; // z represents the channels
+
+	SDL_Texture* createForPass(lsd::StringView passName);
 };
 
 } // namespace esengine

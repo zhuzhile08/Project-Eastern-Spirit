@@ -47,6 +47,8 @@ extern Window* window;
 extern RenderSystem* renderSystem;
 extern InputSystem* inputSystem;
 
+inline constexpr std::uint32_t spriteUnit = 16;
+
 } // namespace globals
 
 } // namespace esengine
