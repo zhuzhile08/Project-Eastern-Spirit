@@ -34,7 +34,7 @@ class Hurtbox;
 class Path;
 class Sprite2D;
 class Sprtie3D;
-class TextBox;
+class Textbox;
 class Trail;
 class Valuable;
 
