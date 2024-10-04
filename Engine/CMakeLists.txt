@@ -26,6 +26,7 @@ set (ENGINE_SOURCE_FILES
 
 	"src/Common/Filesystem.cpp"
 
+	"src/Components/Background.cpp"
 	"src/Components/Camera.cpp"
 	"src/Components/Sprite2D.cpp"
 	"src/Components/Sprite3D.cpp"
@@ -38,7 +39,6 @@ set (ENGINE_SOURCE_FILES
 	"src/Components/TextBox.cpp"
 	"src/Components/Trail.cpp"
 
-	"src/Graphics/Background.cpp"
 	"src/Graphics/Font.cpp"
 	"src/Graphics/RenderSystem.cpp"
 	"src/Graphics/Texture.cpp"
