@@ -36,8 +36,8 @@ void RenderSystem::drawPass(lsd::StringView name) {
 
 	for (auto& [_, data] : pass.drawData) {
 		for (const auto& call : data) {
-			if (call.rotation == 0) SDL_RenderTexture(pass.renderer, call.texture->texture(), &call.src, &call.dst);
-			else SDL_RenderTextureRotated(pass.renderer, call.texture->texture(), &call.src, &call.dst, 0, nullptr, SDL_FLIP_NONE);
+			if (call.rotation == 0) SDL_RenderTexture(pass.renderer, call.texture, &call.src, &call.dst);
+			else SDL_RenderTextureRotated(pass.renderer, call.texture, &call.src, &call.dst, 0, nullptr, SDL_FLIP_NONE);
 
 			data.clear();
 		}
@@ -52,7 +52,7 @@ void RenderSystem::drawAll() {
 
 		for (auto& [_, data] : pass.drawData) {
 			for (const auto& call : data) {
-				SDL_RenderTextureRotated(pass.renderer, call.texture->texture(), &call.src, &call.dst, 0, nullptr, SDL_FLIP_NONE);
+				SDL_RenderTextureRotated(pass.renderer, call.texture, &call.src, &call.dst, 0, nullptr, SDL_FLIP_NONE);
 
 				data.clear();
 			}

@@ -34,7 +34,7 @@ public:
 		SDL_FRect src;
 		SDL_FRect dst;
 
-		Texture* texture;
+		SDL_Texture* texture;
 
 		lsd::StringView passName = { };
 	};
