@@ -11,7 +11,7 @@ using namespace lsd::enum_operators;
 
 // Raw texture data
 
-TextureData::TextureData(lsd::StringView path) {
+TextureData::TextureData(lsd::StringView path) : m_path(path) {
 	File file = globals::fileSystem->load(globals::fileSystem->assetsPath() / m_path.data(), OpenMode::binary | OpenMode::read, false);
 
 	m_data = stbi_load_from_file(file.stream(), &m_dimension.x, &m_dimension.y, &m_dimension.z, STBI_rgb_alpha);
