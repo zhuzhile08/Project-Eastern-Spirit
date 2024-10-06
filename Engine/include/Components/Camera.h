@@ -22,9 +22,9 @@ namespace esengine {
 
 class Camera {
 public:
-	Camera(double fov = 90, lsd::StringView passName = { }, double near = 0.1f);
+	Camera(lsd::StringView passName = { }, double fov = 90, double near = 0.1f);
 
-	void recalculate(double fov = 90, double near = 0.1f);
+	void recalculate(double fov = 0, double near = 0);
 	void update();
 
 	[[nodiscard]] const glm::mat4& projectionMat() const noexcept {
@@ -33,11 +33,20 @@ public:
 	[[nodiscard]] const lsd::String& passName() const noexcept {
 		return m_passName;
 	}
+	[[nodiscard]] double near() const noexcept {
+		return m_near;
+	}
+	[[nodiscard]] double fov() const noexcept {
+		return m_fov;
+	}
 
 private:
 	lsd::String m_passName;
 
 	glm::mat4 m_projectionMat;
+
+	double m_fov;
+	double m_near;
 };
 
 } // namespace esengine

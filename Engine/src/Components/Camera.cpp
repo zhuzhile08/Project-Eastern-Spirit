@@ -6,7 +6,7 @@
 
 namespace esengine {
 
-Camera::Camera(double fov, lsd::StringView passName, double near) : m_passName(passName), m_projectionMat(0.0f) {
+Camera::Camera(lsd::StringView passName, double fov, double near) : m_passName(passName), m_projectionMat(0.0f), m_fov(fov), m_near(near) {
 	double f = glm::tan(glm::radians(fov / 2));
 	double a = lsd::implicitCast<double>(globals::window->size().x) / globals::window->size().y;
 
@@ -19,6 +19,8 @@ Camera::Camera(double fov, lsd::StringView passName, double near) : m_passName(p
 
 void Camera::recalculate(double fov, double near) {
 	if (fov != 0) {
+		m_fov = fov;
+
 		double f = glm::tan(glm::radians(fov / 2));
 		double a = lsd::implicitCast<double>(globals::window->size().x) / globals::window->size().y;
 
@@ -26,7 +28,11 @@ void Camera::recalculate(double fov, double near) {
 		m_projectionMat[2][2] = 1.0f / f;
 	}
 
-	if (near != 0) m_projectionMat[3][3] = near;
+	if (near != 0) {
+		m_near = near;
+
+		m_projectionMat[3][3] = near;
+	}
 }
 void Camera::update() {
 	if (globals::window->changed()) 
