@@ -25,8 +25,8 @@ void RenderSystem::removePass(lsd::StringView name) {
 	m_renderPasses.erase(name);
 }
 
-void RenderSystem::insertCall(double yPos, CallData&& callData) {
-	m_renderPasses.at(callData.passName).drawData[yPos * 10].emplaceBack(std::move(callData));
+void RenderSystem::insertCall(double sortPos, CallData&& callData) {
+	m_renderPasses.at(callData.passName).drawData[sortPos * 10].emplaceBack(std::move(callData));
 }
 
 void RenderSystem::drawPass(lsd::StringView name) {

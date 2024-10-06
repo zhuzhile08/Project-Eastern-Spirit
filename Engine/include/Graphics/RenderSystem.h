@@ -60,7 +60,7 @@ public:
 	void insertPass(lsd::StringView name, Texture* target = nullptr);
 	void removePass(lsd::StringView name);
 
-	void insertCall(double yPos, CallData&& callData);
+	void insertCall(double sortPos, CallData&& callData);
 	
 	void drawPass(lsd::StringView name);
 	void drawAll();
