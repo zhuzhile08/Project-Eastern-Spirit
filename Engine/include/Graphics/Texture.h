@@ -17,11 +17,35 @@
 #include <LSD/String.h>
 #include <LSD/UnorderedSparseMap.h>
 
+#include <stb_image.h>
+
 #include <SDL3/SDL.h>
 
 #include <glm/glm.hpp>
 
 namespace esengine {
+
+class TextureData {
+public:
+	TextureData(lsd::StringView path);
+	~TextureData();
+
+	[[nodiscard]] const stbi_uc* data() const noexcept {
+		return m_data;
+	}
+	[[nodiscard]] const glm::ivec3& dimension() const noexcept {
+		return m_dimension;
+	}
+	[[nodiscard]] const lsd::String& path() const noexcept {
+		return m_path;
+	}
+
+private:
+	stbi_uc* m_data;
+	glm::ivec3 m_dimension; // z represents the channels
+
+	lsd::String m_path;
+};
 
 // Image texture
 class Texture {
@@ -45,7 +69,7 @@ private:
 
 	lsd::String m_path;
 
-	SDL_Texture* createForPass(lsd::StringView passName, const File& file);
+	SDL_Texture* createForPass(lsd::StringView passName, const TextureData& data);
 };
 
 // Streaming texture
