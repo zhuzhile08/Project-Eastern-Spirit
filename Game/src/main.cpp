@@ -8,8 +8,9 @@
 #include <Graphics/RenderSystem.h>
 #include <Graphics/Texture.h>
 
-#include <Components/Sprite3D.h>
 #include <Components/Camera.h>
+#include <Components/Sprite3D.h>
+#include <Components/Floor.h>
 
 #include <ETCS/ETCS.h>
 
@@ -28,14 +29,14 @@ namespace {
 
 class Application : public esengine::Application {
 public:
-	Application(esengine::InitInfo info) : esengine::Application(info), m_textureAtlas("Sheet.png"), m_camera(etcs::world().insertEntity()), m_camTransform(m_camera.insertComponent<etcs::Transform>()) {
+	Application(esengine::InitInfo info) : esengine::Application(info), m_textureAtlas("Sheet.png"), m_floorTexture("FloorTest.png"), m_camera(etcs::world().insertEntity()), m_camTransform(m_camera.insertComponent<etcs::Transform>()) {
 		m_camera.insertComponent<esengine::Camera>();
 
 		std::random_device randDevice;
 		std::default_random_engine randEngine(randDevice());
 
 		std::uniform_real_distribution<float> randXGen(-20, 20);
-		std::uniform_real_distribution<float> randYGen(0, 64);
+		std::uniform_real_distribution<float> randYGen(10, 64);
 		std::uniform_real_distribution<float> randZGen(-20, 20);
 
 		for (size_t i = 2049; i > 1; i--) {
@@ -51,25 +52,35 @@ public:
 			else if (i % 3 == 0) e.insertComponent<esengine::Sprite3D>(SDL_FRect { 0, 32, 32, 32 }, &m_textureAtlas);
 			else if (i % 2 == 0) e.insertComponent<esengine::Sprite3D>(SDL_FRect { 32, 32, 32, 32 }, &m_textureAtlas);
 		}
+
+		auto floor = etcs::world().insertEntity();
+		floor.insertComponent<etcs::Transform>();
+		floor.insertComponent<esengine::Floor>(&m_floorTexture);
 	}
 
 private:
 	void update() {
+		auto& transfrom = m_camTransform.get();
+
+		transfrom.rotate(transfrom.globalUp(), esengine::globals::inputSystem->mouseDelta().x / esengine::globals::window->size().x);
+		transfrom.rotate(transfrom.left(), -esengine::globals::inputSystem->mouseDelta().y / esengine::globals::window->size().y);
+
 		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::w).held) {
-			m_camTransform.get().translation().z += 0.1;
+			transfrom.translation().z += 0.1;
 		}
 		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::s).held) {
-			m_camTransform.get().translation().z -= 0.1;
+			transfrom.translation().z -= 0.1;
 		}
 		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::a).held) {
-			m_camTransform.get().translation().x += 0.1;
+			transfrom.translation().x += 0.1;
 		}
 		if (esengine::globals::inputSystem->keyboard(esengine::KeyType::d).held) {
-			m_camTransform.get().translation().x -= 0.1;
+			transfrom.translation().x -= 0.1;
 		}
 	}
 
 	esengine::Texture m_textureAtlas;
+	esengine::TextureData m_floorTexture;
 
 	etcs::Entity m_camera;
 	etcs::ComponentView<etcs::Transform> m_camTransform;
