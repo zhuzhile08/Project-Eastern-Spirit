@@ -13,11 +13,7 @@
 
 #include <Common/Common.h>
 
-#include <Components/Sprite3D.h>
-
 #include <SDL3/SDL.h>
-
-#include <ETCS/Components/Transform.h>
 
 #include <LSD/StringView.h>
 #include <LSD/FunctionPointer.h>
