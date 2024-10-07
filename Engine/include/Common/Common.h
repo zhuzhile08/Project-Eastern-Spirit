@@ -48,6 +48,7 @@ extern RenderSystem* renderSystem;
 extern InputSystem* inputSystem;
 
 inline constexpr std::uint32_t spriteUnit = 16;
+inline constexpr std::size_t depthSortingFactor = 500
 
 } // namespace globals
 
