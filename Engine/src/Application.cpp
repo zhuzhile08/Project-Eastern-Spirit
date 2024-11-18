@@ -65,16 +65,10 @@ void Application::run() {
 		for (auto [camTransform, camera] : etcs::world().query<etcs::Transform, Camera>()) {
 			camera.update();
 
-			/*
 			for (auto [transform, floor] : etcs::world().query<etcs::Transform, Floor>()) {
-				floor.update(transform.translation(), camTransform, camera);
-
-				esengine::globals::renderSystem->insertCall(
-					transform.translation().z, // if you for some reason have multiple floors, they will be sorted by z instead of y
-					floor.drawCall(camera)
-				);
+				if (RenderSystem::CallData data { }; floor.drawCall(data, transform.translation(), camTransform, camera))
+					esengine::globals::renderSystem->insertCall(data);
 			}
-			*/
 
 			for (const auto& [transform, sprite] : etcs::world().query<const etcs::Transform, const Sprite3D>())
 				if (RenderSystem::CallData data { }; sprite.drawCall(data, transform.translation(), camTransform.localTransform(), camera))
