@@ -85,9 +85,12 @@ void StreamingTexture::resize(glm::ivec2 dimension) {
 	}
 }
 
-void StreamingTexture::update(const void* data, SDL_Rect location, lsd::StringView passName) {
-	if (SDL_UpdateTexture(m_textures.at(passName).get(), &location, data, m_dimension.x * 4) == false)
-		throw std::runtime_error("Failed to update SDL image texture!");
+void StreamingTexture::lock(SDL_Surface*& surface, const SDL_Rect* location, lsd::StringView passName) {
+	if (!SDL_LockTextureToSurface(m_textures.at(passName).get(), location, &surface)) throw std::runtime_error("esengine::StreamingTexture::lock(): Failed to retrieve surface from streaming texture!");
+}
+
+void StreamingTexture::unlock(lsd::StringView passName) {
+	SDL_UnlockTexture(m_textures.at(passName).get());
 }
 
 SDL_Texture* StreamingTexture::texture(lsd::StringView passName) noexcept {

@@ -78,7 +78,9 @@ public:
 	StreamingTexture(glm::ivec2 dimension, std::initializer_list<lsd::StringView> passNames = { { } });
 
 	void resize(glm::ivec2 dimension);
-	void update(const void* data, SDL_Rect location, lsd::StringView passName = { });
+
+	void lock(SDL_Surface*& surface, const SDL_Rect* location = nullptr, lsd::StringView passName = { });
+	void unlock(lsd::StringView passName = { });
 
 	[[nodiscard]] SDL_Texture* texture(lsd::StringView passName = { }) noexcept;
 	[[nodiscard]] const SDL_Texture* texture(lsd::StringView passName = { }) const noexcept {
