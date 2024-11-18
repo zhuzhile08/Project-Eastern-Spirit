@@ -1,5 +1,5 @@
 # Project Eastern Spirit
-A prototype for a 3rd-person Schoot 'em up, inspired by Mode-7 and Super-Scalar graphics
+A retro 2D top-down action RPG in the veins of The Legend of Zelda games
 
 Cloning instructions for my dear colaborators:
 You will clone from the currently active in-development branch
