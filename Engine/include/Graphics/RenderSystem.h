@@ -37,8 +37,6 @@ public:
 		SDL_FRect dst;
 
 		SDL_Texture* texture;
-
-		lsd::StringView passName = { };
 	};
 
 private:
@@ -47,10 +45,11 @@ private:
 		sdl::Renderer renderer;
 		lsd::String name;
 
+		std::size_t sortingFactor;
+
 		Texture* target = nullptr;
 
 		std::map<int, lsd::Vector<CallData>, std::greater<int>> drawData = { };
-
 	};
 
 	CUSTOM_HASHER(Hasher, const RenderPass&, const lsd::String&, lsd::Hash<lsd::String>(), .name)
@@ -59,10 +58,10 @@ private:
 public:
 	RenderSystem();
 
-	void insertPass(lsd::StringView name, Texture* target = nullptr);
+	void insertPass(lsd::StringView name, Texture* target = nullptr, std::size_t sortingFactor = globals::depthSortingFactor);
 	void removePass(lsd::StringView name);
 
-	void insertCall(const CallData& callData);
+	void insertCall(const CallData& callData, lsd::StringView passName);
 	
 	void drawPass(lsd::StringView name);
 	void drawAll();

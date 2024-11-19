@@ -50,7 +50,7 @@ private:
 // Image texture
 class Texture {
 public:
-	Texture(lsd::StringView path, std::initializer_list<lsd::StringView> passNames = { { } });
+	Texture(lsd::StringView path, std::initializer_list<lsd::StringView> passNames = { { } }, bool filtered = false);
 
 	[[nodiscard]] SDL_Texture* texture(lsd::StringView passName = { }) noexcept;
 	[[nodiscard]] const SDL_Texture* texture(lsd::StringView passName = { }) const noexcept {
@@ -62,6 +62,9 @@ public:
 	[[nodiscard]] const lsd::String& path() const noexcept {
 		return m_path;
 	}
+	[[nodiscard]] bool filtered() const noexcept {
+		return m_filtered;
+	}
 
 private:
 	lsd::UnorderedSparseMap<lsd::String, sdl::Texture> m_textures;
@@ -69,13 +72,15 @@ private:
 
 	lsd::String m_path;
 
+	bool m_filtered;
+
 	SDL_Texture* createForPass(lsd::StringView passName, const TextureData& data);
 };
 
 // Streaming texture
 class StreamingTexture {
 public:
-	StreamingTexture(glm::ivec2 dimension, std::initializer_list<lsd::StringView> passNames = { { } });
+	StreamingTexture(glm::ivec2 dimension, std::initializer_list<lsd::StringView> passNames = { { } }, bool filtered = false);
 
 	void resize(glm::ivec2 dimension);
 
@@ -89,10 +94,15 @@ public:
 	[[nodiscard]] const glm::ivec2& dimension() const noexcept {
 		return m_dimension;
 	}
+	[[nodiscard]] bool filtered() const noexcept {
+		return m_filtered;
+	}
 
 private:
 	lsd::UnorderedSparseMap<lsd::String, sdl::Texture> m_textures;
 	glm::ivec2 m_dimension = { }; // z represents the channels
+
+	bool m_filtered;
 
 	SDL_Texture* createForPass(lsd::StringView passName);
 };

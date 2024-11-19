@@ -2,7 +2,7 @@
  * @file Camera.h
  * @author Zhile Zhu (zhuzhile08@gmail.com)
  * 
- * @brief 
+ * @brief Simple camera class
  * 
  * @date 2024-09-10
  * 
@@ -11,42 +11,44 @@
 
 #pragma once
 
+#include <Common/Common.h>
+
 #include <ETCS/Component.h>
 #include <ETCS/Components/Transform.h>
 
 #include <LSD/String.h>
+#include <LSD/StringView.h>
 
-#include <Common/Common.h>
+#include <SDL3/SDL.h>
+
+#include <glm/glm.hpp>
 
 namespace esengine {
 
 class Camera {
 public:
-	Camera(lsd::StringView passName = { }, double fov = 90, double near = 0.1f);
+	Camera(lsd::StringView passName = { });
+	Camera(SDL_FRect viewport, lsd::StringView passName = { });
 
-	void recalculate(double fov = 0, double near = 0);
-	void update();
+	[[nodiscard]] glm::mat4 transformMat(const etcs::Entity& camera, const etcs::Transform& transform) const noexcept;
 
-	[[nodiscard]] const glm::mat4& projectionMat() const noexcept {
-		return m_projectionMat;
-	}
 	[[nodiscard]] const lsd::String& passName() const noexcept {
 		return m_passName;
 	}
-	[[nodiscard]] double near() const noexcept {
-		return m_near;
-	}
-	[[nodiscard]] double fov() const noexcept {
-		return m_fov;
-	}
+
+	SDL_FRect viewport;
+	SDL_FRect limits { -10000000.f, 10000000.f, 2 * 10000000.f, 2 * 10000000.f };
+	glm::vec2 offset { };
+	glm::vec2 zoom { 1, 1 };
+
+	etcs::ComponentView<etcs::Transform> target;
 
 private:
 	lsd::String m_passName;
 
-	glm::mat4 m_projectionMat;
+	void update(etcs::Transform& transform);
 
-	double m_fov;
-	double m_near;
+	friend class Application;
 };
 
 } // namespace esengine

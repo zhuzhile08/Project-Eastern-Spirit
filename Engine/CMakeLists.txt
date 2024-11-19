@@ -25,11 +25,11 @@ set (ENGINE_SOURCE_FILES
 	"src/Audio/SFX.cpp"
 
 	"src/Common/Filesystem.cpp"
+	"src/Common/Math.cpp"
 
 	"src/Components/Background.cpp"
 	"src/Components/Camera.cpp"
-	"src/Components/Sprite2D.cpp"
-	"src/Components/Sprite3D.cpp"
+	"src/Components/Sprite.cpp"
 	"src/Components/Animator.cpp"
 	"src/Components/Dispenser.cpp"
 	"src/Components/Health.cpp"

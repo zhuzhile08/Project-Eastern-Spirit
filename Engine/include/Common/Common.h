@@ -48,7 +48,11 @@ extern RenderSystem* renderSystem;
 extern InputSystem* inputSystem;
 
 inline constexpr std::uint32_t spriteUnit = 16;
-inline constexpr std::size_t depthSortingFactor = 500
+inline constexpr std::size_t depthSortingFactor = 10;
+
+#ifndef ESENGINE_DYNAMIC_WINDOW_SIZE
+inline constexpr std::size_t defaultWindowScalingFactor = 2;
+#endif
 
 } // namespace globals
 

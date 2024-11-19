@@ -26,8 +26,13 @@ struct InitInfo {
 	char** argv;
 
 	lsd::StringView name = { };
-	glm::ivec2 dim = { 1280, 720 };
+	glm::ivec2 dim = { 16 * 32, 16 * 18 };
+
+#ifdef ESENGINE_DYNAMIC_WINDOW_SIZE
+	int flags = SDL_WINDOW_RESIZABLE;
+#else
 	int flags = { };
+#endif
 
 	std::uint64_t deltaTime = 16;
 };

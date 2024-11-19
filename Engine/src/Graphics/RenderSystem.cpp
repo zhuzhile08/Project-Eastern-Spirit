@@ -15,18 +15,29 @@ RenderSystem::RenderSystem() {
 	insertPass({ }); // default render pass;
 }
 
-void RenderSystem::insertPass(lsd::StringView name, Texture* target) {
-	auto renderer = m_renderPasses.emplace(RenderPass { sdl::Renderer(globals::window->window()), name }).first->renderer.get();
+void RenderSystem::insertPass(lsd::StringView name, Texture* target, std::size_t sortingFactor) {
+	auto renderer = m_renderPasses.emplace(RenderPass { 
+		sdl::Renderer(globals::window->window()), 
+		name,
+		sortingFactor,
+		target
+	}).first->renderer.get();
 
 	if (target) SDL_SetRenderTarget(renderer, target->texture());
+
+#ifndef ESENGINE_DYNAMIC_WINDOW_SIZE
+	SDL_SetRenderLogicalPresentation(renderer, globals::window->baseSize().x, globals::window->baseSize().y, SDL_LOGICAL_PRESENTATION_LETTERBOX); // @todo investigate better options
+#endif
 }
 
 void RenderSystem::removePass(lsd::StringView name) {
 	m_renderPasses.erase(name);
 }
 
-void RenderSystem::insertCall(const CallData& callData) {
-	m_renderPasses.at(callData.passName).drawData[callData.sortingFactor * globals::depthSortingFactor].emplaceBack(std::move(callData));
+void RenderSystem::insertCall(const CallData& callData, lsd::StringView passName) {
+	auto& renderPass = m_renderPasses.at(passName);
+
+	renderPass.drawData[static_cast<int>(callData.sortingFactor * renderPass.sortingFactor)].emplaceBack(std::move(callData));
 }
 
 void RenderSystem::drawPass(lsd::StringView name) {

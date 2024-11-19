@@ -1,8 +1,8 @@
 /************************
- * @file 3DSprite.h
+ * @file Sprite.h
  * @author Zhile Zhu (zhuzhile08@gmail.com)
  * 
- * @brief Sprite with perspective rendering
+ * @brief Sprite lcass
  * 
  * @date 2024-09-06
  * 
@@ -16,6 +16,7 @@
 #include <Graphics/Texture.h>
 
 #include <ETCS/Component.h>
+#include <ETCS/Components/Transform.h>
 
 #include <SDL3/SDL.h>
 
@@ -25,12 +26,17 @@
 
 namespace esengine {
 
-class Sprite3D {
+class Sprite {
 public:
-	Sprite3D() = default;
-	Sprite3D(SDL_FRect rect, Texture* texture) : m_rect(rect), m_texture(texture) { }
+	Sprite() = default;
+	Sprite(SDL_FRect rect, Texture* texture) : m_rect(rect), m_texture(texture) { }
 
-	[[nodiscard]] bool drawCall(RenderSystem::CallData& data, const glm::vec3& translation, const glm::mat4& camTransform, const Camera& camera) const;
+	[[nodiscard]] bool drawCall(
+		RenderSystem::CallData& data,
+		const etcs::Entity& entity,
+		const etcs::Transform& transform,
+		const glm::mat4& camTransform,
+		const Camera& camera) const;
 
 private:
 	SDL_FRect m_rect { };

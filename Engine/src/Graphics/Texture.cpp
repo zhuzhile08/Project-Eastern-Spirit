@@ -27,7 +27,7 @@ TextureData::~TextureData() {
 
 // Image texture
 
-Texture::Texture(lsd::StringView path, std::initializer_list<lsd::StringView> passNames) : m_path(path) {
+Texture::Texture(lsd::StringView path, std::initializer_list<lsd::StringView> passNames, bool filtered) : m_path(path), m_filtered(filtered) {
 	TextureData data(path);
 	m_dimension = data.dimension();
 
@@ -59,13 +59,15 @@ SDL_Texture* Texture::createForPass(lsd::StringView passName, const TextureData&
 	if (SDL_UpdateTexture(tx.get(), nullptr, data.data(), m_dimension.x * m_dimension.z) == false)
 		throw std::runtime_error("esengine::Texture::createForPass(): Failed to update SDL image texture!");
 
+	if (!m_filtered) SDL_SetTextureScaleMode(tx, SDL_SCALEMODE_NEAREST);
+
 	return tx.get();
 }
 
 
 // Streaming texture
 
-StreamingTexture::StreamingTexture(glm::ivec2 dimension, std::initializer_list<lsd::StringView> passNames) : m_dimension(dimension) {
+StreamingTexture::StreamingTexture(glm::ivec2 dimension, std::initializer_list<lsd::StringView> passNames, bool filtered) : m_dimension(dimension), m_filtered(filtered) {
 	for (const auto& name : passNames) createForPass(name);
 }
 
@@ -110,6 +112,8 @@ SDL_Texture* StreamingTexture::createForPass(lsd::StringView passName) {
 	).first->second;
 
 	if (!tx) throw std::runtime_error("Failed to create SDL texture for streaming!");
+
+	if (!m_filtered) SDL_SetTextureScaleMode(tx, SDL_SCALEMODE_NEAREST);
 
 	return tx.get();
 }

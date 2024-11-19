@@ -8,8 +8,7 @@
 #include <Graphics/RenderSystem.h>
 
 #include <Components/Camera.h>
-#include <Components/Floor.h>
-#include <Components/Sprite3D.h>
+#include <Components/Sprite.h>
 
 #include <ETCS/ETCS.h>
 
@@ -27,7 +26,13 @@ Application::Application(InitInfo info) : m_deltaTime(info.deltaTime) {
 	) throw std::runtime_error(SDL_GetError());
 
 	globals::fileSystem = new FileSystem(info.argv);
-	globals::window = new Window(info.name, info.dim, SDL_WINDOW_RESIZABLE | info.flags);
+
+#ifdef ESENGINE_DYNAMIC_WINDOW_SIZE
+	globals::window = new Window(info.name, info.dim, info.flags);
+#else
+	globals::window = new Window(info.name, info.dim, globals::defaultWindowScalingFactor, info.flags);
+#endif
+
 	globals::renderSystem = new RenderSystem();
 	globals::inputSystem = new InputSystem();
 }
@@ -62,17 +67,13 @@ void Application::run() {
 			m_accumulator -= m_deltaTime;
 		}
 
-		for (auto [camTransform, camera] : etcs::world().query<etcs::Transform, Camera>()) {
-			camera.update();
+		for (auto [camera, camTransform, camComponent] : etcs::world().query<const etcs::Entity, etcs::Transform, Camera>()) {
+			camComponent.update(camTransform);
+			auto camTransformMat = camComponent.transformMat(camera, camTransform);
 
-			for (auto [transform, floor] : etcs::world().query<etcs::Transform, Floor>()) {
-				if (RenderSystem::CallData data { }; floor.drawCall(data, transform.translation(), camTransform, camera))
-					esengine::globals::renderSystem->insertCall(data);
-			}
-
-			for (const auto& [transform, sprite] : etcs::world().query<const etcs::Transform, const Sprite3D>())
-				if (RenderSystem::CallData data { }; sprite.drawCall(data, transform.translation(), camTransform.localTransform(), camera))
-					esengine::globals::renderSystem->insertCall(data);
+			for (const auto& [sprite, transform, spriteComponent] : etcs::world().query<const etcs::Entity, const etcs::Transform, const Sprite>())
+				if (RenderSystem::CallData data { }; spriteComponent.drawCall(data, sprite, transform, camTransformMat, camComponent))
+					esengine::globals::renderSystem->insertCall(data, camComponent.passName());
 		}
 
 		globals::renderSystem->drawAll();
