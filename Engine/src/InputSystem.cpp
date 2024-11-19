@@ -99,40 +99,65 @@ void InputSystem::update() {
 		switch (event.type) {
 			case SDL_EVENT_QUIT:
 				m_quit = true;
+			
+				break;
+
 			case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
 			case SDL_EVENT_WINDOW_MINIMIZED:
 			case SDL_EVENT_WINDOW_MAXIMIZED:
 			case SDL_EVENT_WINDOW_ENTER_FULLSCREEN:
 			case SDL_EVENT_WINDOW_LEAVE_FULLSCREEN:
 				globals::window->m_changed = true;
-				SDL_GetWindowSizeInPixels(globals::window->m_window, &globals::window->m_size.x, &globals::window->m_size.y);
+				// SDL_GetWindowSizeInPixels(globals::window->m_window, &globals::window->m_size.x, &globals::window->m_size.y);
+			
+				break;
+		
 			case SDL_EVENT_KEY_DOWN:
 				for (auto& key : m_keys) {
 					if (event.key.key == key.type) key.pressed = true;
 				}
+
+				break;
+
 			case SDL_EVENT_KEY_UP:
 				for (auto& key : m_keys) {
 					if (event.key.key == key.type) key.released = true;
 				}
+				
+				break;
+
 			case SDL_EVENT_MOUSE_BUTTON_DOWN:
 				for (auto& key : m_mouseButtons) {
 					if (event.button.button == key.type) key.pressed = true;
 				}
+				
+				break;
+
 			case SDL_EVENT_MOUSE_BUTTON_UP:
 				for (auto& key : m_mouseButtons) {
 					if (event.button.button == key.type) key.released = true;
 				}
+				
+				break;
+
 			case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
 				for (auto& key : m_controllerButtons) {
 					if (event.button.button == key.type) key.pressed = true;
 				}
+				
+				break;
+
 			case SDL_EVENT_GAMEPAD_BUTTON_UP:
 				for (auto& key : m_controllerButtons) {
 					if (event.button.button == key.type) key.released = true;
 				}
+				
+				break;
 
 			case SDL_EVENT_MOUSE_MOTION:
 				m_mouseDelta = { event.motion.xrel, event.motion.yrel };
+
+				break;
 		}
 	}
 }
