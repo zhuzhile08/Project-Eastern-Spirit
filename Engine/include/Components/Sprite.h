@@ -15,12 +15,12 @@
 #include <Graphics/RenderSystem.h>
 #include <Graphics/Texture.h>
 
+#include <LSD/String.h>
+
 #include <ETCS/Component.h>
 #include <ETCS/Components/Transform.h>
 
 #include <SDL3/SDL.h>
-
-#include <LSD/String.h>
 
 #include <glm/glm.hpp>
 
@@ -42,7 +42,7 @@ private:
 	SDL_FRect m_rect { };
 	Texture* m_texture { };
 
-	friend class Animator;
+	friend class SpriteAnimator;
 };
 
 } // namespace esengine

@@ -10,6 +10,7 @@
 
 #include <Components/Camera.h>
 #include <Components/Sprite.h>
+#include <Components/SpriteAnimator.h>
 
 #include <ETCS/ETCS.h>
 
@@ -26,11 +27,13 @@ static const float fovRatio = glm::tan(glm::radians(static_cast<float>(fov / 2))
 
 namespace {
 
+using namespace std::chrono_literals;
+
 class Application : public esengine::Application {
 public:
 	Application(esengine::InitInfo info) : 
 		esengine::Application(info), 
-		m_textureAtlas("Sheet.png"), 
+		m_spriteSheet("IMG/PlayerSheet.png"), 
 		m_camera(etcs::world().insertEntity()), 
 		m_camTransform(m_camera.insertComponent<etcs::Transform>(glm::vec3(0.0f, 0.0f, 0.0f))) {
 		m_camera.insertComponent<esengine::Camera>();
@@ -38,7 +41,8 @@ public:
 		auto e = etcs::world().insertEntity();
 
 		e.insertComponent<etcs::Transform>(glm::vec3(16, 16, 0));
-		e.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 16, 16 }, &m_textureAtlas);
+		auto s = e.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_spriteSheet);
+		e.insertComponent<esengine::SpriteAnimator>(s, esengine::SpriteAnimator::Animation{"default", {{0, 150ms}, {1, 150ms}, {2, 150ms}, {3, 150ms}}, true});
 	}
 
 private:
@@ -59,7 +63,7 @@ private:
 		}
 	}
 
-	esengine::Texture m_textureAtlas;
+	esengine::Texture m_spriteSheet;
 
 	etcs::Entity m_camera;
 	etcs::ComponentView<etcs::Transform> m_camTransform;

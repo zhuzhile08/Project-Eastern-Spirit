@@ -9,6 +9,7 @@
 
 #include <Components/Camera.h>
 #include <Components/Sprite.h>
+#include <Components/SpriteAnimator.h>
 
 #include <ETCS/ETCS.h>
 
@@ -63,6 +64,10 @@ void Application::run() {
 			globals::inputSystem->update();
 
 			update();
+
+			for (auto [animator] : etcs::world().query<SpriteAnimator>()) {
+				animator.update(m_deltaTime);
+			}
 
 			m_accumulator -= m_deltaTime;
 		}
