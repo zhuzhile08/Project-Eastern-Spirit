@@ -43,7 +43,7 @@ public:
 	Application(InitInfo info);
 	~Application();
 
-	virtual void run() final;
+	void run();
 	[[nodiscard]] virtual double fps() const noexcept final {
 		return 1000.0f / (m_currentTime - m_startTime);
 	}
