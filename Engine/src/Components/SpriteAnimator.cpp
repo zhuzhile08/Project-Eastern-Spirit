@@ -6,10 +6,17 @@
 
 namespace esengine {
 
-SpriteAnimator::SpriteAnimator(const etcs::ComponentView<Sprite>& sprite, Animation&& autoPlay) : m_sprite(sprite) {
-	m_autoPlay = m_animations.emplace(autoPlay).first->name;
+SpriteAnimator::SpriteAnimator(
+	const etcs::ComponentView<Sprite>& sprite, 
+	const lsd::Vector<Animation>& animations, 
+	const lsd::String& autoPlay
+) : m_animations(animations.begin(), animations.end()), m_sprite(sprite) {
+	if (!autoPlay.empty()) {
+		const auto& ap = m_animations.at(autoPlay);
 
-	m_current = AnimPlayData { m_autoPlay, 0, 0, 1.f };
+		m_autoPlay = ap.name;
+		m_current = detail::AnimationPlayData { m_autoPlay, &ap, 0, 0, 1.f };
+	}
 }
 
 void SpriteAnimator::play(lsd::StringView animationName, float speed) {
@@ -18,8 +25,13 @@ void SpriteAnimator::play(lsd::StringView animationName, float speed) {
 	if (it == m_animations.end()) {
 		throw std::out_of_range("esengine::SpriteAnimator::play(): Requested animation to play didn't exist!");
 	} else {
-		m_current = AnimPlayData { it->name, 0, 0, speed };
+		m_current = detail::AnimationPlayData { it->name, it.get(), 0, 0, speed };
 	}
+}
+
+void SpriteAnimator::stop() {
+	if (m_autoPlay.empty()) m_current = detail::AnimationPlayData();
+	else m_current = detail::AnimationPlayData { m_autoPlay, &m_animations.at(m_autoPlay), 0, 0, 1.f };
 }
 
 void SpriteAnimator::setFrame(std::size_t frame, std::uint64_t startingTime) {
@@ -35,15 +47,13 @@ void SpriteAnimator::queue(lsd::StringView animationName, float speed) {
 	if (it == m_animations.end()) {
 		throw std::out_of_range("esengine::SpriteAnimator::queue(): Requested animation to add to queue didn't exist!");
 	} else {
-		m_queue.emplace(AnimPlayData { it->name, 0, 0, speed });
+		m_queue.emplace(detail::AnimationPlayData { it->name, it.get(), 0, 0, speed });
 	}
 }
 
 void SpriteAnimator::update(std::uint64_t deltaTime) {
 	if (m_current.playing()) {
-		const auto& anim = m_animations.at(m_current.name);
-		const auto& frame = anim.frames[m_current.frameIndex];
-		auto& sprite = m_sprite.get();
+		const auto& frame = m_current.animation->frames[m_current.frameIndex];
 
 		m_current.frameTime += deltaTime;
 
@@ -52,15 +62,17 @@ void SpriteAnimator::update(std::uint64_t deltaTime) {
 
 			m_current.frameIndex += 1;
 
-			if (m_current.frameIndex >= anim.frames.size()) {
-				if (!anim.repeated) {
-					m_current = AnimPlayData();
+			if (m_current.frameIndex >= m_current.animation->frames.size()) {
+				if (!m_current.animation->repeated) {
+					stop();
 
 					return;
 				} else m_current.frameIndex = 0;
 			}
 
-			const auto& newFrame = anim.frames[m_current.frameIndex];
+			const auto& newFrame = m_current.animation->frames[m_current.frameIndex];
+
+			auto& sprite = m_sprite.get();
 
 			auto framesPerRow = sprite.m_texture->dimension().x / lsd::implicitCast<std::size_t>(sprite.m_rect.w);
 

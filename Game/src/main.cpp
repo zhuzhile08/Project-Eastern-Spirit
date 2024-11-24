@@ -4,6 +4,7 @@
 #include <InputSystem.h>
 #include <Application.h>
 
+#include <Graphics/AnimatorBuilder.h>
 #include <Graphics/Window.h>
 #include <Graphics/RenderSystem.h>
 #include <Graphics/Texture.h>
@@ -41,8 +42,12 @@ public:
 		auto e = etcs::world().insertEntity();
 
 		e.insertComponent<etcs::Transform>(glm::vec3(16, 16, 0));
-		auto s = e.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_spriteSheet);
-		e.insertComponent<esengine::SpriteAnimator>(s, esengine::SpriteAnimator::Animation{"default", {{0, 150ms}, {1, 150ms}, {2, 150ms}, {3, 150ms}}, true});
+		auto sprite = e.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_spriteSheet);
+
+		esengine::AnimatorBuilder animBuilder;
+		animBuilder.addAutoPlay({"default", {{0, 150ms}, {1, 150ms}, {2, 150ms}, {3, 150ms}}, true});
+
+		e.insertComponent<esengine::SpriteAnimator>(animBuilder.buildSpriteAnimator(sprite));
 	}
 
 private:

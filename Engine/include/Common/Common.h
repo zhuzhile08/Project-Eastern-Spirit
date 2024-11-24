@@ -27,6 +27,9 @@ class Window;
 class RenderSystem;
 class InputSystem;
 
+struct Animation;
+class AnimatorBuilder;
+
 class SpriteAnimator;
 class Camera;
 class Dispenser;
@@ -61,3 +64,11 @@ inline constexpr std::chrono::milliseconds defaultAnimationFrameTime(150);
 } // namespace globals
 
 } // namespace esengine
+
+
+#define ESENGINE_DEFAULT_CONSTRUCTORS(className)\
+className() = default;\
+className(const className&) = default;\
+className(className&&) = default;\
+className& operator=(const className&) = default;\
+className& operator=(className&&) = default;

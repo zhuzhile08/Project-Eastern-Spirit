@@ -30,7 +30,7 @@ set (ENGINE_SOURCE_FILES
 	"src/Components/Background.cpp"
 	"src/Components/Camera.cpp"
 	"src/Components/Sprite.cpp"
-	"src/Components/Animator.cpp"
+	"src/Components/SpriteAnimator.cpp"
 	"src/Components/Dispenser.cpp"
 	"src/Components/Health.cpp"
 	"src/Components/Hitbox.cpp"
@@ -39,6 +39,7 @@ set (ENGINE_SOURCE_FILES
 	"src/Components/TextBox.cpp"
 	"src/Components/Trail.cpp"
 
+	"src/Graphics/AnimatorBuilder.cpp"
 	"src/Graphics/Font.cpp"
 	"src/Graphics/RenderSystem.cpp"
 	"src/Graphics/Texture.cpp"
