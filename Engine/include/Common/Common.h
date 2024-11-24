@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <chrono>
+
 #include <SDL3/SDL.h>
 
 namespace esengine {
@@ -25,7 +27,7 @@ class Window;
 class RenderSystem;
 class InputSystem;
 
-class Animator;
+class SpriteAnimator;
 class Camera;
 class Dispenser;
 class Health;
@@ -47,12 +49,14 @@ extern Window* window;
 extern RenderSystem* renderSystem;
 extern InputSystem* inputSystem;
 
-inline constexpr std::uint32_t spriteUnit = 16;
+inline constexpr std::uint32_t graphicsCellUnit = 16;
 inline constexpr std::size_t depthSortingFactor = 10;
 
 #ifndef ESENGINE_DYNAMIC_WINDOW_SIZE
 inline constexpr std::size_t defaultWindowScalingFactor = 2;
 #endif
+
+inline constexpr std::chrono::milliseconds defaultAnimationFrameTime(150);
 
 } // namespace globals
 
