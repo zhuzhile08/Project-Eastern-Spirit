@@ -36,6 +36,14 @@ void Window::resize(std::size_t scale) {
 	SDL_SetWindowSize(m_window, m_baseSize.x * scale, m_baseSize.y * scale);
 }
 
+void Window::setFocus(bool focus) {
+	SDL_SetWindowRelativeMouseMode(m_window, focus);
+}
+
+bool Window::focus() {
+	SDL_GetWindowRelativeMouseMode(m_window);
+}
+
 #endif
 
 } // namespace esengine

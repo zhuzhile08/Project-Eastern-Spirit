@@ -113,44 +113,44 @@ void InputSystem::update() {
 				break;
 		
 			case SDL_EVENT_KEY_DOWN:
-				for (auto& key : m_keys) {
+				for (auto& key : m_keys)
 					if (event.key.key == key.type) key.pressed = true;
-				}
+
+				if (event.key.key == SDLK_ESCAPE && globals::window->focus())
+					globals::window->setFocus(false);
 
 				break;
 
 			case SDL_EVENT_KEY_UP:
-				for (auto& key : m_keys) {
+				for (auto& key : m_keys)
 					if (event.key.key == key.type) key.released = true;
-				}
 				
 				break;
 
 			case SDL_EVENT_MOUSE_BUTTON_DOWN:
-				for (auto& key : m_mouseButtons) {
+				for (auto& key : m_mouseButtons)
 					if (event.button.button == key.type) key.pressed = true;
-				}
+
+				if (event.button.button == SDL_BUTTON_LEFT && !globals::window->focus())
+					globals::window->setFocus(true);
 				
 				break;
 
 			case SDL_EVENT_MOUSE_BUTTON_UP:
-				for (auto& key : m_mouseButtons) {
+				for (auto& key : m_mouseButtons)
 					if (event.button.button == key.type) key.released = true;
-				}
 				
 				break;
 
 			case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
-				for (auto& key : m_controllerButtons) {
+				for (auto& key : m_controllerButtons)
 					if (event.button.button == key.type) key.pressed = true;
-				}
 				
 				break;
 
 			case SDL_EVENT_GAMEPAD_BUTTON_UP:
-				for (auto& key : m_controllerButtons) {
+				for (auto& key : m_controllerButtons)
 					if (event.button.button == key.type) key.released = true;
-				}
 				
 				break;
 

@@ -53,6 +53,9 @@ public:
 	Window(lsd::StringView title, const glm::ivec2& baseSize, std::size_t scale, int flags);
 
 	void resize(std::size_t scale);
+	void setFocus(bool focus);
+
+	bool focus();
 
 	[[nodiscard]] SDL_Window* window() const noexcept {
 		return m_window.get();
