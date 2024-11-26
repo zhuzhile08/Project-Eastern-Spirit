@@ -16,6 +16,9 @@
 
 namespace esengine {
 
+inline constexpr float fepsilon = std::numeric_limits<float>::epsilon();
+inline constexpr double depsilon = std::numeric_limits<double>::epsilon();
+
 inline GLM_CONSTEXPR glm::vec2 interpolateLinear(glm::vec2 a, glm::vec2 b, float t) noexcept {
 	return a * (1.0f - t) + b * t;
 }
@@ -36,9 +39,9 @@ inline GLM_CONSTEXPR glm::ivec2 mapToQuad(glm::ivec2 quadPos, glm::ivec2 quadDim
 	return glm::ivec2((pos.x + quadPos.x) % quadDim.x, (pos.y + quadPos.y) % quadDim.y);
 }
 
-template <class FloatingPoint> inline constexpr bool fpEqual(FloatingPoint a, FloatingPoint b) noexcept requires std::is_floating_point_v<FloatingPoint> {
+template <class FloatingPoint> inline constexpr bool fpEqual(FloatingPoint a, std::type_identity_t<FloatingPoint> b) noexcept requires std::is_floating_point_v<FloatingPoint> {
 	auto diff = a - b;
-	return (diff < std::numeric_limits<FloatingPoint>::epsilon()) && (-diff < std::numeric_limits<FloatingPoint>::epsilon());
+	return (diff < fepsilon) && (-diff < depsilon);
 }
 
 } // namespace esengine

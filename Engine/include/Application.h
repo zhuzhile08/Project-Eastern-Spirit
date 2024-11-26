@@ -34,7 +34,7 @@ struct InitInfo {
 	int flags = { };
 #endif
 
-	std::uint64_t deltaTime = 16;
+	std::uint64_t deltaTime = 33;
 };
 
 
@@ -49,7 +49,7 @@ public:
 	}
 
 protected:
-	virtual void update() { }
+	virtual void update(float deltaTime) { }
 
 	std::uint64_t m_accumulator = 0;
 	std::uint64_t m_deltaTime;

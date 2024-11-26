@@ -65,7 +65,7 @@ void Application::run() {
 		while (m_accumulator >= m_deltaTime) {
 			globals::inputSystem->update();
 
-			update();
+			update(m_deltaTime / 16.f);
 
 			for (auto [kinematicBody, transform] : etcs::world().query<KinematicBody, etcs::Transform>()) {
 				kinematicBody.move(transform);

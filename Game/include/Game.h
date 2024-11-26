@@ -24,7 +24,7 @@ public:
 	Game(esengine::InitInfo info);
 
 private:
-	void update();
+	void update(float deltaTime);
 
 	esengine::Texture m_spriteSheet;
 };

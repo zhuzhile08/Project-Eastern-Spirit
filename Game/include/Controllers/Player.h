@@ -15,8 +15,13 @@
 
 class PlayerController {
 public:
-	void update(esengine::KinematicBody& kinematicBody, esengine::SpriteAnimator& animator) const;
+	void update(float deltaTime, esengine::KinematicBody& kinematicBody, esengine::SpriteAnimator& animator);
 
 private:
+	float m_speed = 1;
 
+	glm::vec2 m_prevInputVec = { };
+
+	glm::vec2 getInputVec() const;
+	void updateAnimations(const glm::vec2& inputVec, esengine::SpriteAnimator& animator) const;
 };

@@ -15,23 +15,38 @@ SpriteAnimator::SpriteAnimator(
 		const auto& ap = m_animations.at(autoPlay);
 
 		m_autoPlay = ap.name;
-		m_current = detail::AnimationPlayData { m_autoPlay, &ap, 0, 0, 1.f };
+		m_current = detail::AnimationPlayData { m_autoPlay, &ap, ap.frames.size() == 1, 0, 0, 1.f };
+
+		updateSpritePos();
 	}
 }
 
 void SpriteAnimator::play(lsd::StringView animationName, float speed) {
-	auto it = m_animations.find(animationName);
+	if (animationName == m_current.name) {
+		if (!m_current.playing()) m_current.speed = speed;
 
-	if (it == m_animations.end()) {
-		throw std::out_of_range("esengine::SpriteAnimator::play(): Requested animation to play didn't exist!");
+
 	} else {
-		m_current = detail::AnimationPlayData { it->name, it.get(), 0, 0, speed };
+		auto it = m_animations.find(animationName);
+
+		if (it == m_animations.end()) {
+			throw std::out_of_range("esengine::SpriteAnimator::play(): Requested animation to play didn't exist!");
+		} else {
+			m_current = detail::AnimationPlayData { it->name, it.get(), it->frames.size() == 1, 0, 0, speed };
+
+			updateSpritePos();
+		}
 	}
 }
 
 void SpriteAnimator::stop() {
 	if (m_autoPlay.empty()) m_current = detail::AnimationPlayData();
-	else m_current = detail::AnimationPlayData { m_autoPlay, &m_animations.at(m_autoPlay), 0, 0, 1.f };
+	else {
+		auto& ap = m_animations.at(m_autoPlay);
+		m_current = detail::AnimationPlayData { m_autoPlay, &ap, ap.frames.size() == 1, 0, 0, 1.f };
+
+		updateSpritePos();
+	}
 }
 
 void SpriteAnimator::setFrame(std::size_t frame, std::uint64_t startingTime) {
@@ -47,39 +62,44 @@ void SpriteAnimator::queue(lsd::StringView animationName, float speed) {
 	if (it == m_animations.end()) {
 		throw std::out_of_range("esengine::SpriteAnimator::queue(): Requested animation to add to queue didn't exist!");
 	} else {
-		m_queue.emplace(detail::AnimationPlayData { it->name, it.get(), 0, 0, speed });
+		m_queue.emplace(detail::AnimationPlayData { it->name, it.get(), it->frames.size() == 1, 0, 0, speed });
 	}
 }
 
 void SpriteAnimator::update(std::uint64_t deltaTime) {
 	if (m_current.playing()) {
-		const auto& frame = m_current.animation->frames[m_current.frameIndex];
+		if (!m_current.singleFrame && m_current.animation->repeated) {
+			const auto& frame = m_current.animation->frames[m_current.frameIndex];
 
-		m_current.frameTime += deltaTime;
+			m_current.frameTime += deltaTime;
 
-		if (m_current.frameTime >= lsd::implicitCast<std::uint64_t>(frame.time.count())) {
-			m_current.frameTime %= frame.time.count();
+			if (m_current.frameTime >= lsd::implicitCast<std::uint64_t>(frame.time.count())) {
+				m_current.frameTime %= frame.time.count();
 
-			m_current.frameIndex += 1;
+				m_current.frameIndex += 1;
 
-			if (m_current.frameIndex >= m_current.animation->frames.size()) {
-				if (!m_current.animation->repeated) {
-					stop();
+				if (m_current.frameIndex >= m_current.animation->frames.size()) {
+					if (!m_current.animation->repeated) {
+						stop();
 
-					return;
-				} else m_current.frameIndex = 0;
+						return;
+					} else m_current.frameIndex = 0;
+				}
+
+				updateSpritePos();
 			}
-
-			const auto& newFrame = m_current.animation->frames[m_current.frameIndex];
-
-			auto& sprite = m_sprite.get();
-
-			auto framesPerRow = sprite.m_texture->dimension().x / lsd::implicitCast<std::size_t>(sprite.m_rect.w);
-
-			sprite.m_rect.x = (newFrame.index % framesPerRow) * sprite.m_rect.w;
-			sprite.m_rect.y = (newFrame.index / framesPerRow) * sprite.m_rect.h;
 		}
 	}
+}
+
+void SpriteAnimator::updateSpritePos() {
+	auto frameIndex = m_current.animation->frames[m_current.frameIndex].index;
+	auto& sprite = m_sprite.get();
+
+	auto framesPerRow = sprite.m_texture->dimension().x / lsd::implicitCast<std::size_t>(sprite.m_rect.w);
+
+	sprite.m_rect.x = (frameIndex % framesPerRow) * sprite.m_rect.w;
+	sprite.m_rect.y = (frameIndex / framesPerRow) * sprite.m_rect.h;
 }
 
 } // namespace esengine

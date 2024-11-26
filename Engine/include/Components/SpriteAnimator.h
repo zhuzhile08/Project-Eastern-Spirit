@@ -70,6 +70,8 @@ private:
 
 	void update(std::uint64_t deltaTime);
 
+	void updateSpritePos();
+
 	friend class AnimatorBuilder;
 	friend class Application;
 };

@@ -36,6 +36,8 @@ public:
 
 	lsd::StringView name { };
 	const Animation* animation { };
+	bool singleFrame { };
+
 	std::size_t frameIndex { };
 	std::uint64_t frameTime { };
 	float speed = 1.f;
