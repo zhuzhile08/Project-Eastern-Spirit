@@ -40,8 +40,9 @@ void Window::setFocus(bool focus) {
 	SDL_SetWindowRelativeMouseMode(m_window, focus);
 }
 
-bool Window::focus() {
-	SDL_GetWindowRelativeMouseMode(m_window);
+bool Window::focused() {
+	auto b = SDL_GetWindowRelativeMouseMode(m_window);
+	return b;
 }
 
 #endif
