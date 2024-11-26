@@ -35,6 +35,8 @@ set (ENGINE_SOURCE_FILES
 	"src/Components/Health.cpp"
 	"src/Components/Hitbox.cpp"
 	"src/Components/Hurtbox.cpp"
+	"src/Components/KinematicBody.cpp"
+	"src/Components/ParticleSystem.cpp"
 	"src/Components/Path.cpp"
 	"src/Components/TextBox.cpp"
 	"src/Components/Trail.cpp"

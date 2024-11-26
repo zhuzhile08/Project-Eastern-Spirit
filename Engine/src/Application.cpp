@@ -8,6 +8,8 @@
 #include <Graphics/RenderSystem.h>
 
 #include <Components/Camera.h>
+#include <Components/KinematicBody.h>
+#include <Components/ParticleSystem.h>
 #include <Components/Sprite.h>
 #include <Components/SpriteAnimator.h>
 
@@ -64,6 +66,10 @@ void Application::run() {
 			globals::inputSystem->update();
 
 			update();
+
+			for (auto [kinematicBody, transform] : etcs::world().query<KinematicBody, etcs::Transform>()) {
+				kinematicBody.move(transform);
+			}
 
 			for (auto [animator] : etcs::world().query<SpriteAnimator>()) {
 				animator.update(m_deltaTime);

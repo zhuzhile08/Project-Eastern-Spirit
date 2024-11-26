@@ -116,7 +116,7 @@ void InputSystem::update() {
 				for (auto& key : m_keys)
 					if (event.key.key == key.type) key.pressed = true;
 
-				if (event.key.key == SDLK_ESCAPE && globals::window->focus())
+				if (event.key.key == SDLK_ESCAPE && globals::window->focused())
 					globals::window->setFocus(false);
 
 				break;
@@ -131,7 +131,7 @@ void InputSystem::update() {
 				for (auto& key : m_mouseButtons)
 					if (event.button.button == key.type) key.pressed = true;
 
-				if (event.button.button == SDL_BUTTON_LEFT && !globals::window->focus())
+				if (event.button.button == SDL_BUTTON_LEFT && !globals::window->focused())
 					globals::window->setFocus(true);
 				
 				break;

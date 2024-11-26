@@ -7,6 +7,7 @@ include_directories(
 PUBLIC
 	# library local include directory
 	${ENGINE_INCLUDE_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}/include/
 
 	# audio libraries
 	# ${LIBRARY_PATH}/openal-soft/include/
@@ -16,6 +17,9 @@ PUBLIC
 )
 
 set (GAME_SOURCE_FILES 
+	"src/Controllers/Player.cpp"
+
+	"src/Game.cpp"
 	"src/main.cpp"
 )
 
