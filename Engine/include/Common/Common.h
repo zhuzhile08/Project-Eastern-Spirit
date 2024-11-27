@@ -59,7 +59,7 @@ inline constexpr std::size_t depthSortingFactor = 10;
 inline constexpr std::size_t defaultWindowScalingFactor = 2;
 #endif
 
-inline constexpr std::chrono::milliseconds defaultAnimationFrameTime(150);
+inline constexpr std::chrono::milliseconds defaultAnimationFrameTime(125);
 
 } // namespace globals
 
