@@ -25,8 +25,8 @@ namespace esengine {
 struct InitInfo {
 	char** argv;
 
-	lsd::StringView name = { };
-	glm::ivec2 dim = { 16 * 32, 16 * 18 };
+	lsd::StringView name;
+	glm::ivec2 dim;
 
 #ifdef ESENGINE_DYNAMIC_WINDOW_SIZE
 	int flags = SDL_WINDOW_RESIZABLE;
