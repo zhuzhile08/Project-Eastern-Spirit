@@ -30,10 +30,10 @@ Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet
 		auto sprite = player.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_spriteSheet);
 
 		esengine::AnimatorBuilder animBuilder;
-		animBuilder.addAnimation({ "IdleDown", { {0} }, true });
-		animBuilder.addAnimation({ "IdleLeft", { {1} }, true });
-		animBuilder.addAnimation({ "IdleUp", { {2} }, true });
-		animBuilder.addAnimation({ "IdleRight", { {3} }, true });
+		animBuilder.addAnimation({ "IdleDown", { { 0 } }, true });
+		animBuilder.addAnimation({ "IdleLeft", { { 1 } }, true });
+		animBuilder.addAnimation({ "IdleUp", { { 2 } }, true });
+		animBuilder.addAnimation({ "IdleRight", { { 3 } }, true });
 
 		animBuilder.addAnimation({ "WalkDown", { { 32 }, { 33 }, { 34 }, { 35 } }, true });
 		animBuilder.addAnimation({ "WalkLeft", { { 36 }, { 37 }, { 38 }, { 39 } }, true });
