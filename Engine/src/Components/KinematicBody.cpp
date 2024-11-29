@@ -7,6 +7,8 @@ bool KinematicBody::move(etcs::Transform& transform) {
 	transform.translation().y += velocity.y;
 
 	velocity = glm::vec2 { };
+
+	return true;
 }
 
 } // namespace esengine
