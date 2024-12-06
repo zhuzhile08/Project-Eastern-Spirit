@@ -11,7 +11,7 @@
 #pragma once
 
 #include <Common/Common.h>
-#include <Common/Animation.h>
+#include <Detail/Animation.h>
 #include <Components/Sprite.h>
 
 #include <LSD/Vector.h>
