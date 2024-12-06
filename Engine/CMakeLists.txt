@@ -33,13 +33,14 @@ set (ENGINE_SOURCE_FILES
 	"src/Components/SpriteAnimator.cpp"
 	"src/Components/Dispenser.cpp"
 	"src/Components/Health.cpp"
-	"src/Components/Hitbox.cpp"
-	"src/Components/Hurtbox.cpp"
 	"src/Components/KinematicBody.cpp"
 	"src/Components/ParticleSystem.cpp"
 	"src/Components/Path.cpp"
 	"src/Components/TextBox.cpp"
+	"src/Components/Tilemap.cpp"
 	"src/Components/Trail.cpp"
+
+	"src/Detail/PhysicsSystem.cpp"
 
 	"src/Graphics/AnimatorBuilder.cpp"
 	"src/Graphics/Font.cpp"
@@ -95,7 +96,7 @@ if(BUILD_STATIC)
 		SDL3::SDL3-static
 
 		# audio libraries
-		# OpenAL::OpenAL
+		Miniaudio::Headers
 
 		# utility libraries
 		LyraStandardLibrary::Headers

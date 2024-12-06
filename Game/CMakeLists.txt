@@ -39,7 +39,7 @@ LINK_PUBLIC
 	SDL3::SDL3-static
 
 	# audio libraries
-	# OpenAL::OpenAL
+	Miniaudio::Headers
 
 	# math libraries
 	glm::glm
