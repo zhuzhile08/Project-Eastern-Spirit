@@ -16,3 +16,6 @@
 [submodule "Data"]
 	path = Data
 	url = https://github.com/zhuzhile08/Project-Eastern-Spirit-Data.git
+[submodule "Deps/miniaudio/miniaudio"]
+	path = Deps/miniaudio/miniaudio
+	url = https://github.com/mackron/miniaudio.git
