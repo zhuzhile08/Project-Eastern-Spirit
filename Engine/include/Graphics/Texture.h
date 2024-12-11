@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include <Common/RAIIContainers.h>
-#include <Common/FileSystem.h>
+#include <Core/RAIIContainers.h>
+#include <Core/FileSystem.h>
 
 #include <LSD/String.h>
 #include <LSD/UnorderedSparseMap.h>

@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <Common/Common.h>
+#include <Core/Common.h>
 
 #include <LSD/Vector.h>
 #include <LSD/String.h>

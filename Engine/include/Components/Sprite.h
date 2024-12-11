@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <Common/Common.h>
+#include <Core/Common.h>
 #include <Graphics/RenderSystem.h>
 #include <Graphics/Texture.h>
 

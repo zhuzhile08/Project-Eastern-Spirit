@@ -19,44 +19,50 @@ namespace esengine {
 
 class FileSystem;
 
-class Background;
 class Font;
-class Texutre;
+class Texture;
 class Window;
-
 class RenderSystem;
+
+class Background;
+class Camera;
+class Dispenser;
+class Health;
+class KinematicBody;
+class Path;
+class Sprite;
+class SpriteAnimator;
+class StaticBody;
+class Textbox;
+class Valuable;
+
+namespace detail {
+
+struct Frame;
+struct AnimationPlayData;
+
 class InputSystem;
+class PhysicsSystem;
+
+}
 
 struct Animation;
 class AnimatorBuilder;
 
-class SpriteAnimator;
-class Camera;
-class Dispenser;
-class Health;
-class Hitbox;
-class Hurtbox;
-class Path;
-class Sprite2D;
-class Sprtie3D;
-class Textbox;
-class Trail;
-class Valuable;
-
-class Texture;
 
 namespace globals {
 
 extern FileSystem* fileSystem;
 extern Window* window;
 extern RenderSystem* renderSystem;
-extern InputSystem* inputSystem;
+extern detail::InputSystem* inputSystem;
+extern detail::PhysicsSystem* physicsSystem;
 
 inline constexpr std::uint32_t graphicsCellUnit = 16;
 inline constexpr std::size_t depthSortingFactor = 10;
 
 #ifndef ESENGINE_DYNAMIC_WINDOW_SIZE
-inline constexpr std::size_t defaultWindowScalingFactor = 2;
+inline constexpr std::size_t defaultWindowScalingFactor = 3;
 #endif
 
 inline constexpr std::chrono::milliseconds defaultAnimationFrameTime(125);
