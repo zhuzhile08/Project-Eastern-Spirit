@@ -1,8 +1,8 @@
 /*************************
- * @file InputSystem.h
+ * @file Input.h
  * @author zhuzhile08 (zhuzhile08@gmail.com)
  * 
- * @brief A wrapper around SDL input which polls events
+ * @brief Provides input codes and types to the user
  * 
  * @date 2024-08-31
  * 
@@ -372,40 +372,6 @@ CUSTOM_HASHER(CBHasher, const ControllerButton&, ControllerButtonType, lsd::Hash
 CUSTOM_EQUAL(CBEqual, const ControllerButton&, ControllerButtonType, .type)
 
 } // namespace input_system_detail
-
-
-class InputSystem {
-public:
-	InputSystem();
-
-	bool quit();
-	void cancelQuit();
-
-	const Key& keyboard(KeyType type);
-	const MouseButton& mouse(MouseButtonType type);
-	const ControllerButton& controller(ControllerButtonType type);
-	glm::vec2 mousePos();
-	glm::vec2 mouseDelta();
-	glm::vec2 analogueStickPos();
-
-	void startFrame();
-	void update();
-
-private:
-	lsd::UnorderedSparseSet<Key, input_system_detail::KHasher, input_system_detail::KEqual> m_keys;
-	lsd::UnorderedSparseSet<MouseButton, input_system_detail::MBHasher, input_system_detail::MBEqual> m_mouseButtons;
-	lsd::UnorderedSparseSet<ControllerButton, input_system_detail::CBHasher, input_system_detail::CBEqual> m_controllerButtons;
-
-	bool m_quit = false;
-
-	std::uint32_t m_mouseState;
-	const bool* m_keyboardState;
-
-	glm::vec2 m_mousePos;
-	glm::vec2 m_mouseDelta;
-	glm::vec2 m_stickPos;
-	glm::vec2 m_stickDelta;
-};
 
 } // namespace esengine
 
