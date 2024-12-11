@@ -1,10 +1,10 @@
 /************************
- * @file KinematicBody.h
+ * @file StaticBody.h
  * @author Zhile Zhu (zhuzhile08@gmail.com)
  * 
- * @brief Kinematic physics body
+ * @brief Static physics-bodies which only influence others, and can't be moved except manually or influenced
  * 
- * @date 2024-11-26
+ * @date 2024-12-08
  * @copyright Copyright (c) 2024
  ************************/
 
@@ -19,18 +19,13 @@
 
 namespace esengine {
 
-class KinematicBody {
+class StaticBody {
 public:
-	KinematicBody(glm::vec2 collider, glm::vec2 offset, std::size_t layers = 0, std::size_t detectionLayers = 0) : 
+	StaticBody(glm::vec2 collider, glm::vec2 offset, std::size_t layers = 0, std::size_t detectionLayers = 0) : 
 		m_collider(collider), m_offset(offset), m_layers(layers), m_detectionLayers(detectionLayers) { }
-
-	void move(etcs::Transform& transform);
 
 	[[nodiscard]] BoundingBox aabb(const etcs::Transform& transform) const noexcept;
 
-	[[nodiscard]] glm::vec2 collider() const noexcept {
-		return m_collider;
-	}
 	[[nodiscard]] glm::vec2 offset() const noexcept {
 		return m_offset;
 	}
@@ -46,8 +41,6 @@ public:
 	[[nodiscard]] std::uint32_t detectedLayer() const noexcept {
 		return m_detectedLayer;
 	}
-
-	glm::vec2 velocity;
 
 private:
 	glm::vec2 m_collider;
