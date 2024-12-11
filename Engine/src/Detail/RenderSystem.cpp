@@ -1,4 +1,4 @@
-#include <Graphics/RenderSystem.h>
+#include <Detail/RenderSystem.h>
 
 #include <Graphics/Window.h>
 #include <Graphics/Texture.h>
@@ -7,9 +7,11 @@ namespace esengine {
 
 namespace globals {
 
-RenderSystem* renderSystem = nullptr;
+detail::RenderSystem* renderSystem = nullptr;
 
 } // namespace globals
+
+namespace detail {
 
 RenderSystem::RenderSystem() {
 	insertPass({ }); // default render pass;
@@ -72,5 +74,7 @@ void RenderSystem::drawAll() {
 		SDL_RenderPresent(pass.renderer);
 	}
 }
+
+} // namespace detail
 
 } // namespace esengine

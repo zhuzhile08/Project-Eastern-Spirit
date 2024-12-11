@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <Common/RAIIContainers.h>
+#include <Core/RAIIContainers.h>
 
-#include <Common/Common.h>
+#include <Core/Common.h>
 
 #include <SDL3/SDL.h>
 
@@ -24,6 +24,8 @@
 #include <map>
 
 namespace esengine {
+
+namespace detail {
 
 class RenderSystem {
 public:
@@ -73,5 +75,7 @@ public:
 private:
 	lsd::UnorderedSparseSet<RenderPass, Hasher, Equal> m_renderPasses;
 };
+
+}
 
 } // namespace esengine

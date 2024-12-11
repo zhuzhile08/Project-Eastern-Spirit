@@ -8,7 +8,6 @@
 
 #include <Graphics/AnimatorBuilder.h>
 #include <Graphics/Window.h>
-#include <Graphics/RenderSystem.h>
 
 #include <glm/glm.hpp>
 

@@ -22,7 +22,6 @@ class FileSystem;
 class Font;
 class Texture;
 class Window;
-class RenderSystem;
 
 class Background;
 class Camera;
@@ -38,6 +37,7 @@ class Valuable;
 
 namespace detail {
 
+class RenderSystem;
 struct Frame;
 struct AnimationPlayData;
 
@@ -54,7 +54,7 @@ namespace globals {
 
 extern FileSystem* fileSystem;
 extern Window* window;
-extern RenderSystem* renderSystem;
+extern detail::RenderSystem* renderSystem;
 extern detail::InputSystem* inputSystem;
 extern detail::PhysicsSystem* physicsSystem;
 

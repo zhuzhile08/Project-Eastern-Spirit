@@ -12,7 +12,7 @@
 #pragma once
 
 #include <Core/Common.h>
-#include <Graphics/RenderSystem.h>
+#include <Detail/RenderSystem.h>
 #include <Graphics/Texture.h>
 
 #include <LSD/String.h>
@@ -32,7 +32,7 @@ public:
 	Sprite(SDL_FRect rect, Texture* texture) : m_rect(rect), m_texture(texture) { }
 
 	[[nodiscard]] bool drawCall(
-		RenderSystem::CallData& data,
+		detail::RenderSystem::CallData& data,
 		const etcs::Entity& entity,
 		const etcs::Transform& transform,
 		const glm::mat4& camTransform,

@@ -8,7 +8,7 @@
 namespace esengine {
 
 bool Sprite::drawCall(
-	RenderSystem::CallData& data,
+	detail::RenderSystem::CallData& data,
 	const etcs::Entity& entity,
 	const etcs::Transform& transform,
 	const glm::mat4& camTransform,

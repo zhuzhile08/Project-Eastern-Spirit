@@ -3,7 +3,7 @@
 #include <Core/Common.h>
 
 #include <Graphics/Texture.h>
-#include <Graphics/RenderSystem.h>
+#include <Detail/RenderSystem.h>
 
 namespace esengine {
 
