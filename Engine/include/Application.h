@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <Common/Common.h>
+#include <Core/Common.h>
 
 #include <SDL3/SDL.h>
 
@@ -49,7 +49,7 @@ public:
 	}
 
 protected:
-	virtual void update(float deltaTime) { }
+	virtual void update(float) { }
 
 	std::uint64_t m_accumulator = 0;
 	std::uint64_t m_deltaTime;

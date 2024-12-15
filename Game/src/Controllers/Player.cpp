@@ -1,7 +1,7 @@
 #include <Controllers/Player.h>
 
-#include <Common/Math.h>
-#include <InputSystem.h>
+#include <Core/Math.h>
+#include <Detail/InputSystem.h>
 
 void PlayerController::update(float deltaTime, esengine::KinematicBody& kinematicBody, esengine::SpriteAnimator& animator) {
 	auto& vel = kinematicBody.velocity;

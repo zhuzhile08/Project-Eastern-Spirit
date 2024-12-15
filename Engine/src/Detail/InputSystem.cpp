@@ -1,4 +1,4 @@
-#include <InputSystem.h>
+#include <Detail/InputSystem.h>
 
 #include <Graphics/Window.h>
 
@@ -14,11 +14,11 @@ namespace esengine {
 
 namespace globals {
 
-InputSystem* inputSystem = nullptr;
-
-extern Window* window;
+detail::InputSystem* inputSystem = nullptr;
 
 } // namespace globals
+
+namespace detail {
 
 InputSystem::InputSystem() { 
 	m_mouseState = SDL_GetMouseState(&m_mousePos.x, &m_mousePos.y);
@@ -161,5 +161,7 @@ void InputSystem::update() {
 		}
 	}
 }
+
+} // namespace detail
 
 } // namespace esengine

@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <Common/Common.h>
+#include <Core/Common.h>
 
 #include <LSD/Vector.h>
 #include <LSD/String.h>
@@ -25,7 +25,7 @@ namespace detail {
 
 struct Frame {
 	std::size_t index;
-	std::chrono::milliseconds time = globals::defaultAnimationFrameTime;
+	std::chrono::milliseconds time = constants::defaultAnimationFrameTime;
 };
 
 struct AnimationPlayData {

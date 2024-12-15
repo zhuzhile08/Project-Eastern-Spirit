@@ -11,7 +11,8 @@
 
 #pragma once
 
-#include <Common/RAIIContainers.h>
+#include <Core/Common.h>
+#include <Core/RAIIContainers.h>
 
 #include <SDL3/SDL.h>
 #include <glm/glm.hpp>
@@ -43,7 +44,7 @@ private:
 
 	bool m_changed = false;
 
-	friend class InputSystem;
+	friend class detail::InputSystem;
 };
 
 #else
@@ -78,7 +79,7 @@ private:
 
 	bool m_changed = false;
 
-	friend class InputSystem;
+	friend class detail::InputSystem;
 };
 
 #endif

@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include <Common/Common.h>
-#include <Common/Animation.h>
+#include <Core/Common.h>
+#include <Core/Animation.h>
 
 #include <Components/Sprite.h>
 

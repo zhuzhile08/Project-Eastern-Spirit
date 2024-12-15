@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <Common/Common.h>
+#include <Core/Common.h>
 
 #include <ETCS/Component.h>
 #include <ETCS/Components/Transform.h>

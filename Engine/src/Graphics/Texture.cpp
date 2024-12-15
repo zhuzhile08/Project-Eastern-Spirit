@@ -1,9 +1,9 @@
 #define STB_IMAGE_IMPLEMENTATION // Do not remove this, just leave this at the top of the file
 
-#include <Common/Common.h>
+#include <Core/Common.h>
 
 #include <Graphics/Texture.h>
-#include <Graphics/RenderSystem.h>
+#include <Detail/RenderSystem.h>
 
 namespace esengine {
 

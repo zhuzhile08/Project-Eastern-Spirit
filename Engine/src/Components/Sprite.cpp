@@ -8,7 +8,7 @@
 namespace esengine {
 
 bool Sprite::drawCall(
-	RenderSystem::CallData& data,
+	detail::RenderSystem::CallData& data,
 	const etcs::Entity& entity,
 	const etcs::Transform& transform,
 	const glm::mat4& camTransform,
@@ -23,8 +23,8 @@ bool Sprite::drawCall(
 			transform.globalOrientation(entity).z * -360,
 			m_rect,
 			SDL_FRect {
-				tf.x + camera.viewport.x,
-				tf.y + camera.viewport.y,
+				tf.x + camera.viewport.x - scale.x / 2,
+				tf.y + camera.viewport.y - scale.y / 2,
 				scale.x,
 				scale.y
 			},

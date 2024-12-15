@@ -24,32 +24,33 @@ set (ENGINE_SOURCE_FILES
 	"src/Audio/Music.cpp"
 	"src/Audio/SFX.cpp"
 
-	"src/Common/Filesystem.cpp"
-	"src/Common/Math.cpp"
+	"src/Core/Filesystem.cpp"
+	"src/Core/Math.cpp"
 
 	"src/Components/Background.cpp"
 	"src/Components/Camera.cpp"
-	"src/Components/Sprite.cpp"
-	"src/Components/SpriteAnimator.cpp"
 	"src/Components/Dispenser.cpp"
 	"src/Components/Health.cpp"
 	"src/Components/KinematicBody.cpp"
 	"src/Components/ParticleSystem.cpp"
 	"src/Components/Path.cpp"
+	"src/Components/Sprite.cpp"
+	"src/Components/SpriteAnimator.cpp"
+	"src/Components/StaticBody.cpp"
 	"src/Components/TextBox.cpp"
 	"src/Components/Tilemap.cpp"
 	"src/Components/Trail.cpp"
 
+	"src/Detail/RenderSystem.cpp"
 	"src/Detail/PhysicsSystem.cpp"
+	"src/Detail/InputSystem.cpp"
 
 	"src/Graphics/AnimatorBuilder.cpp"
 	"src/Graphics/Font.cpp"
-	"src/Graphics/RenderSystem.cpp"
 	"src/Graphics/Texture.cpp"
 	"src/Graphics/Window.cpp"
 
 	"src/Application.cpp"
-	"src/InputSystem.cpp"
 	"src/Stage.cpp"
 )
 
