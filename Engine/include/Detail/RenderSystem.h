@@ -68,7 +68,10 @@ public:
 	void drawPass(lsd::StringView name);
 	void drawAll();
 
-	const RenderPass& pass(lsd::StringView name = { }) const {
+	[[nodiscard]] const RenderPass& pass(lsd::StringView name = { }) const {
+		return m_renderPasses.at(name);
+	}
+	[[nodiscard]] RenderPass& pass(lsd::StringView name = { }) {
 		return m_renderPasses.at(name);
 	}
 

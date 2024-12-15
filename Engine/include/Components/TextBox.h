@@ -25,24 +25,8 @@
 #include <cstddef>
 
 namespace esengine {
-class Rect {
-public:
-	Rect(const glm::uvec2& pos, const glm::uvec2& rec) noexcept :
-		m_pos(pos),
-		m_rec(rec) { }
 
-	[[nodiscard]] const glm::uvec2& pos() const noexcept {
-		return m_pos;
-	}
-	[[nodiscard]] const glm::uvec2& rec() const noexcept {
-		return m_rec;
-	}
-
-private:
-	glm::uvec2 m_pos;
-	glm::uvec2 m_rec;
-};
-class TextBox : public Rect  {
+class TextBox {
 public:
 	enum class Alignment {
 		center = 1,
@@ -55,36 +39,60 @@ public:
 		
 	};
 
-	TextBox(lsd::StringView text, const Font& font, const glm::uvec2& kerning, const glm::uvec2& pos, const glm::uvec2& rec, Alignment alignment = Alignment::def, bool scrolingAnimation = false) :
-		Rect(pos, rec),
-		m_text(text),
-		m_font(font),
+
+	TextBox(
+		lsd::StringView text, 
+		const Font& font, 
+		const glm::uvec2& kerning, 
+		const glm::vec2& offset, 
+		const glm::uvec2& dimension, 
+		Alignment alignment = Alignment::def, 
+		bool scrolling = false
+	) : text(text),
+		scrolling(scrolling),
+		m_offset(offset),
+		m_dimension(dimension),
 		m_kerning(kerning),
 		m_alignment(alignment),
-		m_scrolingAnimation(scrolingAnimation) { }
+		m_font(font) { }
 
-	[[nodiscard]] void insertDrawCalls(
+
+	void draw(
 		const etcs::Entity& entity,
 		const etcs::Transform& transform,
 		const glm::mat4& camTransform,
 		const Camera& camera) const;
 		
-	void changeText(lsd::StringView newText);
-
 	
-	[[nodiscard]] const lsd::String& text() const noexcept {
-		return m_text;
+	[[nodiscard]] const glm::vec2& offset() const noexcept {
+		return m_offset;
+	}
+	[[nodiscard]] const glm::uvec2& dimension() const noexcept {
+		return m_dimension;
+	}
+	[[nodiscard]] const glm::uvec2& kerning() const noexcept {
+		return m_kerning;
+	}
+	[[nodiscard]] Alignment alignment() const noexcept {
+		return m_alignment;
+	}
+	[[nodiscard]] const Font& font() const noexcept {
+		return m_font;
 	}
 
+
+	lsd::String text;
+	bool scrolling;
+
 private:
+	glm::vec2 m_offset;
+	glm::uvec2 m_dimension;
+
 	glm::uvec2 m_kerning;
-	lsd::String m_text;
 
 	Alignment m_alignment;
-	bool m_scrolingAnimation;
 
 	const Font& m_font;
-	
 };
 
 

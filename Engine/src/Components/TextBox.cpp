@@ -7,11 +7,7 @@
 
 namespace esengine {
 
-void TextBox::changeText(lsd::StringView newText) {
-	m_text = newText;
-};
-
-void TextBox::insertDrawCalls(
+void TextBox::draw(
 	const etcs::Entity& entity,
 	const etcs::Transform& transform,
 	const glm::mat4& camTransform,

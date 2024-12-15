@@ -43,6 +43,12 @@ public:
 	float speed = 1.f;
 };
 
+
+struct TextboxAnimationPlayData {
+public:
+	
+};
+
 } // namespace detail
 
 struct Animation {
