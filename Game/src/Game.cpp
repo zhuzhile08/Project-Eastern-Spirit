@@ -27,7 +27,7 @@ Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet
 	{ // player
 		auto player = etcs::world().insertEntity();
 		player.insertComponent<etcs::Transform>(glm::vec3(0, 0, 0));
-		player.insertComponent<esengine::KinematicBody>(glm::vec2(6.0f, 9.0f), glm::vec2(-3, 5), 0);
+		player.insertComponent<esengine::KinematicBody>(glm::vec2(6.0f, 9.0f), glm::vec2(-3, 5));
 		player.insertComponent<PlayerController>();
 
 		auto sprite = player.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_spriteSheet);
@@ -48,8 +48,8 @@ Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet
 
 	{
 		auto wall = etcs::world().insertEntity();
-		wall.insertComponent<etcs::Transform>(glm::vec3(48, 48, 0));
-		wall.insertComponent<esengine::StaticBody>(glm::vec2(32.0f, 32.0f), glm::vec2(-16, -16), 0);
+		wall.insertComponent<etcs::Transform>(glm::vec3(48, 48, 1));
+		wall.insertComponent<esengine::StaticBody>(glm::vec2(32.0f, 32.0f), glm::vec2(-16, -16));
 		wall.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_spriteSheet);
 	}
 }
