@@ -85,13 +85,15 @@ void Application::run() {
 			auto camTransformMat = camComponent.transformMat(camEntity, camTransform);
 
 			for (const auto& [spriteEntity, transform, sprite] : etcs::world().query<const etcs::Entity, const etcs::Transform, const Sprite>())
-				if (RenderSystem::CallData data { }; sprite.drawCall(data, spriteEntity, transform, camTransformMat, camComponent))
+				if (detail::RenderSystem::CallData data { }; sprite.drawCall(data, spriteEntity, transform, camTransformMat, camComponent))
 					esengine::globals::renderSystem->insertCall(data, camComponent.passName());
 
+			/*
 			for (const auto& [textBoxEntity, transform, textBox] : etcs::world().query<const etcs::Entity, const etcs::Transform, const TextBox>())
 				for (int i = 0; i < textBox.text().length(); i++) 
 					if (RenderSystem::CallData data{ }; textBox.drawCall(data, textBoxEntity, transform, camTransformMat, camComponent, i))
 						esengine::globals::renderSystem->insertCall(data, camComponent.passName());
+			*/
 				
 		}
 

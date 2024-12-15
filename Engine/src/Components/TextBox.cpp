@@ -18,6 +18,7 @@ void TextBox::insertDrawCalls(
 	const Camera& camera) const {
 	auto tf = camTransform * glm::vec4(transform.globalTranslation(entity), 1.0f);
 
+	/*
 	if (tf.x >= -m_rect.w && tf.x < camera.viewport.w && tf.y >= -m_rect.h && tf.y < camera.viewport.h) {
 		auto scale = transform.globalScale(entity) * glm::vec3(m_rect.w, m_rect.h, 1.f);
 
@@ -35,6 +36,7 @@ void TextBox::insertDrawCalls(
 		};
 
 	}
+	*/
 }
 
 } //namespace esengine

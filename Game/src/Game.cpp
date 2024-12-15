@@ -25,11 +25,13 @@ Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet
 		camera.insertComponent<esengine::Camera>();
 	}
 
+	/*
 	{ // textbox
 		auto text = etcs::world().insertEntity();
 		text.insertComponent<etcs::Transform>(glm::vec3(0.0, 0.0, 0.0));
 		text.insertComponent<esengine::TextBox>();
 	}
+	*/
 
 	{ // player
 		auto player = etcs::world().insertEntity();

@@ -42,12 +42,14 @@ void RenderSystem::insertCall(const CallData& callData, lsd::StringView passName
 	renderPass.drawData[static_cast<int>(callData.sortingFactor * renderPass.sortingFactor)].emplaceBack(std::move(callData));
 }
 
+/*
 void RenderSystem::insertBatch(const CallData& callData, lsd::StringView passName) {
 	for (int i = 0; i < textBox.text().length(); i++)
 	auto& renderPass = m_renderPasses.at(passName);
 
 	renderPass.drawData[static_cast<int>(callData.sortingFactor * renderPass.sortingFactor)].emplaceBack(std::move(callData));
 }
+*/
 
 void RenderSystem::drawPass(lsd::StringView name) {
 	auto& pass = m_renderPasses.at(name);
