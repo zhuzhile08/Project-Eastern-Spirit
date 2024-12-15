@@ -1,6 +1,7 @@
 #include <Game.h>
 
 #include <Controllers/Player.h>
+#include <Components/TextBox.h>
 
 #include <InputSystem.h>
 
@@ -19,6 +20,12 @@ Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet
 		auto camera = etcs::world().insertEntity();
 		camera.insertComponent<etcs::Transform>(glm::vec3(0.0f, 0.0f, 0.0f));
 		camera.insertComponent<esengine::Camera>();
+	}
+
+	{ // textbox
+		auto text = etcs::world().insertEntity();
+		text.insertComponent<etcs::Transform>(glm::vec3(0.0, 0.0, 0.0));
+		text.insertComponent<esengine::TextBox>();
 	}
 
 	{ // player

@@ -12,6 +12,7 @@
 #include <Components/ParticleSystem.h>
 #include <Components/Sprite.h>
 #include <Components/SpriteAnimator.h>
+#include <Components/TextBox.h>
 
 #include <ETCS/ETCS.h>
 
@@ -78,14 +79,22 @@ void Application::run() {
 			m_accumulator -= m_deltaTime;
 		}
 
-		for (auto [camera, camTransform, camComponent] : etcs::world().query<const etcs::Entity, etcs::Transform, Camera>()) {
+		for (auto [camEntity, camTransform, camComponent] : etcs::world().query<const etcs::Entity, etcs::Transform, Camera>()) {
 			camComponent.update(camTransform);
-			auto camTransformMat = camComponent.transformMat(camera, camTransform);
+			auto camTransformMat = camComponent.transformMat(camEntity, camTransform);
 
-			for (const auto& [sprite, transform, spriteComponent] : etcs::world().query<const etcs::Entity, const etcs::Transform, const Sprite>())
-				if (RenderSystem::CallData data { }; spriteComponent.drawCall(data, sprite, transform, camTransformMat, camComponent))
+			for (const auto& [spriteEntity, transform, sprite] : etcs::world().query<const etcs::Entity, const etcs::Transform, const Sprite>())
+				if (RenderSystem::CallData data { }; sprite.drawCall(data, spriteEntity, transform, camTransformMat, camComponent))
 					esengine::globals::renderSystem->insertCall(data, camComponent.passName());
+
+			for (const auto& [textBoxEntity, transform, textBox] : etcs::world().query<const etcs::Entity, const etcs::Transform, const TextBox>())
+				for (int i = 0; i < textBox.text().length(); i++) 
+					if (RenderSystem::CallData data{ }; textBox.drawCall(data, textBoxEntity, transform, camTransformMat, camComponent, i))
+						esengine::globals::renderSystem->insertCall(data, camComponent.passName());
+				
 		}
+
+
 
 		globals::renderSystem->drawAll();
 	}

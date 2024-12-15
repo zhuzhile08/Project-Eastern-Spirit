@@ -19,6 +19,8 @@
 
 #include <glm/glm.hpp>
 #include <SDL3/SDL.h>
+#include <ETCS/Component.h>
+#include <ETCS/Components/Transform.h>
 
 #include <cstddef>
 
@@ -60,8 +62,19 @@ public:
 		m_kerning(kerning),
 		m_alignment(alignment),
 		m_scrolingAnimation(scrolingAnimation) { }
+
+	[[nodiscard]] void insertDrawCalls(
+		const etcs::Entity& entity,
+		const etcs::Transform& transform,
+		const glm::mat4& camTransform,
+		const Camera& camera) const;
 		
 	void changeText(lsd::StringView newText);
+
+	
+	[[nodiscard]] const lsd::String& text() const noexcept {
+		return m_text;
+	}
 
 private:
 	glm::uvec2 m_kerning;
