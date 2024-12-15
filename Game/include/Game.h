@@ -12,9 +12,6 @@
 
 #include <Application.h>
 
-#include <Components/Camera.h>
-#include <Components/Sprite.h>
-
 #include <Graphics/Texture.h>
 
 #include <ETCS/ETCS.h>
