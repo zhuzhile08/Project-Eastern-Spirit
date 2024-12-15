@@ -99,11 +99,14 @@ void PhysicsSystem::handleKinematicCollision(const Manifest& manifest, Kinematic
 	second.body->m_collidedLayers |= manifest.layers;
 }
 
-void PhysicsSystem::handleStaticCollision(const Manifest& manifest, KinematicEntity& kinematicEntity, const StaticEntity& staticEntity) const {
+void PhysicsSystem::handleStaticCollision(const Manifest& manifest, KinematicEntity& kinematicEntity, StaticEntity& staticEntity) const {
 	kinematicEntity.body->velocity *= manifest.penetrationDirection;
 
 	kinematicEntity.body->m_collided = true;
+	staticEntity.body->m_collided = true;
+
 	kinematicEntity.body->m_collidedLayers |= manifest.layers;
+	staticEntity.body->m_collidedLayers |= manifest.layers;
 }
 
 } // namespace detail

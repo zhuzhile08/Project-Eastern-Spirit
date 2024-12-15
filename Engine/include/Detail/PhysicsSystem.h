@@ -60,7 +60,7 @@ private:
 		const glm::vec2& vSecond) const;
 
 	void handleKinematicCollision(const Manifest& manifest, KinematicEntity& first, KinematicEntity& second) const;
-	void handleStaticCollision(const Manifest& manifest, KinematicEntity& kinematicEntity, const StaticEntity& staticEntity) const;
+	void handleStaticCollision(const Manifest& manifest, KinematicEntity& kinematicEntity, StaticEntity& staticEntity) const;
 };
 
 } // namespace detail
