@@ -49,7 +49,7 @@ class Font {
 public:
 	Font(lsd::StringView texturePath, glm::uvec2 charSize, std::uint32_t padding) noexcept;
 
-	[[nodiscard]] RenderSystem::CallData drawCall(const glm::mat4& transform, const Textbox& textBox) const;
+	[[nodiscard]] RenderSystem::CallData drawCall(const glm::mat4& transform, const TextBox& textBox) const;
 
 private:
 	Texture m_texture;
