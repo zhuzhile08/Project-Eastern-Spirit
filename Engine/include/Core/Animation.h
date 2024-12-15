@@ -25,7 +25,7 @@ namespace detail {
 
 struct Frame {
 	std::size_t index;
-	std::chrono::milliseconds time = globals::defaultAnimationFrameTime;
+	std::chrono::milliseconds time = constants::defaultAnimationFrameTime;
 };
 
 struct AnimationPlayData {

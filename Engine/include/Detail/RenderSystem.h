@@ -60,7 +60,7 @@ private:
 public:
 	RenderSystem();
 
-	void insertPass(lsd::StringView name, Texture* target = nullptr, std::size_t sortingFactor = globals::depthSortingFactor);
+	void insertPass(lsd::StringView name, Texture* target = nullptr, std::size_t sortingFactor = constants::depthSortingFactor);
 	void removePass(lsd::StringView name);
 
 	void insertCall(const CallData& callData, lsd::StringView passName);
