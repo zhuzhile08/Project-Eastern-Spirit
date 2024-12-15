@@ -14,7 +14,7 @@ namespace esengine {
 
 namespace detail {
 
-
+#define ESENGINE_COLLISION_LAYER(n) 1 << n
 
 } // namespace detail
 

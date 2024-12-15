@@ -21,8 +21,8 @@ namespace esengine {
 
 class KinematicBody {
 public:
-	KinematicBody(glm::vec2 collider, glm::vec2 offset, std::size_t layers = 0, std::size_t detectionLayers = 0) : 
-		m_collider(collider), m_offset(offset), m_layers(layers), m_detectionLayers(detectionLayers) { }
+	KinematicBody(glm::vec2 collider, glm::vec2 offset, std::size_t layers = 1) : 
+		m_collider(collider), m_offset(offset), m_layers(layers) { }
 
 	void move(etcs::Transform& transform);
 
@@ -37,14 +37,11 @@ public:
 	[[nodiscard]] std::size_t layers() const noexcept {
 		return m_layers;
 	}
-	[[nodiscard]] std::size_t detectionLayers() const noexcept {
-		return m_detectionLayers;
-	}
 	[[nodiscard]] bool collided() const noexcept {
 		return m_collided;
 	}
-	[[nodiscard]] std::uint32_t detectedLayer() const noexcept {
-		return m_detectedLayer;
+	[[nodiscard]] std::uint32_t collidedLayers() const noexcept {
+		return m_collidedLayers;
 	}
 
 	glm::vec2 velocity;
@@ -54,10 +51,9 @@ private:
 	glm::vec2 m_offset;
 
 	std::uint32_t m_layers;
-	std::uint32_t m_detectionLayers;
 
 	bool m_collided;
-	std::uint32_t m_detectedLayer;
+	std::uint32_t m_collidedLayers;
 
 	friend class detail::PhysicsSystem;
 };

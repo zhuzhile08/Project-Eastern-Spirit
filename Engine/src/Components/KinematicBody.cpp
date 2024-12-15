@@ -6,7 +6,7 @@ void KinematicBody::move(etcs::Transform& transform) {
 	transform.translation().x += velocity.x;
 	transform.translation().y += velocity.y;
 
-	velocity = glm::vec2 { };
+	velocity = glm::vec2(0.0f);
 }
 
 BoundingBox KinematicBody::aabb(const etcs::Transform& transform) const noexcept {

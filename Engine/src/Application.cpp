@@ -1,11 +1,13 @@
 #include <Application.h>
 
-#include <Common/Common.h>
-#include <Common/FileSystem.h>
+#include <Core/Common.h>
+#include <Core/FileSystem.h>
 
-#include <InputSystem.h>
+#include <Detail/InputSystem.h>
 #include <Graphics/Window.h>
-#include <Graphics/RenderSystem.h>
+#include <Detail/RenderSystem.h>
+
+#include <Detail/PhysicsSystem.h>
 
 #include <Components/Camera.h>
 #include <Components/KinematicBody.h>
@@ -33,11 +35,12 @@ Application::Application(InitInfo info) : m_deltaTime(info.deltaTime) {
 #ifdef ESENGINE_DYNAMIC_WINDOW_SIZE
 	globals::window = new Window(info.name, info.dim, info.flags);
 #else
-	globals::window = new Window(info.name, info.dim, globals::defaultWindowScalingFactor, info.flags);
+	globals::window = new Window(info.name, info.dim, constants::defaultWindowScalingFactor, info.flags);
 #endif
 
-	globals::renderSystem = new RenderSystem();
-	globals::inputSystem = new InputSystem();
+	globals::renderSystem = new detail::RenderSystem();
+	globals::inputSystem = new detail::InputSystem();
+	globals::physicsSystem = new detail::PhysicsSystem();
 }
 
 Application::~Application() {
@@ -67,9 +70,7 @@ void Application::run() {
 
 			update(m_deltaTime / 16.f);
 
-			for (auto [kinematicBody, transform] : etcs::world().query<KinematicBody, etcs::Transform>()) {
-				kinematicBody.move(transform);
-			}
+			globals::physicsSystem->update();
 
 			for (auto [animator] : etcs::world().query<SpriteAnimator>()) {
 				animator.update(m_deltaTime);
@@ -83,7 +84,7 @@ void Application::run() {
 			auto camTransformMat = camComponent.transformMat(camera, camTransform);
 
 			for (const auto& [sprite, transform, spriteComponent] : etcs::world().query<const etcs::Entity, const etcs::Transform, const Sprite>())
-				if (RenderSystem::CallData data { }; spriteComponent.drawCall(data, sprite, transform, camTransformMat, camComponent))
+				if (detail::RenderSystem::CallData data { }; spriteComponent.drawCall(data, sprite, transform, camTransformMat, camComponent)) // @todo renderpasses are not respected, needs an extra check
 					esengine::globals::renderSystem->insertCall(data, camComponent.passName());
 		}
 

@@ -16,10 +16,24 @@
 
 namespace esengine {
 
+namespace constants {
+
 // epsilons
 
 inline constexpr float fepsilon = std::numeric_limits<float>::epsilon();
 inline constexpr double depsilon = std::numeric_limits<double>::epsilon();
+
+// infinities
+
+inline constexpr float finfinity = std::numeric_limits<float>::infinity();
+inline constexpr double dinfinity = std::numeric_limits<double>::infinity();
+
+// nans
+
+inline constexpr float fnan = std::numeric_limits<float>::quiet_NaN();
+inline constexpr double dnan = std::numeric_limits<double>::quiet_NaN();
+
+}
 
 
 // bounding box
@@ -59,7 +73,7 @@ template <class Numerical> inline GLM_CONSTEXPR Numerical closestToZero(Numerica
 
 template <class FloatingPoint> inline constexpr bool fpEqual(FloatingPoint a, std::type_identity_t<FloatingPoint> b) noexcept requires std::is_floating_point_v<FloatingPoint> {
 	auto diff = a - b;
-	return (diff < fepsilon) && (-diff < depsilon);
+	return (diff < constants::fepsilon) && (-diff < constants::depsilon);
 }
 
 } // namespace esengine
