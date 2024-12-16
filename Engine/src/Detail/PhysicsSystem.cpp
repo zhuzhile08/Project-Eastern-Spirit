@@ -58,20 +58,19 @@ bool PhysicsSystem::aabbCollided(
 	BoundingBox& second,
 	const glm::vec2& vSecond
 ) const {
-	first.min += vFirst;
-	first.max += vFirst;
-
-	second.min += vSecond;
-	second.max += vSecond;
-
 	auto absVel = glm::abs(vFirst) + glm::abs(vSecond);
 
-	auto distance = glm::vec2(
-		glm::max(first.min.x, second.min.x) - glm::min(first.max.x, second.max.x),
-		glm::max(first.min.y, second.min.y) - glm::min(first.max.y, second.max.y)
+	auto distanceTranslated = glm::vec2(
+		glm::max(first.min.x + vFirst.x, second.min.x + vSecond.x) - glm::min(first.max.x + vFirst.x, second.max.x + vSecond.x),
+		glm::max(first.min.y + vFirst.y, second.min.y + vSecond.y) - glm::min(first.max.y + vFirst.y, second.max.y + vSecond.y)
 	);
 
-	if (distance.x < absVel.x && distance.y < absVel.y) {
+	if (distanceTranslated.x < absVel.x && distanceTranslated.y < absVel.y) {
+		auto distance = glm::vec2(
+			glm::max(first.min.x, second.min.x) - glm::min(first.max.x, second.max.x),
+			glm::max(first.min.y, second.min.y) - glm::min(first.max.y, second.max.y)
+		);
+
 		auto timeToCollision = glm::vec2(
 			(absVel.x != 0) ? distance.x / absVel.x : constants::finfinity,
 			(absVel.y != 0) ? distance.y / absVel.y : constants::finfinity
