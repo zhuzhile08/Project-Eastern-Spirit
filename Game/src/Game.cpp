@@ -18,7 +18,7 @@
 
 using namespace std::chrono_literals;
 
-Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet("IMG/PlayerSheet.png") {
+Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet("img/sprites/PlayerSheet.png"), m_wall("img/sprites/Wall.png") {
 	{ // camera
 		auto camera = etcs::world().insertEntity();
 		camera.insertComponent<etcs::Transform>(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -59,7 +59,7 @@ Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet
 		auto wall = etcs::world().insertEntity();
 		wall.insertComponent<etcs::Transform>(glm::vec3(48, 48, 1));
 		wall.insertComponent<esengine::StaticBody>(glm::vec2(32.0f, 32.0f), glm::vec2(-16, -16));
-		wall.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_spriteSheet);
+		wall.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_wall);
 	}
 }
 

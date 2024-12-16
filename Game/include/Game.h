@@ -24,4 +24,5 @@ private:
 	void update(float deltaTime);
 
 	esengine::Texture m_spriteSheet;
+	esengine::Texture m_wall;
 };
