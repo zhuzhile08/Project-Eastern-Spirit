@@ -37,7 +37,7 @@ public:
 	}
 
 	SDL_FRect viewport;
-	// SDL_FRect limits { -10000000.f, 10000000.f, 2 * 10000000.f, 2 * 10000000.f };
+	SDL_FRect limits { -10000000.f, 10000000.f, 2 * 10000000.f, 2 * 10000000.f };
 	glm::vec2 offset { };
 	glm::vec2 zoom { 1, 1 };
 
