@@ -121,7 +121,7 @@ File FileSystem::load(const std::filesystem::path& path, OpenMode mode, bool buf
 		flushAndCloseFile
 	).first->second;
 
-	if (!file) throw FilesystemError("Failed to load file");
+	if (!file.get()) throw FilesystemError("Failed to load file");
 
 	return File(file, (buffered ? globals::fileSystem->unusedBuffer() : nullptr), path.c_str());
 }
