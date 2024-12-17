@@ -53,38 +53,36 @@ void PhysicsSystem::update() {
 
 bool PhysicsSystem::aabbCollided(
 	Manifest& manifest, 
-	BoundingBox& first, 
+	const BoundingBox& first, 
 	const glm::vec2& vFirst, 
-	BoundingBox& second,
+	const BoundingBox& second,
 	const glm::vec2& vSecond
 ) const {
 	auto absVel = glm::abs(vFirst) + glm::abs(vSecond);
 
-	auto distanceTranslated = glm::vec2(
-		glm::max(first.min.x + vFirst.x, second.min.x + vSecond.x) - glm::min(first.max.x + vFirst.x, second.max.x + vSecond.x),
-		glm::max(first.min.y + vFirst.y, second.min.y + vSecond.y) - glm::min(first.max.y + vFirst.y, second.max.y + vSecond.y)
-	);
+	auto firstTranslated = BoundingBox { first.min + vFirst, first.max + vFirst };
+	auto secondTranslated = BoundingBox { second.min + vSecond, second.max + vSecond };
 
-	if (distanceTranslated.x < absVel.x && distanceTranslated.y < absVel.y) {
-		auto distance = glm::vec2(
+	if (firstTranslated.max.x <= secondTranslated.min.x || firstTranslated.min.x >= secondTranslated.max.x) return false;
+	else if (firstTranslated.max.y <= secondTranslated.min.y || firstTranslated.min.y >= secondTranslated.max.y) return false;
+	else {
+		auto distance = glm::vec2 {
 			glm::max(first.min.x, second.min.x) - glm::min(first.max.x, second.max.x),
 			glm::max(first.min.y, second.min.y) - glm::min(first.max.y, second.max.y)
-		);
+		};
 
-		auto timeToCollision = glm::vec2(
+		auto timeToCollision = glm::vec2 {
 			(absVel.x != 0) ? distance.x / absVel.x : constants::finfinity,
 			(absVel.y != 0) ? distance.y / absVel.y : constants::finfinity
-		);
+		};
 
-		if (glm::abs(timeToCollision.x) < glm::abs(timeToCollision.y)) 
-			manifest.penetrationDirection.x = timeToCollision.x; // vertical collision
+		if (glm::abs(timeToCollision.x) < glm::abs(timeToCollision.y))
+			manifest.penetrationDirection.x = (timeToCollision.x == constants::finfinity) ? 0.0f : timeToCollision.x; // vertical collision
 		else
-			manifest.penetrationDirection.y = timeToCollision.y; // horizontal collision
-
+			manifest.penetrationDirection.y = (timeToCollision.y == constants::finfinity) ? 0.0f : timeToCollision.y; // horizontal collision
+		
 		return true;
 	}
-
-	return false;
 }
 
 void PhysicsSystem::handleKinematicCollision(const Manifest& manifest, KinematicEntity& first, KinematicEntity& second) const {

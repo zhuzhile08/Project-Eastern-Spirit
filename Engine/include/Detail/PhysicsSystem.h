@@ -54,9 +54,9 @@ private:
 
 	bool aabbCollided(
 		Manifest& manifest, 
-		BoundingBox& first, 
+		const BoundingBox& first, 
 		const glm::vec2& vFirst, 
-		BoundingBox& second,
+		const BoundingBox& second,
 		const glm::vec2& vSecond) const;
 
 	void handleKinematicCollision(const Manifest& manifest, KinematicEntity& first, KinematicEntity& second) const;
