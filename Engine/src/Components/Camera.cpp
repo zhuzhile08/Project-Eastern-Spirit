@@ -39,13 +39,13 @@ glm::mat4 Camera::transformMat(const etcs::Entity& camera, const etcs::Transform
 	mat[3][3] = 1;
 
 	if (target.valid()) {
-		mat[0][3] = zoom.x * (-transform.translation().x + offset.x - viewport.x);
-		mat[1][3] = zoom.y * (-transform.translation().y + offset.y - viewport.y);
-		mat[2][3] = zoom.y * (-transform.translation().y);
+		mat[3][0] = zoom.x * (-transform.translation().x + offset.x - viewport.x);
+		mat[3][1] = zoom.y * (-transform.translation().y + offset.y - viewport.y);
+		mat[3][2] = zoom.y * (-transform.translation().y);
 	} else {
-		mat[0][3] = zoom.x * (-transform.globalTranslation(camera).x + offset.x - viewport.x);
-		mat[1][3] = zoom.y * (-transform.globalTranslation(camera).y + offset.y - viewport.y);
-		mat[2][3] = zoom.y * (-transform.globalTranslation(camera).y);
+		mat[3][0] = zoom.x * (-transform.globalTranslation(camera).x + offset.x - viewport.x);
+		mat[3][1] = zoom.y * (-transform.globalTranslation(camera).y + offset.y - viewport.y);
+		mat[3][2] = zoom.y * (-transform.globalTranslation(camera).y);
 	}
 
 	return mat;
