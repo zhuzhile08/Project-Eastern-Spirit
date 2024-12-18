@@ -30,17 +30,22 @@ class Font {
 public:
 	Font(lsd::StringView texturePath, glm::uvec2 charSize, std::uint32_t padding) noexcept;
 
-	[[nodiscard]] detail::RenderSystem::CallData drawCall(const glm::mat4& transform, const Textbox& textBox) const;
+	[[nodiscard]] const glm::ivec2& charSize() const noexcept {
+		return m_charSize;
+	}
+	[[nodiscard]] SDL_Texture* texture() noexcept {
+		return m_texture.texture();
+	}
+
+	[[nodiscard]] const SDL_FRect& at(int character) const noexcept;
 
 private:
 	Texture m_texture;
 
-	lsd::Array <SDL_Rect, 256> m_rects;
+	lsd::Array <SDL_FRect, 256> m_rects;
 
 	glm::uvec2 m_charSize;
 	std::uint32_t m_padding;
-
-	[[nodiscard]] const SDL_Rect& at(int character) const noexcept;
 };
 
 #else
@@ -49,13 +54,20 @@ class Font {
 public:
 	Font(lsd::StringView texturePath, glm::uvec2 charSize, std::uint32_t padding) noexcept;
 
+	[[nodiscard]] const glm::ivec2& charSize() const noexcept {
+		return m_charSize;
+	}
+	[[nodiscard]] SDL_Texture* texture() noexcept {
+		return m_texture.texture();
+	}
+
+	[[nodiscard]] SDL_FRect at(int c) const noexcept;
+
 private:
 	Texture m_texture;
 
 	glm::ivec2 m_charSize;
 	std::int32_t m_padding;
-
-	[[nodiscard]] SDL_Rect at(int c) const noexcept;
 };
 
 #endif

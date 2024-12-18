@@ -15,6 +15,7 @@
 #include <Components/Sprite.h>
 #include <Components/SpriteAnimator.h>
 #include <Components/TextBox.h>
+#include <Components/TextBoxAnimator.h>
 
 #include <ETCS/ETCS.h>
 
@@ -66,21 +67,23 @@ void Application::run() {
 
 		globals::inputSystem->startFrame();
 
-		while (m_accumulator >= m_deltaTime) {
+		while (m_accumulator >= m_deltaTime) { // update loop
 			globals::inputSystem->update();
 
 			update(m_deltaTime / 16.f);
 
 			globals::physicsSystem->update();
 
-			for (auto [animator] : etcs::world().query<SpriteAnimator>()) {
+			for (auto [animator] : etcs::world().query<SpriteAnimator>())
 				animator.update(m_deltaTime);
-			}
+
+			for (auto [animator] : etcs::world().query<TextBoxAnimator>())
+				animator.update(m_deltaTime);
 
 			m_accumulator -= m_deltaTime;
 		}
 
-		for (auto [camEntity, camTransform, camComponent] : etcs::world().query<const etcs::Entity, etcs::Transform, Camera>()) {
+		for (auto [camEntity, camTransform, camComponent] : etcs::world().query<const etcs::Entity, etcs::Transform, Camera>()) { // render loop
 			camComponent.update(camTransform);
 			auto camTransformMat = camComponent.transformMat(camEntity, camTransform);
 
@@ -91,8 +94,6 @@ void Application::run() {
 			for (const auto& [textBoxEntity, transform, textBox] : etcs::world().query<const etcs::Entity, const etcs::Transform, const TextBox>())
 				textBox.draw(textBoxEntity, transform, camTransformMat, camComponent);
 		}
-
-
 
 		globals::renderSystem->drawAll();
 	}

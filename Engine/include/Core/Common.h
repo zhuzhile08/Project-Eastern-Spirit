@@ -49,16 +49,16 @@ class PhysicsSystem;
 struct Animation;
 class AnimatorBuilder;
 
-class SpriteAnimator;
 class Camera;
 class Dispenser;
 class Health;
 class Hitbox;
 class Hurtbox;
 class Path;
-class Sprite2D;
-class Sprtie3D;
+class Sprite;
+class SpriteAnimator;
 class TextBox;
+class TextBoxAnimator;
 class Trail;
 class Valuable;
 
@@ -85,6 +85,7 @@ inline constexpr std::size_t defaultWindowScalingFactor = 3;
 #endif
 
 inline constexpr std::chrono::milliseconds defaultAnimationFrameTime(125);
+inline constexpr std::chrono::milliseconds defaultTextSpeed(100);
 
 } // namespace constants
 

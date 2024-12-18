@@ -38,6 +38,7 @@ set (ENGINE_SOURCE_FILES
 	"src/Components/SpriteAnimator.cpp"
 	"src/Components/StaticBody.cpp"
 	"src/Components/TextBox.cpp"
+	"src/Components/TextBoxAnimator.cpp"
 	"src/Components/Tilemap.cpp"
 	"src/Components/Trail.cpp"
 

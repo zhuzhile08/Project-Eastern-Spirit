@@ -1,7 +1,6 @@
 #include <Game.h>
 
 #include <Controllers/Player.h>
-#include <Components/TextBox.h>
 
 #include <Detail/InputSystem.h>
 
@@ -10,6 +9,8 @@
 #include <Components/SpriteAnimator.h>
 #include <Components/KinematicBody.h>
 #include <Components/StaticBody.h>
+#include <Components/TextBox.h>
+#include <Components/TextBoxAnimator.h>
 
 #include <Graphics/AnimatorBuilder.h>
 #include <Graphics/Window.h>
@@ -18,20 +19,20 @@
 
 using namespace std::chrono_literals;
 
-Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet("img/sprites/PlayerSheet.png"), m_wall("img/sprites/Wall.png") {
+Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet("img/sprites/PlayerSheet.png"), m_wall("img/sprites/Wall.png"), m_font("img/fonts/Regular.png", { 7, 13 }, 1) {
 	{ // camera
 		auto camera = etcs::world().insertEntity();
 		camera.insertComponent<etcs::Transform>(glm::vec3(0.0f, 0.0f, 0.0f));
 		camera.insertComponent<esengine::Camera>();
 	}
 
-	/*
 	{ // textbox
 		auto text = etcs::world().insertEntity();
 		text.insertComponent<etcs::Transform>(glm::vec3(0.0, 0.0, 0.0));
-		text.insertComponent<esengine::TextBox>();
+
+		auto box = text.insertComponent<esengine::TextBox>("Hello World!", &m_font, glm::vec2(100, 100), glm::vec2(0.0f, 0.0f), esengine::TextBox::Alignment::center);
+		text.insertComponent<esengine::TextBoxAnimator>(box);
 	}
-	*/
 
 	{ // player
 		auto player = etcs::world().insertEntity();

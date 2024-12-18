@@ -13,6 +13,7 @@
 #include <Application.h>
 
 #include <Graphics/Texture.h>
+#include <Graphics/Font.h>
 
 #include <ETCS/ETCS.h>
 
@@ -25,4 +26,6 @@ private:
 
 	esengine::Texture m_spriteSheet;
 	esengine::Texture m_wall;
+
+	esengine::Font m_font;
 };

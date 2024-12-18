@@ -11,18 +11,23 @@
 
 #pragma once
 
+#include <Core/Animation.h>
+
 #include <Graphics/Font.h>
 #include <Graphics/Texture.h>
 
 #include <LSD/String.h>
 #include <LSD/StringView.h>
 
-#include <glm/glm.hpp>
-#include <SDL3/SDL.h>
 #include <ETCS/Component.h>
 #include <ETCS/Components/Transform.h>
 
+#include <SDL3/SDL.h>
+
+#include <glm/glm.hpp>
+
 #include <cstddef>
+#include <limits>
 
 namespace esengine {
 
@@ -32,28 +37,21 @@ public:
 		center = 1,
 		left = 2,
 		right = 3,
-		top = 8,
-		middle = 16,
-		bottom = 24,
-		def = left | middle
-		
+		def = left
 	};
-
 
 	TextBox(
 		lsd::StringView text, 
-		const Font& font, 
-		const glm::uvec2& kerning, 
-		const glm::vec2& offset, 
-		const glm::uvec2& dimension, 
-		Alignment alignment = Alignment::def, 
-		bool scrolling = false
+		Font* font, 
+		const glm::vec2& dimension, 
+		const glm::vec2& offset = { 0.0f, 0.0f },
+		Alignment horizontalAlignment = Alignment::def, 
+		bool clipping = true
 	) : text(text),
-		scrolling(scrolling),
 		m_offset(offset),
 		m_dimension(dimension),
-		m_kerning(kerning),
-		m_alignment(alignment),
+		m_horizontalAlignment(horizontalAlignment),
+		m_clipping(clipping),
 		m_font(font) { }
 
 
@@ -67,32 +65,31 @@ public:
 	[[nodiscard]] const glm::vec2& offset() const noexcept {
 		return m_offset;
 	}
-	[[nodiscard]] const glm::uvec2& dimension() const noexcept {
+	[[nodiscard]] const glm::vec2& dimension() const noexcept {
 		return m_dimension;
 	}
-	[[nodiscard]] const glm::uvec2& kerning() const noexcept {
-		return m_kerning;
+	[[nodiscard]] Alignment horizontalAlignment() const noexcept {
+		return m_horizontalAlignment;
 	}
-	[[nodiscard]] Alignment alignment() const noexcept {
-		return m_alignment;
-	}
-	[[nodiscard]] const Font& font() const noexcept {
+	[[nodiscard]] const Font* font() const noexcept {
 		return m_font;
 	}
 
 
 	lsd::String text;
-	bool scrolling;
 
 private:
 	glm::vec2 m_offset;
-	glm::uvec2 m_dimension;
+	glm::vec2 m_dimension;
 
-	glm::uvec2 m_kerning;
+	Alignment m_horizontalAlignment;
+	bool m_clipping;
 
-	Alignment m_alignment;
+	std::size_t m_index = std::numeric_limits<std::size_t>::max();
 
-	const Font& m_font;
+	Font* m_font;
+
+	friend class TextBoxAnimator;
 };
 
 
