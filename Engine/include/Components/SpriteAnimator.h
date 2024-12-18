@@ -41,6 +41,8 @@ public:
 		m_queue.clear();
 	}
 
+	void update(std::uint64_t deltaTime);
+
 	[[nodiscard]] const detail::AnimationPlayData& current() const noexcept {
 		return m_current;
 	}
@@ -68,12 +70,9 @@ private:
 		const lsd::String& autoPlay
 	);
 
-	void update(std::uint64_t deltaTime);
-
 	void updateSpritePos();
 
 	friend class AnimatorBuilder;
-	friend class Application;
 };
 
 } // namespace esengine
