@@ -20,7 +20,7 @@ RenderSystem::RenderSystem() {
 void RenderSystem::insertPass(lsd::StringView name, Texture* target, std::size_t sortingFactor) {
 	auto renderer = m_renderPasses.emplace(RenderPass { 
 		sdl::Renderer(globals::window->window()), 
-		name,
+		lsd::String(name),
 		sortingFactor,
 		target
 	}).first->renderer.get();

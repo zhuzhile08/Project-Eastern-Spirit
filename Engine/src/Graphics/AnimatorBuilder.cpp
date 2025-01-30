@@ -23,7 +23,7 @@ void AnimatorBuilder::addAutoPlay(Animation&& anim) {
 }
 
 SpriteAnimator AnimatorBuilder::buildSpriteAnimator(const etcs::ComponentView<Sprite>& sprite) const {
-	return SpriteAnimator(sprite, m_animations, m_autoPlay);
+	return SpriteAnimator(sprite, m_animations, lsd::String(m_autoPlay));
 }
 
 bool AnimatorBuilder::verifyAnimation(Animation&& anim) const {

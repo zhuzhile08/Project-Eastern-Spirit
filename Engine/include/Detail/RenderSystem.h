@@ -54,8 +54,8 @@ private:
 		std::map<int, lsd::Vector<CallData>, std::greater<int>> drawData = { };
 	};
 
-	CUSTOM_HASHER(Hasher, const RenderPass&, const lsd::String&, lsd::Hash<lsd::String>(), .name)
-	CUSTOM_EQUAL(Equal, const RenderPass&, const lsd::String&, .name)
+	CUSTOM_HASHER(Hasher, const RenderPass&, const lsd::StringView&, lsd::Hash<lsd::StringView>(), .name)
+	CUSTOM_EQUAL(Equal, const RenderPass&, const lsd::StringView&, .name)
 
 public:
 	RenderSystem();

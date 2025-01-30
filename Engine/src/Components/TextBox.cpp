@@ -17,13 +17,8 @@ void TextBox::draw(
 	auto tf = camTransform * glm::vec4(transform.globalTranslation(entity), 1.0f) + glm::vec4(m_offset, 0.0f, 0.0f);
 
 	if (tf.x >= -m_dimension.x && tf.x < camera.viewport.w && tf.y >= -m_dimension.y && tf.y < camera.viewport.h) {
-		auto& renderPass = globals::renderSystem->pass(camera.passName());
-		auto& drawCalls = renderPass.drawData[static_cast<int>(tf.z * renderPass.sortingFactor)];
-
 		auto charSize = glm::vec2(m_font->charSize());
-
 		auto maxWidth = static_cast<int>(m_dimension.x / charSize.x) + 1;
-
 		auto renderIndex = std::min(text.size(), m_index);
 
 		glm::ivec2 textDim {
@@ -32,10 +27,14 @@ void TextBox::draw(
 		};
 
 		float startingXPos { };
-
 		if (m_horizontalAlignment == Alignment::center) startingXPos = tf.x + (maxWidth - textDim.x) * charSize.x / 2.0f;
 		else if (m_horizontalAlignment == Alignment::right) startingXPos = tf.x + (maxWidth - textDim.x) * charSize.x;
 		else startingXPos = tf.x;
+
+		auto tx = m_font->texture();
+
+		auto& renderPass = globals::renderSystem->pass(camera.passName());
+		auto& drawCalls = renderPass.drawData[static_cast<int>(tf.z * renderPass.sortingFactor)];
 
 		for (auto y = 0; y < textDim.y; y++) {
 			for (auto x = 0; x < textDim.x; x++) {
@@ -49,7 +48,7 @@ void TextBox::draw(
 						charSize.x,
 						charSize.y
 					},
-					m_font->texture()
+					tx
 				);
 			}
 		}
