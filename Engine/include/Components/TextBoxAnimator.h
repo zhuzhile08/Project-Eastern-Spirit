@@ -28,7 +28,7 @@ public:
 	void skip();
 	void restart();
 
-	void update(std::uint64_t dt);
+	void update(es_time_t dt);
 
 	[[nodiscard]] const etcs::ComponentView<TextBox>& textBox() {
 		return m_textBox;
@@ -37,8 +37,8 @@ public:
 	float speed = 1.0f;
 
 private:
-	const std::uint64_t m_charTime;
-	std::uint64_t m_elapsed = 0.0f;
+	const es_time_t m_charTime;
+	es_time_t m_elapsed = 0.0f;
 
 	etcs::ComponentView<TextBox> m_textBox;
 };

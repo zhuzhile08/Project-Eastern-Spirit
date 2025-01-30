@@ -19,7 +19,7 @@ void TextBoxAnimator::restart() {
 	m_textBox.get().m_index = 0;
 }
 
-void TextBoxAnimator::update(std::uint64_t dt) {
+void TextBoxAnimator::update(es_time_t dt) {
 	auto& textBox = m_textBox.get();
 
 	if (textBox.m_index < textBox.text.size()) {

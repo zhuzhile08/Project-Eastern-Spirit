@@ -34,7 +34,7 @@ struct InitInfo {
 	int flags = { };
 #endif
 
-	std::uint64_t deltaTime = 33;
+	es_time_t deltaTime = 33;
 };
 
 
@@ -51,11 +51,11 @@ public:
 protected:
 	virtual void update(float) { }
 
-	std::uint64_t m_accumulator = 0;
-	std::uint64_t m_deltaTime;
+	es_time_t m_accumulator = 0;
+	es_time_t m_deltaTime;
 
-	std::uint64_t m_startTime = 0;
-	std::uint64_t m_currentTime = 0;
+	es_time_t m_startTime = 0;
+	es_time_t m_currentTime = 0;
 };
 
 } // namespace esengine

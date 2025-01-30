@@ -49,7 +49,7 @@ void SpriteAnimator::stop() {
 	}
 }
 
-void SpriteAnimator::setFrame(std::size_t frame, std::uint64_t startingTime) {
+void SpriteAnimator::setFrame(std::size_t frame, es_time_t startingTime) {
 	if (m_current.playing()) {
 		m_current.frameIndex = frame;
 		m_current.frameTime = startingTime;
@@ -62,18 +62,18 @@ void SpriteAnimator::queue(lsd::StringView animationName, float speed) {
 	if (it == m_animations.end()) {
 		throw std::out_of_range("esengine::SpriteAnimator::queue(): Requested animation to add to queue didn't exist!");
 	} else {
-		m_queue.emplace(detail::AnimationPlayData { it->name, it.get(), it->frames.size() == 1, 0, 0, speed });
+		m_queue.emplaceBack(detail::AnimationPlayData { it->name, it.get(), it->frames.size() == 1, 0, 0, speed });
 	}
 }
 
-void SpriteAnimator::update(std::uint64_t deltaTime) {
+void SpriteAnimator::update(es_time_t deltaTime) {
 	if (m_current.playing()) {
 		if (!m_current.singleFrame && m_current.animation->repeated) {
 			const auto& frame = m_current.animation->frames[m_current.frameIndex];
 
 			m_current.frameTime += deltaTime;
 
-			if (m_current.frameTime >= lsd::implicitCast<std::uint64_t>(frame.time.count())) {
+			if (m_current.frameTime >= lsd::implicitCast<es_time_t>(frame.time.count())) {
 				m_current.frameTime %= frame.time.count();
 
 				m_current.frameIndex += 1;

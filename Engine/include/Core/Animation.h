@@ -39,7 +39,7 @@ public:
 	bool singleFrame { };
 
 	std::size_t frameIndex { };
-	std::uint64_t frameTime { };
+	es_time_t frameTime { };
 	float speed = 1.f;
 };
 
@@ -47,8 +47,8 @@ public:
 
 struct Animation {
 public:
-	CUSTOM_HASHER(Hasher, const Animation&, const lsd::String&, lsd::Hash<lsd::String>(), .name)
-	CUSTOM_EQUAL(Equal, const Animation&, const lsd::String&, .name)
+	CUSTOM_HASHER(Hasher, const Animation&, const lsd::StringView&, lsd::Hash<lsd::StringView>(), .name)
+	CUSTOM_EQUAL(Equal, const Animation&, const lsd::StringView&, .name)
 
 	lsd::String name;
 	lsd::Vector<detail::Frame> frames;

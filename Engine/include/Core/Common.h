@@ -17,22 +17,28 @@
 
 namespace esengine {
 
-class FileSystem;
+// Convenience aliases
 
-class Font;
-class Texture;
-class Window;
+using es_time_t = std::uint64_t;
+
+
+// Structure forward declarations
+
+struct Animation;
+
+class FileSystem;
 
 class Background;
 class Camera;
-class Dispenser;
 class Health;
 class KinematicBody;
+class ParticleSystem;
 class Path;
 class Sprite;
 class SpriteAnimator;
 class StaticBody;
-class Textbox;
+class TextBox;
+class TextBoxAnimator;
 class Valuable;
 
 namespace detail {
@@ -46,23 +52,11 @@ class PhysicsSystem;
 
 } // namespace detail
 
-struct Animation;
 class AnimatorBuilder;
-
-class Camera;
-class Dispenser;
-class Health;
-class Hitbox;
-class Hurtbox;
-class Path;
-class Sprite;
-class SpriteAnimator;
-class TextBox;
-class TextBoxAnimator;
-class Trail;
-class Valuable;
-
+class Font;
+class ParticleSystemBuilder;
 class Texture;
+class Window;
 
 namespace globals {
 
