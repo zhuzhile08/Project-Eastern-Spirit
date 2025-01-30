@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <Components/KinematicBody.h>
+#include <Components/Colliders.h>
 #include <Components/SpriteAnimator.h>
 
 class PlayerController {

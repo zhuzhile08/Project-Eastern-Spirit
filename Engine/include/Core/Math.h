@@ -36,14 +36,6 @@ inline constexpr double dnan = std::numeric_limits<double>::quiet_NaN();
 }
 
 
-// bounding box
-
-struct BoundingBox {
-	glm::vec2 min;
-	glm::vec2 max;
-};
-
-
 // interpolation
 
 inline GLM_CONSTEXPR glm::vec2 interpolateLinear(glm::vec2 a, glm::vec2 b, float t) noexcept {
@@ -53,14 +45,13 @@ inline GLM_CONSTEXPR glm::dvec2 interpolateLinear(glm::dvec2 a, glm::dvec2 b, do
 	return a * (1.0f - t) + b * t;
 }
 
-/*
-inline constexpr float interpolateLinear(float low, float high, float t) noexcept {
-	//return a * (1.0f - t) + b * t;
+inline constexpr float interpolateLinear(float a, float b, float t) noexcept {
+	return a * (1.0f - t) + b * t;
 }
-inline constexpr float interpolateLinear(double low, double high, double t) noexcept {
-	//return a * (1.0f - t) + b * t;
+inline constexpr float interpolateLinear(double a, double b, double t) noexcept {
+	return a * (1.0f - t) + b * t;
 }
-*/
+
 
 inline GLM_CONSTEXPR glm::ivec2 mapToQuad(glm::ivec2 quadPos, glm::ivec2 quadDim, glm::ivec2 pos) noexcept {
 	return glm::ivec2((pos.x + quadPos.x) % quadDim.x, (pos.y + quadPos.y) % quadDim.y);

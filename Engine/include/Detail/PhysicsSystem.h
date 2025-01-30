@@ -12,8 +12,7 @@
 
 #include <Core/Common.h>
 
-#include <Components/KinematicBody.h>
-#include <Components/StaticBody.h>
+#include <Components/Colliders.h>
 
 #include <ETCS/Components/Transform.h>
 
@@ -40,9 +39,10 @@ private:
 		BoundingBox aabb;
 	};
 
-	struct Manifest {
-		std::size_t layers;
-		glm::vec2 penetrationDirection { 1.0f, 1.0f };
+	struct AreaEntity {
+		etcs::Transform* transform;
+		AreaBody* body;
+		BoundingBox aabb;
 	};
 
 public:
@@ -51,16 +51,13 @@ public:
 private:
 	lsd::Vector<KinematicEntity> m_kinematics;
 	lsd::Vector<StaticEntity> m_statics;
+	lsd::Vector<AreaEntity> m_areas;
 
-	bool aabbCollided(
-		Manifest& manifest, 
-		const BoundingBox& first, 
-		const glm::vec2& vFirst, 
-		const BoundingBox& second,
-		const glm::vec2& vSecond) const;
+	void handleKinematicCollision(KinematicEntity& first, KinematicEntity& second, std::uint64_t layers) const;
+	void handleStaticCollision(KinematicEntity& kinematicEntity, StaticEntity& staticEntity, std::uint64_t layers) const;
+	void handleAreaCollision(KinematicEntity& kinematicEntity, AreaEntity& areaEntity, std::uint64_t layers) const;
 
-	void handleKinematicCollision(const Manifest& manifest, KinematicEntity& first, KinematicEntity& second) const;
-	void handleStaticCollision(const Manifest& manifest, KinematicEntity& kinematicEntity, StaticEntity& staticEntity) const;
+	void setCollisionFlags(const glm::vec2& timeToCol, const glm::vec2& firstVel, Collision& first, Collision& second) const noexcept;
 };
 
 } // namespace detail

@@ -7,8 +7,7 @@
 #include <Components/Camera.h>
 #include <Components/Sprite.h>
 #include <Components/SpriteAnimator.h>
-#include <Components/KinematicBody.h>
-#include <Components/StaticBody.h>
+#include <Components/Colliders.h>
 #include <Components/TextBox.h>
 #include <Components/TextBoxAnimator.h>
 
