@@ -10,7 +10,7 @@
 #include <Detail/PhysicsSystem.h>
 
 #include <Components/Camera.h>
-#include <Components/KinematicBody.h>
+#include <Components/Colliders.h>
 #include <Components/ParticleSystem.h>
 #include <Components/Sprite.h>
 #include <Components/SpriteAnimator.h>
@@ -93,6 +93,9 @@ void Application::run() {
 
 			for (const auto& [textBoxEntity, transform, textBox] : etcs::world().query<const etcs::Entity, const etcs::Transform, const TextBox>())
 				textBox.draw(textBoxEntity, transform, camTransformMat, camComponent);
+
+			for (const auto& [particleSystemEntity, transform, particleSystem] : etcs::world().query<const etcs::Entity, const etcs::Transform, const ParticleSystem>())
+				particleSystem.draw(particleSystemEntity, transform, camTransformMat, camComponent);
 		}
 
 		globals::renderSystem->drawAll();
