@@ -58,7 +58,7 @@ public:
 		const Camera& camera);
 #endif
 
-	[[nodiscard]] BoundingBox aabb(const etcs::Transform& transform) const noexcept;
+	[[nodiscard]] BoundingBox aabb(const etcs::Entity& entity, const etcs::Transform& transform) const noexcept;
 
 	[[nodiscard]] Collision collisions() const noexcept {
 		return m_collisions;
@@ -102,7 +102,7 @@ public:
 	friend class detail::PhysicsSystem;
 };
 
-class AreaBody : public detail::BasicCollider {
+class AreaCollider : public detail::BasicCollider {
 	using detail::BasicCollider::BasicCollider;
 
 	friend class detail::PhysicsSystem;

@@ -1,11 +1,14 @@
 #include <Components/Colliders.h>
 
+#include <Core/Input.h>
+#include <Detail/InputSystem.h>
+
 namespace esengine {
 
 namespace detail {
 
-BoundingBox BasicCollider::aabb(const etcs::Transform& transform) const noexcept {
-	auto pos = glm::vec2(transform.translation()) + offset;
+BoundingBox BasicCollider::aabb(const etcs::Entity& entity, const etcs::Transform& transform) const noexcept {
+	auto pos = glm::vec2(transform.globalTranslation(entity)) + offset;
 
 	return { pos, pos + collider };
 }

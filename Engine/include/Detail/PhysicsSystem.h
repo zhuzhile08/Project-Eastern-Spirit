@@ -41,7 +41,7 @@ private:
 
 	struct AreaEntity {
 		etcs::Transform* transform;
-		AreaBody* body;
+		AreaCollider* body;
 		BoundingBox aabb;
 	};
 

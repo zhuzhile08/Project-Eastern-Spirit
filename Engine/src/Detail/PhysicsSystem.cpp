@@ -19,19 +19,19 @@ detail::PhysicsSystem* physicsSystem = nullptr;
 namespace detail {
 
 void PhysicsSystem::update() {
-	for (auto [transform, body] : etcs::world().query<etcs::Transform, KinematicBody>()) {
+	for (auto [entity, transform, body] : etcs::world().query<const etcs::Entity, etcs::Transform, KinematicBody>()) {
 		body.clearCollisions();
-		m_kinematics.emplaceBack(&transform, &body, body.aabb(transform));
+		m_kinematics.emplaceBack(&transform, &body, body.aabb(entity, transform));
 	}
 	
-	for (auto [transform, body] : etcs::world().query<etcs::Transform, StaticBody>()) {
+	for (auto [entity, transform, body] : etcs::world().query<const etcs::Entity, etcs::Transform, StaticBody>()) {
 		body.clearCollisions();
-		m_statics.emplaceBack(&transform, &body, body.aabb(transform));
+		m_statics.emplaceBack(&transform, &body, body.aabb(entity, transform));
 	}
 	
-	for (auto [transform, body] : etcs::world().query<etcs::Transform, AreaBody>()) {
+	for (auto [entity, transform, body] : etcs::world().query<const etcs::Entity, etcs::Transform, AreaCollider>()) {
 		body.clearCollisions();
-		m_areas.emplaceBack(&transform, &body, body.aabb(transform));
+		m_areas.emplaceBack(&transform, &body, body.aabb(entity, transform));
 	}
 
 	for (auto kinematicIt = m_kinematics.begin(); kinematicIt != m_kinematics.end(); kinematicIt++) {
@@ -67,10 +67,10 @@ void PhysicsSystem::handleKinematicCollision(KinematicEntity& first, KinematicEn
 	auto firstTranslated = BoundingBox { first.aabb.min + vFirst, first.aabb.max + vFirst };
 	auto secondTranslated = BoundingBox { second.aabb.min + vSecond, second.aabb.max + vSecond };
 
-	if (firstTranslated.max.x >= secondTranslated.min.x && 
-		firstTranslated.min.x <= secondTranslated.max.x && 
-		firstTranslated.max.y >= secondTranslated.min.y && 
-		firstTranslated.min.y <= secondTranslated.max.y
+	if (firstTranslated.max.x > secondTranslated.min.x && 
+		firstTranslated.min.x < secondTranslated.max.x && 
+		firstTranslated.max.y > secondTranslated.min.y && 
+		firstTranslated.min.y < secondTranslated.max.y
 	) {
 		auto distance = glm::vec2 {
 			glm::max(first.aabb.min.x, second.aabb.min.x) - glm::min(first.aabb.max.x, second.aabb.max.x),
@@ -106,10 +106,10 @@ void PhysicsSystem::handleStaticCollision(KinematicEntity& kinematicEntity, Stat
 	auto& vel = kinematicEntity.body->velocity;
 	auto kinematicAABB = BoundingBox { kinematicEntity.aabb.min + vel, kinematicEntity.aabb.max + vel };
 
-	if (kinematicAABB.max.x >= staticEntity.aabb.min.x && 
-		kinematicAABB.min.x <= staticEntity.aabb.max.x && 
-		kinematicAABB.max.y >= staticEntity.aabb.min.y && 
-		kinematicAABB.min.y <= staticEntity.aabb.max.y
+	if (kinematicAABB.max.x > staticEntity.aabb.min.x && 
+		kinematicAABB.min.x < staticEntity.aabb.max.x && 
+		kinematicAABB.max.y > staticEntity.aabb.min.y && 
+		kinematicAABB.min.y < staticEntity.aabb.max.y
 	) {
 		auto distance = glm::vec2 {
 			glm::max(kinematicEntity.aabb.min.x, staticEntity.aabb.min.x) - glm::min(kinematicEntity.aabb.max.x, staticEntity.aabb.max.x),
@@ -137,13 +137,13 @@ void PhysicsSystem::handleStaticCollision(KinematicEntity& kinematicEntity, Stat
 }
 
 void PhysicsSystem::handleAreaCollision(KinematicEntity& kinematicEntity, AreaEntity& areaEntity, std::uint64_t layers) const {
-	auto& vel = kinematicEntity.body->velocity;
+	const auto& vel = kinematicEntity.body->velocity;
 	auto kinematicAABB = BoundingBox { kinematicEntity.aabb.min + vel, kinematicEntity.aabb.max + vel };
 
-	if (kinematicAABB.max.x >= areaEntity.aabb.min.x && 
-		kinematicAABB.min.x <= areaEntity.aabb.max.x && 
-		kinematicAABB.max.y >= areaEntity.aabb.min.y && 
-		kinematicAABB.min.y <= areaEntity.aabb.max.y
+	if (kinematicAABB.max.x > areaEntity.aabb.min.x && 
+		kinematicAABB.min.x < areaEntity.aabb.max.x && 
+		kinematicAABB.max.y > areaEntity.aabb.min.y && 
+		kinematicAABB.min.y < areaEntity.aabb.max.y
 	) {
 		auto distance = glm::vec2 {
 			glm::max(kinematicEntity.aabb.min.x, areaEntity.aabb.min.x) - glm::min(kinematicEntity.aabb.max.x, areaEntity.aabb.max.x),
