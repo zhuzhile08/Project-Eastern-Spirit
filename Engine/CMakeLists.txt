@@ -29,7 +29,6 @@ set (ENGINE_SOURCE_FILES
 
 	"src/Components/Background.cpp"
 	"src/Components/Camera.cpp"
-	"src/Components/Health.cpp"
 	"src/Components/Colliders.cpp"
 	"src/Components/ParticleSystem.cpp"
 	"src/Components/Path.cpp"
