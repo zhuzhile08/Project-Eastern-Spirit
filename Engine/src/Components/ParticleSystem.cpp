@@ -16,33 +16,33 @@ void ParticleSystem::update(es_time_t deltaTime) {
 	}
 }
 
-void ParticleSystem::draw(const etcs::Entity& entity, const etcs::Transform& transform, const glm::mat4& camTransform, const Camera& camera) const {
-	auto tfBase = camTransform * glm::vec4(transform.globalTranslation(entity), 1.0f);
+void ParticleSystem::draw(
+	const etcs::Entity& entity, 
+	const etcs::Transform& transform,
+	const glm::mat4& renderMatrix
+) const {
+	auto tfBase = renderMatrix * glm::vec4(transform.globalTranslation(entity), 1.0f);
 	auto rotBase = transform.globalOrientation(entity).z * -360;
-	auto tx = m_texture->texture(camera.passName());
 
-	auto& renderPass = globals::renderSystem->pass(camera.passName());
-	auto& drawCalls = renderPass.drawData[static_cast<int>(tfBase.z * renderPass.sortingFactor)];
-	
+	auto& drawCalls = globals::renderSystem->drawData()[static_cast<int>(tfBase.z)];
+
+	auto tx = m_texture->texture();
+
 	for (const auto& particle : m_particles) {
 		auto tf = tfBase + glm::vec4(particle.offset, 0.0f, 0.0f);
+		auto scale = glm::vec2(particle.rect.w, particle.rect.h) * particle.scale;
 
-		if (tf.x >= -particle.rect.w && tf.x < camera.viewport.w && tf.y >= -particle.rect.h && tf.y < camera.viewport.h) {
-			auto scale = glm::vec2(particle.rect.w, particle.rect.h) * particle.scale;
-
-			drawCalls.emplaceBack(
-				0.0f, // not needed
-				rotBase + particle.rotation,
-				particle.rect,
-				SDL_FRect {
-					tf.x + camera.viewport.x - scale.x / 2,
-					tf.y + camera.viewport.y - scale.y / 2,
-					scale.x,
-					scale.y
-				},
-				tx
-			);
-		}
+		drawCalls.emplaceBack(
+			rotBase + particle.rotation,
+			particle.rect,
+			SDL_FRect {
+				tf.x,
+				tf.y,
+				scale.x,
+				scale.y
+			},
+			tx
+		);
 	}
 }
 

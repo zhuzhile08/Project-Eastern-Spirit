@@ -55,11 +55,7 @@ public:
 		m_font(font) { }
 
 
-	void draw(
-		const etcs::Entity& entity,
-		const etcs::Transform& transform,
-		const glm::mat4& camTransform,
-		const Camera& camera) const;
+	void draw(const etcs::Entity& entity, const etcs::Transform& transform, const glm::mat4& renderMatrix) const;
 		
 	
 	[[nodiscard]] const glm::vec2& offset() const noexcept {

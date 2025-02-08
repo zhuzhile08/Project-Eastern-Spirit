@@ -7,32 +7,22 @@
 
 namespace esengine {
 
-bool Sprite::drawCall(
-	detail::RenderSystem::CallData& data,
-	const etcs::Entity& entity,
-	const etcs::Transform& transform,
-	const glm::mat4& camTransform,
-	const Camera& camera) const {
-	auto tf = camTransform * glm::vec4(transform.globalTranslation(entity), 1.0f);
+void Sprite::draw(const etcs::Entity& entity, const etcs::Transform& transform, const glm::mat4& renderMatrix) const {
+	auto tf = renderMatrix * glm::vec4(transform.globalTranslation(entity), 1.0f);
 
-	if (tf.x >= -m_rect.w && tf.x < camera.viewport.w && tf.y >= -m_rect.h && tf.y < camera.viewport.h) {
-		auto scale = transform.globalScale(entity) * glm::vec3(m_rect.w, m_rect.h, 1.f);
+	auto scale = transform.globalScale(entity) * glm::vec3(m_rect.w, m_rect.h, 1.f);
 
-		data = {
-			tf.z,
-			transform.globalOrientation(entity).z * -360,
-			m_rect,
-			SDL_FRect {
-				tf.x + camera.viewport.x - scale.x / 2,
-				tf.y + camera.viewport.y - scale.y / 2,
-				scale.x,
-				scale.y
-			},
-			m_texture->texture(camera.passName())
-		};
-
-		return true;
-	} else return false;
+	globals::renderSystem->drawData()[static_cast<std::size_t>(tf.z) * constants::depthSortingFactor].emplaceBack(
+		transform.globalOrientation(entity).z * -360,
+		m_rect,
+		SDL_FRect {
+			tf.x,
+			tf.y,
+			scale.x,
+			scale.y
+		},
+		m_texture->texture()
+	);
 }
 
 } // namespace esengine

@@ -13,6 +13,8 @@
 
 #include <Core/Common.h>
 
+#include <Detail/RenderSystem.h>
+
 #include <ETCS/Component.h>
 #include <ETCS/Components/Transform.h>
 
@@ -27,28 +29,32 @@ namespace esengine {
 
 class Camera {
 public:
-	Camera(lsd::StringView passName = { });
-	Camera(SDL_FRect viewport, lsd::StringView passName = { });
+	Camera(lsd::StringView passName = { }, SDL_Texture* target = nullptr);
+	Camera(const SDL_FRect& viewport, lsd::StringView passName = { }, SDL_Texture* target = nullptr);
 
-	[[nodiscard]] glm::mat4 transformMat(const etcs::Entity& camera, const etcs::Transform& transform) const noexcept;
+	void destoryRenderPass() const;
 
+	void setRenderPassClipRect(const SDL_FRect& clipRect) const;
+	void setRenderPassViewport(const SDL_FRect& viewport) const;
+
+	[[nodiscard]] SDL_FRect renderPassClipRect() const;
+	[[nodiscard]] SDL_FRect renderPassViewport() const;
+
+	glm::mat4 renderMatrix(const etcs::Entity& entity, etcs::Transform& transform);
+
+	[[nodiscard]] bool validRenderPass() const noexcept;
 	[[nodiscard]] const lsd::String& passName() const noexcept {
 		return m_passName;
 	}
 
-	SDL_FRect viewport;
 	SDL_FRect limits { -10000000.f, 10000000.f, 2 * 10000000.f, 2 * 10000000.f };
 	glm::vec2 offset { };
 	glm::vec2 zoom { 1, 1 };
 
-	etcs::ComponentView<etcs::Transform> target;
+	etcs::Entity target;
 
 private:
 	lsd::String m_passName;
-
-	void update(etcs::Transform& transform);
-
-	friend class Application;
 };
 
 } // namespace esengine

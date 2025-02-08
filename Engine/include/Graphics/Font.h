@@ -33,8 +33,8 @@ public:
 	[[nodiscard]] const glm::ivec2& charSize() const noexcept {
 		return m_charSize;
 	}
-	[[nodiscard]] SDL_Texture* texture() noexcept {
-		return m_texture.texture();
+	[[nodiscard]] const Texture& texture() const noexcept {
+		return m_texture;
 	}
 
 	[[nodiscard]] const SDL_FRect& at(int character) const noexcept;
@@ -57,8 +57,11 @@ public:
 	[[nodiscard]] const glm::ivec2& charSize() const noexcept {
 		return m_charSize;
 	}
-	[[nodiscard]] SDL_Texture* texture() noexcept {
-		return m_texture.texture();
+	[[nodiscard]] Texture& texture() noexcept {
+		return m_texture;
+	}
+	[[nodiscard]] const Texture& texture() const noexcept {
+		return m_texture;
 	}
 
 	[[nodiscard]] SDL_FRect at(int c) const noexcept;

@@ -18,14 +18,23 @@
 
 using namespace std::chrono_literals;
 
-Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet("img/sprites/PlayerSheet.png"), m_wall("img/sprites/Wall.png"), m_font("img/fonts/Regular.png", { 7, 13 }, 1) {
-	{ // camera
+Game::Game(esengine::InitInfo info) : 
+	esengine::Application(info), 
+	m_spriteSheet("img/sprites/PlayerSheet.png"), 
+	m_wall("img/sprites/Wall.png"), 
+	m_font("img/fonts/Regular.png", { 7, 13 }, 1) 
+{	
+	m_spriteSheet.disableFiltering();
+	m_font.texture().disableFiltering();
+	m_wall.disableFiltering();
+
+	{ // Camera
 		auto camera = etcs::world().insertEntity();
 		camera.insertComponent<etcs::Transform>(glm::vec3(0.0f, 0.0f, 0.0f));
 		camera.insertComponent<esengine::Camera>();
 	}
 
-	{ // textbox
+	{ // Textbox
 		auto text = etcs::world().insertEntity();
 		text.insertComponent<etcs::Transform>(glm::vec3(0.0, 0.0, 0.0));
 
@@ -33,10 +42,10 @@ Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet
 		text.insertComponent<esengine::TextBoxAnimator>(box);
 	}
 
-	{ // player
+	{ // Player
 		auto player = etcs::world().insertEntity();
 		player.insertComponent<etcs::Transform>(glm::vec3(0, 0, 0));
-		player.insertComponent<esengine::KinematicBody>(glm::vec2(6.0f, 9.0f), glm::vec2(-3, 5));
+		player.insertComponent<esengine::KinematicBody>(glm::vec2(6.0f, 9.0f), glm::vec2(13, 21));
 		player.insertComponent<PlayerController>();
 
 		auto sprite = player.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_spriteSheet);
@@ -58,7 +67,7 @@ Game::Game(esengine::InitInfo info) : esengine::Application(info), m_spriteSheet
 	{
 		auto wall = etcs::world().insertEntity();
 		wall.insertComponent<etcs::Transform>(glm::vec3(48, 48, 1));
-		wall.insertComponent<esengine::StaticBody>(glm::vec2(32.0f, 32.0f), glm::vec2(-16, -16));
+		wall.insertComponent<esengine::StaticBody>(glm::vec2(32.0f, 32.0f), glm::vec2(0, 0));
 		wall.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_wall);
 	}
 }

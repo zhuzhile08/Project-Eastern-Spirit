@@ -14,12 +14,14 @@
 #include <chrono>
 
 #include <SDL3/SDL.h>
+#include <glm/glm.hpp>
 
 namespace esengine {
 
 // Convenience aliases
 
 using es_time_t = std::uint64_t;
+using es_color_t = glm::vec3;
 
 
 // Structure forward declarations
@@ -80,6 +82,8 @@ inline constexpr std::size_t defaultWindowScalingFactor = 3;
 
 inline constexpr std::chrono::milliseconds defaultAnimationFrameTime(125);
 inline constexpr std::chrono::milliseconds defaultTextSpeed(100);
+
+inline constexpr SDL_Rect nullRect = { std::numeric_limits<int>::min(), 0, 0, 0 };
 
 } // namespace constants
 

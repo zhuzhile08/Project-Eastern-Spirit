@@ -51,7 +51,7 @@ public:
 	ParticleSystem(Texture* texture, update_func updateSystem) : m_texture(texture), m_updateSystem(updateSystem) { }
 
 	void update(es_time_t deltaTime);
-	void draw(const etcs::Entity& entity, const etcs::Transform& transform, const glm::mat4& camTransform, const Camera& camera) const;
+	void draw(const etcs::Entity& entity, const etcs::Transform& transform, const glm::mat4& renderMatrix) const;
 
 private:
 	lsd::Vector<Particle> m_particles;

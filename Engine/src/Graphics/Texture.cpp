@@ -5,9 +5,58 @@
 #include <Graphics/Texture.h>
 #include <Detail/RenderSystem.h>
 
+using namespace lsd::enum_operators;
+
 namespace esengine {
 
-using namespace lsd::enum_operators;
+namespace detail {
+
+void BasicTexture::setAlphaMod(float a) {
+	SDL_SetTextureAlphaModFloat(m_texture, a);
+}
+
+void BasicTexture::setColorMod(es_color_t col) {
+	SDL_SetTextureColorModFloat(m_texture, col.x, col.y, col.z);
+}
+
+void BasicTexture::setBlendMode(BlendMode mode) {
+	SDL_SetTextureBlendMode(m_texture, static_cast<SDL_BlendMode>(mode));
+}
+
+void BasicTexture::enableFiltering() {
+	SDL_SetTextureScaleMode(m_texture, SDL_SCALEMODE_LINEAR);
+}
+
+void BasicTexture::disableFiltering() {
+	SDL_SetTextureScaleMode(m_texture, SDL_SCALEMODE_NEAREST);
+}
+
+float BasicTexture::alphaMod() const {
+	float res;
+	SDL_GetTextureAlphaModFloat(m_texture, &res);
+	return res;
+}
+
+es_color_t BasicTexture::colorMod() const {
+	es_color_t res;
+	SDL_GetTextureColorModFloat(m_texture, &res.x, &res.y, &res.z);
+	return res;
+}
+
+BlendMode BasicTexture::blendMode() const {
+	SDL_BlendMode res;
+	SDL_GetTextureBlendMode(m_texture, &res);
+	return static_cast<BlendMode>(res);
+}
+
+bool BasicTexture::filtered() const {
+	SDL_ScaleMode res;
+	SDL_GetTextureScaleMode(m_texture, &res);
+	return res == SDL_SCALEMODE_LINEAR;
+}
+
+} // namespace detail
+
 
 // Raw texture data
 
@@ -27,95 +76,83 @@ TextureData::~TextureData() {
 
 // Image texture
 
-Texture::Texture(lsd::StringView path, std::initializer_list<lsd::StringView> passNames, bool filtered) : m_path(path), m_filtered(filtered) {
-	TextureData data(path);
-	m_dimension = data.dimension();
+Texture::Texture(const TextureData& data) : 
+	detail::BasicTexture(
+		data.m_dimension,
+		sdl::Texture (
+			globals::renderSystem->renderer(),
+			SDL_PIXELFORMAT_RGBA32,
+			SDL_TEXTUREACCESS_STATIC,
+			data.m_dimension.x,
+			data.m_dimension.y
+		)
+	),
+	m_path(data.m_path)
+{
+	if (!m_texture) throw std::runtime_error("esengine::Texture::Texture(): Failed to create SDL image texture!");
 
-	for (const auto& name : passNames) createForPass(name, data);
+	if (!SDL_UpdateTexture(m_texture, nullptr, data.data(), m_dimension.x * m_dimension.z))
+		throw std::runtime_error("esengine::Texture::Texture(): Failed to update SDL image texture!");
 }
 
-SDL_Texture* Texture::texture(lsd::StringView passName) noexcept {
-	auto it = m_textures.find(passName);
+Texture::Texture(lsd::StringView path) {
+	auto data = TextureData(path);
 
-	if (it != m_textures.end()) return it->second.get();
-	else {
-		TextureData data(m_path);
+	m_dimension = data.m_dimension;
 
-		return createForPass(passName, data);
-	}
-}
-
-SDL_Texture* Texture::createForPass(lsd::StringView passName, const TextureData& data) {
-	auto& tx = m_textures.emplace(passName, sdl::Texture(
-		globals::renderSystem->pass(passName).renderer,
+	m_texture = sdl::Texture(
+		globals::renderSystem->renderer(),
 		SDL_PIXELFORMAT_RGBA32,
 		SDL_TEXTUREACCESS_STATIC,
 		m_dimension.x,
-		m_dimension.y)
-	).first->second;
+		m_dimension.y
+	);
 
-	if (!tx) throw std::runtime_error("esengine::Texture::createForPass(): Failed to create SDL image texture!");
+	if (!m_texture) throw std::runtime_error("esengine::Texture::Texture(): Failed to create SDL image texture!");
 
-	if (SDL_UpdateTexture(tx.get(), nullptr, data.data(), m_dimension.x * m_dimension.z) == false)
-		throw std::runtime_error("esengine::Texture::createForPass(): Failed to update SDL image texture!");
+	if (!SDL_UpdateTexture(m_texture, nullptr, data.data(), m_dimension.x * m_dimension.z))
+		throw std::runtime_error("esengine::Texture::Texture(): Failed to update SDL image texture!");
 
-	if (!m_filtered) SDL_SetTextureScaleMode(tx, SDL_SCALEMODE_NEAREST);
-
-	return tx.get();
+	m_path = std::move(data.m_path);
 }
 
 
 // Streaming texture
 
-StreamingTexture::StreamingTexture(glm::ivec2 dimension, std::initializer_list<lsd::StringView> passNames, bool filtered) : m_dimension(dimension), m_filtered(filtered) {
-	for (const auto& name : passNames) createForPass(name);
+StreamingTexture::StreamingTexture(glm::ivec2 dimension) :
+	detail::BasicTexture(
+		glm::ivec3(dimension, 4),
+		sdl::Texture(
+			globals::renderSystem->renderer(), 
+			SDL_PIXELFORMAT_RGBA32, 
+			SDL_TEXTUREACCESS_STREAMING, 
+			dimension.x, 
+			dimension.y
+		)
+	) {
+	if (!m_texture) throw std::runtime_error("esengine::StreamingTexture::StreamingTexture(): Failed to create SDL texture for streaming!");
 }
 
 void StreamingTexture::resize(glm::ivec2 dimension) {
-	m_dimension = dimension;
+	m_dimension = glm::ivec3(dimension, 4);
 
-	for (auto& [name, texture] : m_textures) {
-		texture = sdl::Texture(
-			globals::renderSystem->pass(name).renderer, 
-			SDL_PIXELFORMAT_RGBA32, 
-			SDL_TEXTUREACCESS_STREAMING, 
-			m_dimension.x, 
-			m_dimension.y
-		);
-
-		if (!texture) throw std::runtime_error("Failed to create SDL texture for streaming!");
-	}
-}
-
-void StreamingTexture::lock(SDL_Surface*& surface, const SDL_Rect* location, lsd::StringView passName) {
-	if (!SDL_LockTextureToSurface(m_textures.at(passName).get(), location, &surface)) throw std::runtime_error("esengine::StreamingTexture::lock(): Failed to retrieve surface from streaming texture!");
-}
-
-void StreamingTexture::unlock(lsd::StringView passName) {
-	SDL_UnlockTexture(m_textures.at(passName).get());
-}
-
-SDL_Texture* StreamingTexture::texture(lsd::StringView passName) noexcept {
-	auto it = m_textures.find(passName);
-
-	if (it != m_textures.end()) return it->second.get();
-	else return createForPass(passName);
-}
-
-SDL_Texture* StreamingTexture::createForPass(lsd::StringView passName) {
-	auto& tx = m_textures.emplace(passName, sdl::Texture(
-		globals::renderSystem->pass(passName).renderer, 
+	m_texture = sdl::Texture(
+		globals::renderSystem->renderer(), 
 		SDL_PIXELFORMAT_RGBA32, 
 		SDL_TEXTUREACCESS_STREAMING, 
 		m_dimension.x, 
-		m_dimension.y)
-	).first->second;
+		m_dimension.y
+	);
 
-	if (!tx) throw std::runtime_error("Failed to create SDL texture for streaming!");
+	if (!m_texture) throw std::runtime_error("Failed to resize SDL texture for streaming!");
+}
 
-	if (!m_filtered) SDL_SetTextureScaleMode(tx, SDL_SCALEMODE_NEAREST);
+void StreamingTexture::lock(SDL_Surface*& surface, const SDL_Rect* location) {
+	if (!SDL_LockTextureToSurface(m_texture, location, &surface)) throw std::runtime_error("esengine::StreamingTexture::lock(): Failed to retrieve surface from streaming texture!");
+}
 
-	return tx.get();
+void StreamingTexture::unlock() {
+	SDL_UnlockTexture(m_texture);
 }
 
 } // namespace esengine

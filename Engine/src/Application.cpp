@@ -67,9 +67,8 @@ void Application::run() {
 
 		globals::inputSystem->startFrame();
 
-		while (m_accumulator >= m_deltaTime) { // update loop
+		while (m_accumulator >= m_deltaTime) { // Update loop
 			globals::inputSystem->update();
-
 			update(m_deltaTime / 16.f);
 
 			globals::physicsSystem->update();
@@ -83,22 +82,20 @@ void Application::run() {
 			m_accumulator -= m_deltaTime;
 		}
 
-		for (auto [camEntity, camTransform, camComponent] : etcs::world().query<const etcs::Entity, etcs::Transform, Camera>()) { // render loop
-			camComponent.update(camTransform);
-			auto camTransformMat = camComponent.transformMat(camEntity, camTransform);
+		for (auto [camEntity, camTransform, camComponent] : etcs::world().query<const etcs::Entity, etcs::Transform, Camera>()) {
+			auto renderMatrix = camComponent.renderMatrix(camEntity, camTransform);
 
 			for (const auto& [spriteEntity, transform, sprite] : etcs::world().query<const etcs::Entity, const etcs::Transform, const Sprite>())
-				if (detail::RenderSystem::CallData data { }; sprite.drawCall(data, spriteEntity, transform, camTransformMat, camComponent))
-					esengine::globals::renderSystem->insertCall(data, camComponent.passName());
+				sprite.draw(spriteEntity, transform, renderMatrix);
 
 			for (const auto& [textBoxEntity, transform, textBox] : etcs::world().query<const etcs::Entity, const etcs::Transform, const TextBox>())
-				textBox.draw(textBoxEntity, transform, camTransformMat, camComponent);
+				textBox.draw(textBoxEntity, transform, renderMatrix);
 
 			for (const auto& [particleSystemEntity, transform, particleSystem] : etcs::world().query<const etcs::Entity, const etcs::Transform, const ParticleSystem>())
-				particleSystem.draw(particleSystemEntity, transform, camTransformMat, camComponent);
+				particleSystem.draw(particleSystemEntity, transform, renderMatrix);
 		}
 
-		globals::renderSystem->drawAll();
+		globals::renderSystem->draw();
 	}
 }
 

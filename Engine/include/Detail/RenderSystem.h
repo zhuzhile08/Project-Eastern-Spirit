@@ -11,15 +11,16 @@
 
 #pragma once
 
-#include <Core/RAIIContainers.h>
-
 #include <Core/Common.h>
+#include <Core/RAIIContainers.h>
 
 #include <SDL3/SDL.h>
 
 #include <LSD/Vector.h>
 #include <LSD/String.h>
-#include <LSD/UnorderedSparseSet.h>
+#include <LSD/UnorderedSparseMap.h>
+
+#include <glm/glm.hpp>
 
 #include <map>
 
@@ -31,8 +32,6 @@ class RenderSystem {
 public:
 	struct CallData {
 	public:
-		double sortingFactor;
-
 		double rotation;
 		
 		SDL_FRect src;
@@ -44,41 +43,49 @@ public:
 private:
 	struct RenderPass {
 	public:
-		sdl::Renderer renderer;
-		lsd::String name;
+		SDL_Texture* target = nullptr;
 
-		std::size_t sortingFactor;
-
-		Texture* target = nullptr;
-
-		std::map<int, lsd::Vector<CallData>, std::greater<int>> drawData = { };
+		SDL_FRect viewport = { 0, 0, 1, 1 };
+		SDL_FRect clipRect = { 0, 0, 1, 1 };
 	};
-
-	CUSTOM_HASHER(Hasher, const RenderPass&, const lsd::StringView&, lsd::Hash<lsd::StringView>(), .name)
-	CUSTOM_EQUAL(Equal, const RenderPass&, const lsd::StringView&, .name)
 
 public:
 	RenderSystem();
 
-	void insertPass(lsd::StringView name, Texture* target = nullptr, std::size_t sortingFactor = constants::depthSortingFactor);
+	void insertPass(
+		lsd::StringView name, 
+		SDL_Texture* target, 
+		const SDL_FRect& viewport,
+		const SDL_FRect& clipRect
+	);
 	void removePass(lsd::StringView name);
-
-	void insertCall(const CallData& callData, lsd::StringView passName);
 	
-	void drawPass(lsd::StringView name);
-	void drawAll();
+	void draw();
 
+	[[nodiscard]] bool containsPass(lsd::StringView name = { }) const noexcept {
+		return m_renderPasses.contains(name);
+	}
+
+	[[nodiscard]] SDL_Renderer* renderer() noexcept {
+		return m_renderer;
+	}
 	[[nodiscard]] const RenderPass& pass(lsd::StringView name = { }) const {
 		return m_renderPasses.at(name);
 	}
 	[[nodiscard]] RenderPass& pass(lsd::StringView name = { }) {
 		return m_renderPasses.at(name);
 	}
+	[[nodiscard]] decltype(auto) drawData() noexcept {
+		return (m_drawData);
+	}
 
 private:
-	lsd::UnorderedSparseSet<RenderPass, Hasher, Equal> m_renderPasses;
+	sdl::Renderer m_renderer;
+
+	lsd::UnorderedSparseMap<lsd::String, RenderPass> m_renderPasses;
+	std::map<int, lsd::Vector<CallData>, std::greater<int>> m_drawData;
 };
 
-}
+} // namespace detail
 
 } // namespace esengine

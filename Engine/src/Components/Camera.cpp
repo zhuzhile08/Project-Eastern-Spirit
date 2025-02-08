@@ -2,31 +2,41 @@
 
 #include <Graphics/Window.h>
 
+#include <ETCS/Entity.h>
+
 #include <glm/glm.hpp>
 
 namespace esengine {
 
-#ifdef ESENGINE_DYNAMIC_WINDOW_SIZE
-Camera::Camera(lsd::StringView passName) : 
-	viewport { 
-		0.f, 
-		0.f, 
-		lsd::implicitCast<float>(globals::window->size().x), 
-		lsd::implicitCast<float>(globals::window->size().y) 
-	}, m_passName(passName) { }
-#else
-Camera::Camera(lsd::StringView passName) : 
-	viewport { 
-		0.f, 
-		0.f, 
-		lsd::implicitCast<float>(globals::window->baseSize().x), 
-		lsd::implicitCast<float>(globals::window->baseSize().y) 
-	}, m_passName(passName) { }
-#endif
+Camera::Camera(lsd::StringView passName, SDL_Texture* target) : m_passName(passName) {
+	globals::renderSystem->insertPass(passName, target, { 0, 0, 1, 1 }, { 0, 0, 1, 1 });
+}
 
-Camera::Camera(SDL_FRect viewport, lsd::StringView passName) : viewport(viewport), m_passName(passName) { }
+Camera::Camera(const SDL_FRect& viewport, lsd::StringView passName, SDL_Texture* target) : m_passName(passName) {
+	globals::renderSystem->insertPass(passName, target, viewport, { 0, 0, 1, 1 });
+}
 
-glm::mat4 Camera::transformMat(const etcs::Entity& camera, const etcs::Transform& transform) const noexcept {
+void Camera::destoryRenderPass() const {
+	globals::renderSystem->removePass(m_passName);
+}
+
+void Camera::setRenderPassClipRect(const SDL_FRect& clipRect) const {
+	globals::renderSystem->pass(m_passName).clipRect = clipRect;
+}
+
+void Camera::setRenderPassViewport(const SDL_FRect& viewport) const {
+	globals::renderSystem->pass(m_passName).viewport = viewport;
+}
+
+SDL_FRect Camera::renderPassClipRect() const {
+	return globals::renderSystem->pass(m_passName).clipRect;
+}
+
+SDL_FRect Camera::renderPassViewport() const {
+	return globals::renderSystem->pass(m_passName).viewport;
+}
+
+glm::mat4 Camera::renderMatrix(const etcs::Entity& entity, etcs::Transform& transform) {
 	/*
 	 * This matrix just transforms the object into the local coordinates of the viewport
 	 * The results are in pixel coordinates and are henceforth not normalized
@@ -38,24 +48,23 @@ glm::mat4 Camera::transformMat(const etcs::Entity& camera, const etcs::Transform
 	mat[2][2] = 1;
 	mat[3][3] = 1;
 
-	if (target.valid()) {
-		mat[3][0] = zoom.x * (-transform.translation().x + offset.x - viewport.x);
-		mat[3][1] = zoom.y * (-transform.translation().y + offset.y - viewport.y);
-		mat[3][2] = zoom.y * (-transform.translation().y);
+	glm::vec3 translation;
+
+	if (target.alive() && target.contains<etcs::Transform>()) {
+		translation = target.component<etcs::Transform>().get().globalTranslation(target);
 	} else {
-		mat[3][0] = zoom.x * (-transform.globalTranslation(camera).x + offset.x - viewport.x);
-		mat[3][1] = zoom.y * (-transform.globalTranslation(camera).y + offset.y - viewport.y);
-		mat[3][2] = zoom.y * (-transform.globalTranslation(camera).y);
+		translation = transform.globalTranslation(entity);
 	}
 
+	mat[3][0] = zoom.x * (-translation.x + offset.x);
+	mat[3][1] = zoom.y * (-translation.y + offset.y);
+	mat[3][2] = zoom.y * (-translation.y);
+	
 	return mat;
 }
 
-void Camera::update(etcs::Transform& transform) {
-	if (target.valid()) {
-		transform.translation().x = std::clamp(transform.translation().x, limits.x, limits.x + limits.w);
-		transform.translation().y = std::clamp(transform.translation().y, limits.y, limits.y - limits.y);
-	}
+bool Camera::validRenderPass() const noexcept {
+	return globals::renderSystem->containsPass(m_passName);
 }
 
 } // namespace esengine
