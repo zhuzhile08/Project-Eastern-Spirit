@@ -7,9 +7,6 @@ PUBLIC
 	# local include directory
 	${CMAKE_CURRENT_SOURCE_DIR}/include/
 
-	# graphics and windowing libraries
-	Vulkan::Headers
-
 	# math and physics libraries
 	${LIBRARY_PATH}/glm/
 
@@ -27,7 +24,6 @@ set (ENGINE_SOURCE_FILES
 	"src/Core/Filesystem.cpp"
 	"src/Core/Math.cpp"
 
-	"src/Components/Background.cpp"
 	"src/Components/Camera.cpp"
 	"src/Components/Colliders.cpp"
 	"src/Components/ParticleSystem.cpp"
@@ -36,7 +32,7 @@ set (ENGINE_SOURCE_FILES
 	"src/Components/SpriteAnimator.cpp"
 	"src/Components/TextBox.cpp"
 	"src/Components/TextBoxAnimator.cpp"
-	"src/Components/Tilemap.cpp"
+	"src/Components/TileMap.cpp"
 	"src/Components/Trail.cpp"
 
 	"src/Detail/RenderSystem.cpp"
@@ -46,6 +42,7 @@ set (ENGINE_SOURCE_FILES
 	"src/Graphics/AnimatorBuilder.cpp"
 	"src/Graphics/Font.cpp"
 	"src/Graphics/Texture.cpp"
+	"src/Graphics/TileSet.cpp"
 	"src/Graphics/Window.cpp"
 
 	"src/Application.cpp"
