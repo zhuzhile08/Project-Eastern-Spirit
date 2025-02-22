@@ -5,7 +5,7 @@
 
 namespace esengine {
 
-void ParticleSystem::update(es_time_t deltaTime) {
+void ParticleSystem::update(ms_time_t deltaTime) {
 	(*m_spawnSystem)(m_particles, m_time, deltaTime);
 
 	auto it = m_particles.begin();
@@ -24,7 +24,7 @@ void ParticleSystem::draw(
 	auto tfBase = renderMatrix * glm::vec4(transform.globalTranslation(entity), 1.0f);
 	auto rotBase = transform.globalOrientation(entity).z * -360;
 
-	auto& drawCalls = globals::renderSystem->drawData()[static_cast<int>(tfBase.z)];
+	auto& drawCalls = globals::renderSystem->drawData(static_cast<int>(tfBase.z));
 
 	auto tx = m_texture->texture();
 

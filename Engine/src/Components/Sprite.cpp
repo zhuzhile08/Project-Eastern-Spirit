@@ -12,7 +12,7 @@ void Sprite::draw(const etcs::Entity& entity, const etcs::Transform& transform, 
 
 	auto scale = transform.globalScale(entity) * glm::vec3(m_rect.w, m_rect.h, 1.f);
 
-	globals::renderSystem->drawData()[static_cast<std::size_t>(tf.z) * constants::depthSortingFactor].emplaceBack(
+	globals::renderSystem->drawData(static_cast<std::size_t>(tf.z) * constants::depthSortingFactor).emplaceBack(
 		transform.globalOrientation(entity).z * -360,
 		m_rect,
 		SDL_FRect {

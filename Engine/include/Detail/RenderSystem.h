@@ -75,8 +75,8 @@ public:
 	[[nodiscard]] RenderPass& pass(lsd::StringView name = { }) {
 		return m_renderPasses.at(name);
 	}
-	[[nodiscard]] decltype(auto) drawData() noexcept {
-		return (m_drawData);
+	[[nodiscard]] decltype(auto) drawData(int zCoord) noexcept {
+		return (m_drawData[zCoord]);
 	}
 
 private:
