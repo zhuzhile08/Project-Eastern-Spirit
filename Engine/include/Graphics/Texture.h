@@ -112,6 +112,7 @@ private:
 // Image texture
 class Texture : public detail::BasicTexture {
 public:
+	Texture() = default;
 	Texture(const TextureData& data);
 	Texture(lsd::StringView path);
 
@@ -126,6 +127,7 @@ private:
 // Streaming texture
 class StreamingTexture : public detail::BasicTexture {
 public:
+	StreamingTexture() = default;
 	StreamingTexture(glm::ivec2 dimension);
 
 	void resize(glm::ivec2 dimension);
