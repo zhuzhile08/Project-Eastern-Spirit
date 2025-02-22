@@ -14,7 +14,7 @@
 #include <Graphics/Texture.h>
 #include <Detail/RenderSystem.h>
 
-#include <LSD/Array.h>
+#include <LSD/Vector.h>
 #include <LSD/StringView.h>
 
 #include <SDL3/SDL.h>
@@ -24,39 +24,20 @@
 
 namespace esengine {
 
-#ifdef ESENGINE_FONT_STORE_IN_ARRAY
-
 class Font {
 public:
-	Font(lsd::StringView texturePath, glm::uvec2 charSize, std::uint32_t padding) noexcept;
+	Font(lsd::StringView fontPath);
 
-	[[nodiscard]] const glm::ivec2& charSize() const noexcept {
-		return m_charSize;
+	[[nodiscard]] const glm::ivec2& cellSize() const noexcept {
+		return m_cellSize;
 	}
-	[[nodiscard]] const Texture& texture() const noexcept {
-		return m_texture;
+	[[nodiscard]] std::size_t baseLine() const noexcept {
+		return m_baseLine;
+	}
+	[[nodiscard]] std::size_t capLine() const noexcept {
+		return m_capLine;
 	}
 
-	[[nodiscard]] const SDL_FRect& at(int character) const noexcept;
-
-private:
-	Texture m_texture;
-
-	lsd::Array <SDL_FRect, 256> m_rects;
-
-	glm::uvec2 m_charSize;
-	std::uint32_t m_padding;
-};
-
-#else
-
-class Font {
-public:
-	Font(lsd::StringView texturePath, glm::uvec2 charSize, std::uint32_t padding) noexcept;
-
-	[[nodiscard]] const glm::ivec2& charSize() const noexcept {
-		return m_charSize;
-	}
 	[[nodiscard]] Texture& texture() noexcept {
 		return m_texture;
 	}
@@ -64,15 +45,16 @@ public:
 		return m_texture;
 	}
 
-	[[nodiscard]] SDL_FRect at(int c) const noexcept;
+	[[nodiscard]] const SDL_FRect& at(int c) const noexcept;
 
 private:
 	Texture m_texture;
 
-	glm::ivec2 m_charSize;
-	std::int32_t m_padding;
-};
+	glm::ivec2 m_cellSize;
+	std::size_t m_baseLine;
+	std::size_t m_capLine;
 
-#endif
+	lsd::Vector<SDL_FRect> m_chars;
+};
 
 } // namespace esengine

@@ -23,12 +23,12 @@ namespace esengine {
 
 class TextBoxAnimator {
 public:
-	TextBoxAnimator(const etcs::ComponentView<TextBox>& textBox, std::chrono::milliseconds charTime = constants::defaultTextSpeed);
+	TextBoxAnimator(const etcs::ComponentView<TextBox>& textBox, ms_time_t charTime = constants::defaultTextSpeed);
 
 	void skip();
 	void restart();
 
-	void update(es_time_t dt);
+	void update(ms_time_t dt);
 
 	[[nodiscard]] const etcs::ComponentView<TextBox>& textBox() {
 		return m_textBox;
@@ -37,8 +37,8 @@ public:
 	float speed = 1.0f;
 
 private:
-	const es_time_t m_charTime;
-	es_time_t m_elapsed = 0.0f;
+	const ms_time_t m_charTime;
+	ms_time_t m_elapsed = 0.0f;
 
 	etcs::ComponentView<TextBox> m_textBox;
 };

@@ -16,33 +16,42 @@ void TextBox::draw(
 ) const {
 	auto tf = renderMatrix * glm::vec4(transform.globalTranslation(entity), 1.0f) + glm::vec4(m_offset, 0.0f, 0.0f);
 
-	auto charSize = glm::vec2(m_font->charSize());
-	auto maxWidth = static_cast<int>(m_dimension.x / charSize.x) + 1;
-	auto renderIndex = std::min(text.size(), m_index);
+	glm::ivec2 textDim { };
+	glm::ivec2 textPixelDim { };
+	for (std::size_t i = 0; i < std::min(text.size(), m_index); i++) {
+		const auto& c = m_font->at(text[i]);
 
-	glm::ivec2 textDim {
-		renderIndex % maxWidth,
-		static_cast<int>(glm::ceil(glm::min(renderIndex / lsd::implicitCast<float>(maxWidth), m_dimension.y / charSize.y)))
-	};
+		if (auto width = textPixelDim.x + c.w + m_padding.x; width > m_dimension.x) {
+			if (auto height = textPixelDim.y + c.h + m_padding.y; height <= m_dimension.y) {
+				textPixelDim.y = height;
+				++textDim.y;
+			} else break;
+		} else {
+			textPixelDim.x = width;
+			++textDim.x;
+		}
+	}
 
 	float startingXPos { };
-	if (m_horizontalAlignment == Alignment::center) startingXPos = tf.x + (maxWidth - textDim.x) * charSize.x / 2.0f;
-	else if (m_horizontalAlignment == Alignment::right) startingXPos = tf.x + (maxWidth - textDim.x) * charSize.x;
+	if (m_horizontalAlignment == Alignment::center) startingXPos = tf.x + textPixelDim.x * 2.0f;
+	else if (m_horizontalAlignment == Alignment::right) startingXPos = tf.x + textPixelDim.x;
 	else startingXPos = tf.x;
 
 	auto tx = m_font->texture().texture();
-	auto& drawCalls = globals::renderSystem->drawData()[static_cast<int>(tf.z)];
+	auto& drawCalls = globals::renderSystem->drawData(static_cast<int>(tf.z));
 
 	for (auto y = 0; y < textDim.y; y++) {
 		for (auto x = 0; x < textDim.x; x++) {
+			const auto& c = m_font->at(text[x + y * textDim.x]);
+
 			drawCalls.emplaceBack(
 				0.0f,
-				m_font->at(text[x + y * textDim.x]),
+				c,
 				SDL_FRect {
-					startingXPos + x * charSize.x,
-					tf.y + y * charSize.y,
-					charSize.x,
-					charSize.y
+					startingXPos + x * c.w + m_padding.x,
+					tf.y + y * c.h + m_padding.y,
+					c.w,
+					c.h
 				},
 				tx
 			);

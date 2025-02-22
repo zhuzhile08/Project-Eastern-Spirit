@@ -2,8 +2,8 @@
 
 namespace esengine {
 
-TextBoxAnimator::TextBoxAnimator(const etcs::ComponentView<TextBox>& textBox, std::chrono::milliseconds charTime) : 
-	m_charTime(charTime.count()),
+TextBoxAnimator::TextBoxAnimator(const etcs::ComponentView<TextBox>& textBox, ms_time_t charTime) : 
+	m_charTime(charTime),
 	m_textBox(textBox) {
 	m_textBox.get().m_index = 0;
 }
@@ -19,7 +19,7 @@ void TextBoxAnimator::restart() {
 	m_textBox.get().m_index = 0;
 }
 
-void TextBoxAnimator::update(es_time_t dt) {
+void TextBoxAnimator::update(ms_time_t dt) {
 	auto& textBox = m_textBox.get();
 
 	if (textBox.m_index < textBox.text.size()) {

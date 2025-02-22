@@ -16,13 +16,11 @@
 
 #include <glm/glm.hpp>
 
-using namespace std::chrono_literals;
-
 Game::Game(esengine::InitInfo info) : 
 	esengine::Application(info), 
 	m_spriteSheet("img/sprites/PlayerSheet.png"), 
 	m_wall("img/sprites/Wall.png"), 
-	m_font("img/fonts/Regular.png", { 7, 13 }, 1) 
+	m_font("img/fonts/Regular.esfj") 
 {	
 	m_spriteSheet.disableFiltering();
 	m_font.texture().disableFiltering();
@@ -38,7 +36,7 @@ Game::Game(esengine::InitInfo info) :
 		auto text = etcs::world().insertEntity();
 		text.insertComponent<etcs::Transform>(glm::vec3(0.0, 0.0, 0.0));
 
-		auto box = text.insertComponent<esengine::TextBox>("Hello World!", &m_font, glm::vec2(100, 100), glm::vec2(0.0f, 0.0f), esengine::TextBox::Alignment::center);
+		auto box = text.insertComponent<esengine::TextBox>("Hello World!", &m_font, glm::vec2(100, 100), glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f), esengine::TextBox::Alignment::center);
 		text.insertComponent<esengine::TextBoxAnimator>(box);
 	}
 
