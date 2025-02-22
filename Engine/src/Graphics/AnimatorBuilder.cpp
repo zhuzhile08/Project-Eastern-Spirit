@@ -27,7 +27,7 @@ SpriteAnimator AnimatorBuilder::buildSpriteAnimator(const etcs::ComponentView<Sp
 }
 
 bool AnimatorBuilder::verifyAnimation(Animation&& anim) const {
-	for (const auto& frame : anim.frames) if (frame.time.count() == 0) return false;
+	for (const auto& frame : anim.frames) if (frame.time == 0) return false;
 	return true;
 }
 

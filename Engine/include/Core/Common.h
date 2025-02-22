@@ -11,8 +11,6 @@
 
 #pragma once
 
-#include <chrono>
-
 #include <SDL3/SDL.h>
 #include <glm/glm.hpp>
 
@@ -20,7 +18,7 @@ namespace esengine {
 
 // Convenience aliases
 
-using es_time_t = std::uint64_t;
+using ms_time_t = std::uint64_t;
 using es_color_t = glm::vec3;
 
 
@@ -30,7 +28,6 @@ struct Animation;
 
 class FileSystem;
 
-class Background;
 class Camera;
 class Health;
 class KinematicBody;
@@ -41,6 +38,7 @@ class SpriteAnimator;
 class StaticBody;
 class TextBox;
 class TextBoxAnimator;
+class TileMap;
 class Valuable;
 
 namespace detail {
@@ -56,8 +54,8 @@ class PhysicsSystem;
 
 class AnimatorBuilder;
 class Font;
-class ParticleSystemBuilder;
 class Texture;
+class TileSet;
 class Window;
 
 namespace globals {
@@ -80,8 +78,8 @@ inline constexpr std::size_t depthSortingFactor = 10;
 inline constexpr std::size_t defaultWindowScalingFactor = 3;
 #endif
 
-inline constexpr std::chrono::milliseconds defaultAnimationFrameTime(125);
-inline constexpr std::chrono::milliseconds defaultTextSpeed(100);
+inline constexpr ms_time_t defaultAnimationFrameTime = 125;
+inline constexpr ms_time_t defaultTextSpeed = 100;
 
 inline constexpr SDL_Rect nullRect = { std::numeric_limits<int>::min(), 0, 0, 0 };
 

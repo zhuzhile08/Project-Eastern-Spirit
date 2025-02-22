@@ -34,7 +34,7 @@ struct InitInfo {
 	int flags = { };
 #endif
 
-	es_time_t deltaTime = 33;
+	ms_time_t deltaTime = 33;
 };
 
 
@@ -51,11 +51,11 @@ public:
 protected:
 	virtual void update(float) { }
 
-	es_time_t m_accumulator = 0;
-	es_time_t m_deltaTime;
+	ms_time_t m_accumulator = 0;
+	ms_time_t m_deltaTime;
 
-	es_time_t m_startTime = 0;
-	es_time_t m_currentTime = 0;
+	ms_time_t m_startTime = 0;
+	ms_time_t m_currentTime = 0;
 };
 
 } // namespace esengine

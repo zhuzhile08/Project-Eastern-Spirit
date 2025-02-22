@@ -34,14 +34,14 @@ public:
 	}
 	void stop();
 
-	void setFrame(std::size_t frame, es_time_t startingTime = 0.f);
+	void setFrame(std::size_t frame, ms_time_t startingTime = 0.f);
 
 	void queue(lsd::StringView animationName, float speed = 1.f);
 	void clearQueue() {
 		m_queue.clear();
 	}
 
-	void update(es_time_t deltaTIme);
+	void update(ms_time_t deltaTIme);
 
 	[[nodiscard]] const detail::AnimationPlayData& current() const noexcept {
 		return m_current;

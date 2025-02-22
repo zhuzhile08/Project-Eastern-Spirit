@@ -16,7 +16,6 @@
 #include <LSD/String.h>
 #include <LSD/StringView.h>
 
-#include <chrono>
 #include <cstddef>
 
 namespace esengine {
@@ -25,7 +24,7 @@ namespace detail {
 
 struct Frame {
 	std::size_t index;
-	std::chrono::milliseconds time = constants::defaultAnimationFrameTime;
+	ms_time_t time = constants::defaultAnimationFrameTime;
 };
 
 struct AnimationPlayData {
@@ -39,7 +38,7 @@ public:
 	bool singleFrame { };
 
 	std::size_t frameIndex { };
-	es_time_t frameTime { };
+	ms_time_t frameTime { };
 	float speed = 1.f;
 };
 

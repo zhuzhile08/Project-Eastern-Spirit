@@ -41,16 +41,16 @@ public:
 
 		bool visible = true;
 
-		es_time_t timeAlive = 0;
+		ms_time_t timeAlive = 0;
 	};
 
-	typedef bool (*update_func)(Particle&, es_time_t);
-	typedef void (*spawner_func)(lsd::Vector<Particle>, es_time_t&, es_time_t);
+	typedef bool (*update_func)(Particle&, ms_time_t);
+	typedef void (*spawner_func)(lsd::Vector<Particle>, ms_time_t&, ms_time_t);
 
 
 	ParticleSystem(Texture* texture, update_func updateSystem) : m_texture(texture), m_updateSystem(updateSystem) { }
 
-	void update(es_time_t deltaTime);
+	void update(ms_time_t deltaTime);
 	void draw(const etcs::Entity& entity, const etcs::Transform& transform, const glm::mat4& renderMatrix) const;
 
 private:
@@ -59,7 +59,7 @@ private:
 
 	update_func m_updateSystem;
 
-	es_time_t m_time;
+	ms_time_t m_time;
 	spawner_func m_spawnSystem;
 };
 
