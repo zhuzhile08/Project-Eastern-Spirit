@@ -28,7 +28,7 @@ Game::Game(esengine::InitInfo info) :
 
 	{ // Camera
 		auto camera = etcs::world().insertEntity();
-		camera.insertComponent<etcs::Transform>(glm::vec3(0.0f, 0.0f, 0.0f));
+		camera.insertComponent<etcs::Transform>(glm::vec3(0, 0, 0));
 		camera.insertComponent<esengine::Camera>();
 	}
 
@@ -36,14 +36,14 @@ Game::Game(esengine::InitInfo info) :
 		auto text = etcs::world().insertEntity();
 		text.insertComponent<etcs::Transform>(glm::vec3(0.0, 0.0, 0.0));
 
-		auto box = text.insertComponent<esengine::TextBox>("Hello World!", &m_font, glm::vec2(100, 100), glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 0.0f), esengine::TextBox::Alignment::center);
+		auto box = text.insertComponent<esengine::TextBox>("Hello World!", &m_font, glm::vec2(100, 100), glm::vec2(0, 0), glm::vec2(-1, 0), esengine::TextBox::Alignment::center);
 		text.insertComponent<esengine::TextBoxAnimator>(box);
 	}
 
 	{ // Player
 		auto player = etcs::world().insertEntity();
 		player.insertComponent<etcs::Transform>(glm::vec3(0, 0, 0));
-		player.insertComponent<esengine::KinematicBody>(glm::vec2(6.0f, 9.0f), glm::vec2(13, 21));
+		player.insertComponent<esengine::KinematicBody>(glm::vec2(6, 9), glm::vec2(13, 21));
 		player.insertComponent<PlayerController>();
 
 		auto sprite = player.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_spriteSheet);
@@ -65,7 +65,7 @@ Game::Game(esengine::InitInfo info) :
 	{
 		auto wall = etcs::world().insertEntity();
 		wall.insertComponent<etcs::Transform>(glm::vec3(48, 48, 1));
-		wall.insertComponent<esengine::StaticBody>(glm::vec2(32.0f, 32.0f), glm::vec2(0, 0));
+		wall.insertComponent<esengine::StaticBody>(glm::vec2(32, 32), glm::vec2(0, 0));
 		wall.insertComponent<esengine::Sprite>(SDL_FRect { 0, 0, 32, 32 }, &m_wall);
 	}
 }
