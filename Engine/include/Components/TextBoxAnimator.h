@@ -38,7 +38,7 @@ public:
 
 private:
 	const ms_time_t m_charTime;
-	ms_time_t m_elapsed = 0.0f;
+	ms_time_t m_elapsed = 0;
 
 	etcs::ComponentView<TextBox> m_textBox;
 };

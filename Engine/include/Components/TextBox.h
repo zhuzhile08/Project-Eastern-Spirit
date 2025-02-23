@@ -46,19 +46,26 @@ public:
 		const glm::vec2& dimension, 
 		const glm::vec2& offset = { 0.0f, 0.0f },
 		const glm::vec2& padding = { 0.0f, 0.0f },
-		Alignment horizontalAlignment = Alignment::def, 
-		bool clipping = true
-	) : text(text),
+		Alignment horizontalAlignment = Alignment::def
+	) : m_text(text),
 		m_offset(offset),
 		m_dimension(dimension),
 		m_padding(padding),
 		m_horizontalAlignment(horizontalAlignment),
-		m_clipping(clipping),
 		m_font(font) { }
 
 
 	void draw(const etcs::Entity& entity, const etcs::Transform& transform, const glm::mat4& renderMatrix) const;
 		
+
+	[[nodiscard]] const lsd::String& text() const noexcept {
+		return m_text;
+	}
+	[[nodiscard]] lsd::String& text() noexcept {
+		m_dirty = true;
+
+		return m_text;
+	}
 	
 	[[nodiscard]] const glm::vec2& offset() const noexcept {
 		return m_offset;
@@ -72,22 +79,25 @@ public:
 	[[nodiscard]] Alignment horizontalAlignment() const noexcept {
 		return m_horizontalAlignment;
 	}
+
 	[[nodiscard]] const Font* font() const noexcept {
 		return m_font;
 	}
 
-	lsd::String text;
-
 private:
+	lsd::String m_text;
+
 	glm::vec2 m_offset;
 	glm::vec2 m_dimension;
 
 	glm::vec2 m_padding;
-
 	Alignment m_horizontalAlignment;
-	bool m_clipping;
 
-	std::size_t m_index = std::numeric_limits<std::size_t>::max();
+	std::size_t m_renderLimit = std::numeric_limits<std::size_t>::max();
+
+	mutable glm::ivec2 m_textDim { };
+	mutable glm::ivec2 m_textPixelDim { };
+	bool m_dirty = false;
 
 	Font* m_font;
 

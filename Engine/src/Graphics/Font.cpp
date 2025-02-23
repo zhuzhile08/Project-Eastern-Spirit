@@ -8,12 +8,15 @@
 namespace esengine {
 
 Font::Font(lsd::StringView fontPath) {
-	File file = globals::fileSystem->load(fontPath.data(), OpenMode::read, false);
+	File file = globals::fileSystem->load(globals::fileSystem->assetsPath() / fontPath.data(), OpenMode::read, false);
 
-	lsd::String fontFileData('\0', file.size());
+	lsd::String fontFileData(file.size(), '\0');
 	file.read(fontFileData.data(), fontFileData.size());
 
 	lsd::Json fontData = lsd::Json::parse(fontFileData);
+
+	std::filesystem::path fntPth = fontPath.data();
+	m_texture = Texture(fntPth.remove_filename().append(fontData.at("img").string().data()).c_str());
 
 	const auto& cellSiz = fontData.at("cell").array();
 	m_cellSize.x = cellSiz[0].unsignedInt();
@@ -23,19 +26,17 @@ Font::Font(lsd::StringView fontPath) {
 	m_capLine = bounds[0].unsignedInt();
 	m_baseLine = bounds[1].unsignedInt();
 
-	const auto& charDim = fontData.at("dim").array();
+	const auto& charDim = fontData.at("chr").array();
 	m_chars.reserve(charDim.size());
 
 	auto charDimIt = charDim.begin();
 
 	for (auto y = 0; y < m_texture.dimension().y; y += m_cellSize.y) {
-		for (auto x = 0; x < m_texture.dimension().x / m_cellSize.x; x += m_cellSize.x) {
-			const auto& charDim = *charDimIt;
-
+		for (auto x = 0; x < m_texture.dimension().x; x += m_cellSize.x) {
 			m_chars.emplaceBack(SDL_FRect {
-				lsd::implicitCast<float>(x + charDim[0].unsignedInt()),
+				lsd::implicitCast<float>(x + charDimIt->unsignedInt()),
 				lsd::implicitCast<float>(y),
-				lsd::implicitCast<float>(charDim[1].unsignedInt()),
+				lsd::implicitCast<float>((++charDimIt)->unsignedInt()),
 				lsd::implicitCast<float>(m_cellSize.y)
 			});
 
